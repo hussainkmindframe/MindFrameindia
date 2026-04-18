@@ -1,0 +1,34 @@
+/**
+ * Blog Service
+ * Handles all blog-related API calls
+ */
+
+import apiClient from './apiClient';
+
+export const blogService = {
+  // Public endpoints
+  getAllBlogs: (page = 1, limit = 10, search = '', tag = '', category = '') =>
+    apiClient.get('/blogs', {
+      params: { page, limit, search, tag, category },
+    }),
+
+  getBlogById: (id) =>
+    apiClient.get(`/blogs/${id}`),
+
+  // Admin endpoints
+  createBlog: (blogData) =>
+    apiClient.post('/blogs', blogData),
+
+  updateBlog: (id, blogData) =>
+    apiClient.put(`/blogs/${id}`, blogData),
+
+  deleteBlog: (id) =>
+    apiClient.delete(`/blogs/${id}`),
+
+  getAdminBlogs: (page = 1, limit = 10, search = '') =>
+    apiClient.get('/blogs/admin/all', {
+      params: { page, limit, search },
+    }),
+};
+
+export default blogService;
