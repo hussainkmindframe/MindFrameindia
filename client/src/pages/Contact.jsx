@@ -1,336 +1,267 @@
 /**
- * Contact Page
+ * Contact Page — Updated Design (Mindframe India)
  */
 
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { MdEmail, MdPhone, MdLocationOn, MdSend, MdElectricBolt, MdGpsFixed, MdHandshake } from 'react-icons/md';
+
+const gold = '#c9a84c';
+
+const inputStyle = {
+  border: 'none',
+  borderBottom: '1px solid #999',
+  background: 'transparent',
+  fontFamily: 'Georgia, serif',
+  fontSize: 13,
+  color: '#1a1a1a',
+  padding: '8px 0',
+  outline: 'none',
+  width: '100%',
+};
+
+const services = [
+  ['Digital Marketing', 'Corporate Films/TVCs/Film Production'],
+  ['Website Design & Development', 'Video Animation 2D/3D'],
+  ['Creative Designing', 'Augmented Reality/Virtual Reality'],
+  ['Brand Identity', 'Product Campaign'],
+  ['Creative Campaign', 'Media Planning'],
+  ['ATL/BTL', ''],
+];
+
+const offices = [
+  {
+    heading: 'HEAD OFFICE',
+    city: 'MUMBAI, INDIA',
+    address: '6th Floor Bhukanvala Chambers B-22, Off Link Road, Veera Desai Rd, Andheri West, Mumbai, Maharashtra 400053',
+    phone: '+91 9892000733',
+    email: 'info@mindframeindia.com',
+  },
+];
+
+const branches = [
+  {
+    city: '– MUMBAI , INDIA',
+    address: '302, 3rd Floor, Crescent Towers, Behind Crystal Plaza, Next to Morya House, Off Link Road, Andheri (West), Mumbai – 400 053',
+    phone: '+91 9892000733 / +91 9167830733',
+    email: 'info@mindframeindia.com',
+  },
+  {
+    city: '– HYDERABAD , INDIA',
+    address: '501, Fifth floor, Pioneer Heights, Lane Opp International Public School, Manikonda Road, Hyderabad 500008',
+    phone: '',
+    email: 'info@mindframeindia.com',
+  },
+  {
+    city: '– DUBAI , UAE',
+    address: 'No: 606, 6th floor, Gardens 4, Near Ibn Battuta Mall, P. O. Box 234637, Dubai, United Arab Emirates',
+    phone: '+91 9892000733',
+    email: 'info@mindframeindia.com',
+  },
+  {
+    city: '– CALIFORNIA , UNITED STATES OF AMERICA',
+    address: 'Bishop Ranch 3, 2603 Camino Ramon, Suite 200, San Ramon, California 94583, United States of America',
+    phone: '+1 (925) 205 8356',
+    email: 'info@mindframeglobal.com',
+  },
+];
 
 export default function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    subject: '',
-    message: '',
+    company: '',
+    anything: '',
+    services: [],
   });
-
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleServiceToggle = (service) => {
+    setFormData((prev) => ({
+      ...prev,
+      services: prev.services.includes(service)
+        ? prev.services.filter((s) => s !== service)
+        : [...prev.services, service],
+    }));
+  };
 
-    // Basic validation
-    if (!formData.name || !formData.email || !formData.message) {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.phone) {
       toast.error('Please fill in all required fields');
       return;
     }
-
+    if (formData.services.length === 0) {
+      toast.error('Please select at least one service');
+      return;
+    }
     setLoading(true);
-
-    // Simulate form submission
     setTimeout(() => {
       toast.success('Thank you! We will get back to you soon.');
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: '',
-      });
+      setFormData({ name: '', email: '', phone: '', company: '', anything: '', services: [] });
       setLoading(false);
     }, 1000);
   };
 
+  const dividerStyle = { border: 'none', borderTop: '1px solid #e0ddd5', margin: '0 0 28px' };
+  const cityStyle = { fontSize: 12, color: '#888', textTransform: 'uppercase', letterSpacing: 1, margin: '0 0 8px' };
+  const addrStyle = { fontSize: 12.5, color: '#444', lineHeight: 1.65, margin: '0 0 4px' };
+  const contactLineStyle = { fontSize: 12, color: '#666', margin: '2px 0' };
+
   return (
-    <div>
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-primary to-secondary text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl font-bold mb-4">Get in Touch</h1>
-          <p className="text-xl opacity-90">We'd love to hear from you. Let's start a conversation about your digital marketing goals.</p>
-        </div>
-      </section>
+    <div style={{ background: '#f7f6f2', fontFamily: 'Georgia, serif', minHeight: '100vh' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '56px 48px 80px' }}>
 
-      {/* Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        {/* Contact Info Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          {/* Contact Info */}
-          {[
-            { 
-              icon: '�', 
-              title: 'Email', 
-              detail: 'info@mindframeindia.com',
-              color: 'from-purple-400 to-purple-600'
-            },
-            { 
-              icon: '📱', 
-              title: 'Head Office - Mumbai', 
-              detail: '+91 9892000733 / +91 9167830733',
-              color: 'from-green-400 to-green-600'
-            },
-            { 
-              icon: '🌍', 
-              title: 'California Office', 
-              detail: '+1 (925) 205 8356',
-              color: 'from-blue-400 to-blue-600'
-            },
-          ].map((info, index) => (
-            <div
-              key={index}
-              className="bg-white p-8 rounded-lg border-t-4 border-secondary shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all"
-            >
-              <div className="text-5xl mb-4">{info.icon}</div>
-              <h3 className="text-xl font-bold text-primary mb-2">{info.title}</h3>
-              <p className="text-gray-600 text-lg">{info.detail}</p>
-            </div>
-          ))}
-        </div>
+        {/* Title */}
+        <h1 style={{ fontSize: 46, fontWeight: 900, color: '#1a1a1a', margin: '0 0 10px', letterSpacing: -1 }}>
+          Get In Touch
+        </h1>
+        <div style={{ width: 60, height: 3, background: gold, marginBottom: 48 }} />
 
-        {/* Office Locations Section */}
-        <div className="mb-16">
-          <h2 className="text-4xl font-bold text-primary mb-8 text-center">Our Global Offices</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-            {[
-              {
-                name: 'HEAD OFFICE',
-                city: 'MUMBAI, INDIA',
-                address: '6th Floor Bhukanvala Chambers B-22, Off Link Road, Veera Desai Rd, Andheri West, Mumbai, Maharashtra 400053',
-                email: 'info@mindframeindia.com',
-                phone: '+91 9892000733'
-              },
-              {
-                name: 'BRANCH OFFICE',
-                city: 'MUMBAI, INDIA',
-                address: '302, 3rd Floor, Crescent Towers, Behind Crystal Plaza, Next to Morya House, Off Link Road, Andheri (West), Mumbai – 400 053',
-                email: 'info@mindframeindia.com',
-                phone: '+91 9892000733 / +91 9167830733'
-              },
-              {
-                name: 'BRANCH OFFICE',
-                city: 'HYDERABAD, INDIA',
-                address: '501, Fifth floor, Pioneer Heights, Lane Opp International Public School, Manikonda Road, Hyderabad 500008',
-                email: 'info@mindframeindia.com',
-                phone: ''
-              },
-              {
-                name: 'BRANCH OFFICE',
-                city: 'DUBAI, UAE',
-                address: 'No: 606, 6th floor, Gardens 4, Near Ibn Battuta Mall, P. O. Box 234637, Dubai, United Arab Emirates',
-                email: 'info@mindframeindia.com',
-                phone: '+91 9892000733'
-              },
-              {
-                name: 'BRANCH OFFICE',
-                city: 'CALIFORNIA, USA',
-                address: 'Bishop Ranch 3, 2603 Camino Ramon, Suite 200, San Ramon, California 94583, United States of America',
-                email: 'info@mindframeglobal.com',
-                phone: '+1 (925) 205 8356'
-              }
-            ].map((office, index) => (
-              <div key={index} className="bg-gradient-to-br from-gray-50 to-white p-6 rounded-lg border border-gray-200 shadow-md hover:shadow-lg hover:-translate-y-1 transition-all">
-                <h4 className="font-bold text-secondary mb-1">{office.name}</h4>
-                <h5 className="font-bold text-primary mb-3">{office.city}</h5>
-                <p className="text-sm text-gray-600 leading-relaxed mb-3">{office.address}</p>
-                <div className="border-t pt-3 space-y-1">
-                  <p className="text-xs text-gray-600 flex items-center gap-2">
-                    <MdEmail className="text-secondary flex-shrink-0" />
-                    <span>{office.email}</span>
-                  </p>
-                  {office.phone && (
-                    <p className="text-xs text-gray-600 flex items-center gap-2">
-                      <MdPhone className="text-secondary flex-shrink-0" />
-                      <span>{office.phone}</span>
-                    </p>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* Two Column Layout */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: 64, alignItems: 'flex-start' }}>
 
-        {/* Main Contact Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          {/* Contact Form */}
-          <div className="bg-white border border-gray-200 p-8 rounded-lg shadow-lg">
-            <h2 className="text-3xl font-bold text-primary mb-8">Send us a Message</h2>
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Name */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Full Name <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all"
-                  placeholder="John Doe"
-                  required
-                />
-              </div>
-
-              {/* Email */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email Address <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all"
-                  placeholder="john@example.com"
-                  required
-                />
-              </div>
-
-              {/* Phone */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all"
-                  placeholder="(555) 123-4567"
-                />
-              </div>
-
-              {/* Subject */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
-                <input
-                  type="text"
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all"
-                  placeholder="How can we help you?"
-                />
-              </div>
-
-              {/* Message */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Message <span className="text-red-500">*</span>
-                </label>
-                <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  rows="5"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 resize-none transition-all"
-                  placeholder="Tell us more about your project..."
-                  required
-                ></textarea>
-              </div>
-
-              {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full px-6 py-3 bg-gradient-to-r from-secondary to-blue-600 text-white rounded-lg hover:shadow-lg transition-all font-bold disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 flex items-center justify-center gap-2 active:scale-95"
-              >
-                <MdSend className="text-lg" />
-                {loading ? 'Sending...' : 'Send Message'}
-              </button>
-            </form>
-          </div>
-
-          {/* Contact Image & Info */}
+          {/* Left: Office Addresses */}
           <div>
-            <img
-              src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&q=80"
-              alt="Contact Us"
-              className="rounded-lg shadow-lg mb-8 w-full h-96 object-cover"
-            />
-
-            {/* Additional Info Box */}
-            <div className="bg-gradient-to-br from-secondary/10 to-accent/10 p-8 rounded-lg border-l-4 border-secondary">
-              <h3 className="text-2xl font-bold text-primary mb-4">Why Contact Us?</h3>
-              <ul className="space-y-3">
-                {[
-                  'Get personalized digital marketing recommendations',
-                  'Discuss your business goals and challenges',
-                  'Learn about our services and pricing',
-                  'Schedule a free consultation with our experts',
-                  'Explore partnership opportunities',
-                ].map((item, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <span className="text-secondary font-bold mt-1">→</span>
-                    <span className="text-gray-700">{item}</span>
-                  </li>
-                ))}
-              </ul>
+            {/* Head Office */}
+            <div style={{ marginBottom: 28, paddingBottom: 28, borderBottom: '1px solid #e0ddd5' }}>
+              <h2 style={{ fontSize: 13, fontWeight: 900, textTransform: 'uppercase', letterSpacing: 2, color: '#1a1a1a', margin: '0 0 4px' }}>
+                HEAD OFFICE
+              </h2>
+              <p style={cityStyle}>MUMBAI, INDIA</p>
+              <p style={addrStyle}>{offices[0].address}</p>
+              <p style={contactLineStyle}>Email: {offices[0].email}</p>
+              <p style={contactLineStyle}>Mob: {offices[0].phone}</p>
             </div>
 
-            {/* Response Time */}
-            <div className="bg-accent/20 p-4 rounded-lg mt-6 border border-accent">
-              <p className="text-sm text-gray-700">
-                <span className="font-bold">Average Response Time:</span> We typically respond to inquiries within 24 hours during business days.
-              </p>
+            {/* Branch Offices */}
+            <div style={{ marginBottom: 28, paddingBottom: 10, borderBottom: '1px solid #e0ddd5' }}>
+              <h2 style={{ fontSize: 13, fontWeight: 900, textTransform: 'uppercase', letterSpacing: 2, color: '#1a1a1a', margin: '0 0 20px' }}>
+                BRANCH OFFICES
+              </h2>
             </div>
-          </div>
-        </div>
 
-        {/* Map Section */}
-        <div className="mt-20">
-          <h2 className="text-4xl font-bold text-primary mb-8 text-center">Head Office Location</h2>
-          <div className="bg-gray-200 rounded-lg overflow-hidden h-96 shadow-lg">
-            <iframe
-              width="100%"
-              height="100%"
-              frameBorder="0"
-              title="Mindframe Agency Location"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3767.6046876937015!2d72.82649!3d19.11717!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c8df8dc13d79%3A0x60f5ff3b8f9e4e0!2sBhukanvala%20Chambers%2C%20Veera%20Desai%20Rd%2C%20Andheri%20West%2C%20Mumbai%2C%20Maharashtra%20400053!5e0!3m2!1sen!2sin!4v1234567890"
-              allowFullScreen=""
-              loading="lazy"
-              style={{ border: 0 }}
-            ></iframe>
-          </div>
-        </div>
-
-        {/* Additional Support Section */}
-        <div className="mt-20 bg-gray-50 p-12 rounded-lg">
-          <h3 className="text-3xl font-bold text-primary mb-8 text-center">We're Here to Help</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            {[
-              {
-                icon: '⚡',
-                title: 'Quick Response',
-                description: 'We respond to all inquiries promptly and professionally'
-              },
-              {
-                icon: '🎯',
-                title: 'Expert Consultation',
-                description: 'Get advice from our team of experienced digital marketing experts'
-              },
-              {
-                icon: '🤝',
-                title: '24/7 Support',
-                description: 'Your success is our priority, and we\'re here to support you'
-              },
-            ].map((support, index) => (
-              <div key={index} className="p-6">
-                <div className="text-5xl mb-4">{support.icon}</div>
-                <h4 className="text-xl font-bold text-primary mb-2">{support.title}</h4>
-                <p className="text-gray-600">{support.description}</p>
+            {branches.map((b, i) => (
+              <div
+                key={i}
+                style={{
+                  marginBottom: i < branches.length - 1 ? 24 : 0,
+                  paddingBottom: i < branches.length - 1 ? 24 : 0,
+                  borderBottom: i < branches.length - 1 ? '1px solid #e0ddd5' : 'none',
+                }}
+              >
+                <p style={{ ...cityStyle, color: '#1a1a1a', fontWeight: 700 }}>{b.city}</p>
+                <p style={addrStyle}>{b.address}</p>
+                {b.phone && <p style={contactLineStyle}>Mob: {b.phone}</p>}
+                <p style={contactLineStyle}>Email: {b.email}</p>
               </div>
             ))}
           </div>
+
+          {/* Right: Form */}
+          <form onSubmit={handleSubmit}>
+            {/* Name + Email */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 }}>
+              <input
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Name*"
+                style={inputStyle}
+                required
+              />
+              <input
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="E-mail*"
+                style={inputStyle}
+                required
+              />
+            </div>
+
+            {/* Phone */}
+            <div style={{ marginBottom: 20 }}>
+              <input
+                name="phone"
+                type="tel"
+                value={formData.phone}
+                onChange={handleChange}
+                placeholder="Phone*"
+                style={inputStyle}
+                required
+              />
+            </div>
+
+            {/* Company */}
+            <div style={{ marginBottom: 24 }}>
+              <input
+                name="company"
+                value={formData.company}
+                onChange={handleChange}
+                placeholder="Your Company Name & Location*"
+                style={inputStyle}
+              />
+            </div>
+
+            {/* Services */}
+            <p style={{ fontSize: 12, color: '#444', margin: '0 0 14px', lineHeight: 1.5 }}>
+              I require the following services ( select at least one )
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px 16px', marginBottom: 24 }}>
+              {services.flat().filter(Boolean).map((s) => (
+                <label
+                  key={s}
+                  style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#333', cursor: 'pointer' }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={formData.services.includes(s)}
+                    onChange={() => handleServiceToggle(s)}
+                    style={{ width: 13, height: 13, accentColor: gold, cursor: 'pointer', flexShrink: 0 }}
+                  />
+                  {s}
+                </label>
+              ))}
+            </div>
+
+            {/* Anything else */}
+            <div style={{ marginBottom: 28 }}>
+              <input
+                name="anything"
+                value={formData.anything}
+                onChange={handleChange}
+                placeholder="Anything else you would like us to know.."
+                style={inputStyle}
+              />
+            </div>
+
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={loading}
+              style={{
+                background: loading ? '#b8952e' : gold,
+                color: '#fff',
+                border: 'none',
+                padding: '12px 36px',
+                fontSize: 11,
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: 2,
+                cursor: loading ? 'not-allowed' : 'pointer',
+                fontFamily: 'Georgia, serif',
+                opacity: loading ? 0.7 : 1,
+              }}
+            >
+              {loading ? 'SENDING...' : 'SUBMIT'}
+            </button>
+          </form>
         </div>
       </div>
     </div>

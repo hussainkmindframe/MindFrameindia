@@ -1,217 +1,147 @@
 /**
- * About Page
+ * About Page — Updated Design (Mindframe India)
  */
 
-import { Link } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+
+const gold = '#c9a84c';
+
+const skills = [
+  { label: 'Digital Marketing', value: 96 },
+  { label: 'Branding Solutions', value: 90 },
+  { label: 'Creative Designing', value: 93 },
+  { label: 'Print Media Creative', value: 89 },
+  { label: '2D / 3D Animation', value: 76 },
+  { label: 'Website Development', value: 95 },
+  { label: 'Mobile App Development', value: 90 },
+  { label: 'Corporate Films & TVCs', value: 80 },
+];
+
+const sections = [
+  {
+    title: 'Our Vision',
+    text: `Our vision lies in creating a subtle marketplace for all big-small businesses by providing win-win opportunities in the digital world. We understand our clients' requirements and then serve them a broad spectrum of services blended with creativity, technology, and innovation.`,
+  },
+  {
+    title: 'Our Mission',
+    text: `Our mission is to become a leading Advertising Agency for the top global brands in the market. We have been providing the perfect balance between strategy, creativity, and on-target digital marketing to our clients. And so we look forward to continuing the legacy of delivering the result-oriented services to the business that seek our assistance.`,
+  },
+  {
+    title: 'Our Commitment',
+    text: [
+      `Our Commitment is to give value to your business and help you soar beyond the horizons of success.`,
+      `Together we can develop innovative solutions to all your online and offline advertising and marketing dilemmas. To which, we need you to provide us with sufficient understanding of your business, company, services, products, competitors and the market you operate in.`,
+      `Without this critical information, a plan for a successful advertising campaign is nothing more than a matchstick expecting the sun to ignite it.`,
+    ],
+  },
+];
+
+function SkillBar({ label, value, animate }) {
+  return (
+    <div style={{ marginBottom: 18 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+        <span style={{ fontSize: 13, color: '#333' }}>{label}</span>
+        <strong style={{ fontSize: 13, fontWeight: 700, color: '#1a1a1a' }}>{value}%</strong>
+      </div>
+      <div style={{ height: 4, background: '#e0ddd5', overflow: 'hidden' }}>
+        <div
+          style={{
+            height: 4,
+            background: gold,
+            width: animate ? `${value}%` : '0%',
+            transition: 'width 1.2s ease',
+          }}
+        />
+      </div>
+    </div>
+  );
+}
 
 export default function About() {
+  const skillsRef = useRef(null);
+  const [animate, setAnimate] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setAnimate(true); },
+      { threshold: 0.2 }
+    );
+    if (skillsRef.current) observer.observe(skillsRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  const dividerStyle = { border: 'none', borderTop: '1px solid #ddd', margin: '0 0 48px' };
+  const bodyText = { fontSize: 13, color: '#444', lineHeight: 1.9, margin: '0 0 18px' };
+
   return (
-    <div>
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-primary to-secondary text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl font-bold mb-4">About Mindframe Agency</h1>
-          <p className="text-xl opacity-90">Transforming businesses through digital excellence since 2019</p>
+    <div style={{ background: '#f7f6f2', fontFamily: 'Georgia, serif', color: '#1a1a1a', minHeight: '100vh' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '56px 48px 80px' }}>
+
+        {/* Title */}
+        <h1 style={{ fontSize: 32, fontWeight: 900, textAlign: 'center', margin: '0 0 40px', letterSpacing: 0 }}>
+          About Us
+        </h1>
+
+        {/* Top Two Column */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: 56,
+            marginBottom: 64,
+            alignItems: 'flex-start',
+          }}
+        >
+          {/* Left: Text */}
+          <div>
+            <p style={bodyText}>
+              Mind Frame India, a leading Agency in the Advertising world, was established on the 6th Oct 2009.
+            </p>
+            <p style={bodyText}>
+              It has a panel of Creative Directors who happen to be marketing evangelists, brand strategists, creative
+              writers & filmmakers by profession. The team has successfully managed to create advertisements for many
+              leading brands including Microsoft, HP, and Dell to name a few. Working with several marketing agencies &
+              media companies helped Mind Frame gain an enormous amount of strategic experience that helped in initiating
+              and accomplishing many successful creative marketing projects.
+            </p>
+            <p style={{ ...bodyText, marginBottom: 0 }}>
+              Mind Frame has sourced the best creative talent in the industry lets it meet the challenges and demands of
+              the advertising world with also servicing the requirements of its clients. Mind Frame team comprises
+              Creative Marketing & Communication Professionals, Art Directors, Business & Creative Heads, Concept
+              Designers, Copywriters, Content Creators, Production Supervisors & Designers who work together to create
+              the most memorable and sophisticated experience for its Clientele.
+            </p>
+          </div>
+
+          {/* Right: Skill Bars */}
+          <div ref={skillsRef}>
+            {skills.map((s) => (
+              <SkillBar key={s.label} label={s.label} value={s.value} animate={animate} />
+            ))}
+          </div>
         </div>
-      </section>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        {/* Our Story */}
-        <section className="mb-20">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <img
-              src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=80"
-              alt="Our Story"
-              className="rounded-lg shadow-lg"
-            />
-            <div>
-              <h2 className="text-5xl font-bold text-primary mb-6">Our Story</h2>
-              <p className="text-gray-700 leading-relaxed mb-4 text-lg">
-                Founded in 2019, Mindframe Agency began with a simple mission: to help businesses thrive in the digital world. 
-                What started as a small team of passionate digital marketers has grown into a full-service agency trusted by hundreds of companies across various industries.
-              </p>
-              <p className="text-gray-700 leading-relaxed mb-4 text-lg">
-                We believe that every business, regardless of size, deserves access to world-class digital marketing strategies. 
-                Our approach combines data-driven insights with creative excellence to deliver measurable results.
-              </p>
-              <p className="text-gray-700 leading-relaxed text-lg">
-                Today, we're proud to have helped over 500 clients achieve their digital marketing goals and transform their online presence.
-              </p>
+        {/* Vision / Mission / Commitment */}
+        {sections.map((sec, i) => (
+          <div key={i}>
+            <hr style={dividerStyle} />
+            <div style={{ marginBottom: 52 }}>
+              <h2 style={{ fontSize: 22, fontWeight: 700, textAlign: 'center', margin: '0 0 20px' }}>
+                {sec.title}
+              </h2>
+              {Array.isArray(sec.text) ? (
+                sec.text.map((para, j) => (
+                  <p key={j} style={{ fontSize: 13, color: '#444', lineHeight: 1.9, margin: '0 0 10px' }}>
+                    {para}
+                  </p>
+                ))
+              ) : (
+                <p style={{ fontSize: 13, color: '#444', lineHeight: 1.9, margin: 0 }}>{sec.text}</p>
+              )}
             </div>
           </div>
-        </section>
+        ))}
 
-        {/* Our Mission & Vision */}
-        <section className="mb-20 grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-gradient-to-br from-blue-50 to-secondary/10 p-8 rounded-lg shadow-lg border-l-4 border-secondary">
-            <h3 className="text-3xl font-bold text-primary mb-4">🎯 Our Mission</h3>
-            <p className="text-gray-700 leading-relaxed text-lg">
-              To empower businesses with innovative digital marketing solutions that drive growth, 
-              build brand awareness, and create lasting connections with their audiences. We're committed 
-              to delivering exceptional service, transparency, and results-driven strategies that exceed expectations.
-            </p>
-          </div>
-
-          <div className="bg-gradient-to-br from-accent/10 to-orange-50 p-8 rounded-lg shadow-lg border-l-4 border-accent">
-            <h3 className="text-3xl font-bold text-primary mb-4">🚀 Our Vision</h3>
-            <p className="text-gray-700 leading-relaxed text-lg">
-              To be the most trusted digital marketing partner for businesses worldwide, known for 
-              innovation, integrity, and outstanding results. We envision a future where every company 
-              can leverage cutting-edge digital strategies to achieve their business goals.
-            </p>
-          </div>
-        </section>
-
-        {/* Our Values */}
-        <section className="mb-20">
-          <h2 className="text-5xl font-bold text-primary mb-12 text-center">Our Core Values</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                icon: '⭐',
-                title: 'Excellence',
-                description: 'We strive for excellence in every project, ensuring quality and attention to detail in everything we do.',
-              },
-              {
-                icon: '💡',
-                title: 'Innovation',
-                description: 'We stay ahead of industry trends and implement cutting-edge strategies and technologies.',
-              },
-              {
-                icon: '🤝',
-                title: 'Integrity',
-                description: 'We believe in transparency, honesty, and building trust with our clients through open communication.',
-              },
-              {
-                icon: '👥',
-                title: 'Collaboration',
-                description: 'We work closely with our clients to understand their goals and deliver results together.',
-              },
-              {
-                icon: '📈',
-                title: 'Impact',
-                description: 'We focus on creating meaningful impact and measurable results for our clients.',
-              },
-              {
-                icon: '🌱',
-                title: 'Growth',
-                description: 'We believe in continuous learning and helping our clients grow their businesses exponentially.',
-              },
-            ].map((value, index) => (
-              <div
-                key={index}
-                className="bg-white p-8 rounded-lg border border-gray-200 hover:border-secondary hover:shadow-lg transition-all hover:-translate-y-1"
-              >
-                <div className="text-5xl mb-4">{value.icon}</div>
-                <h3 className="text-2xl font-bold text-primary mb-3">{value.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{value.description}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Why Choose Us */}
-        <section className="mb-20">
-          <h2 className="text-5xl font-bold text-primary mb-12 text-center">Why Choose Mindframe?</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div>
-              <ul className="space-y-6">
-                {[
-                  { icon: '✓', text: 'Proven track record of success with 500+ satisfied clients' },
-                  { icon: '✓', text: 'Team of experienced digital marketing professionals' },
-                  { icon: '✓', text: 'Data-driven strategies backed by comprehensive analytics' },
-                  { icon: '✓', text: 'Transparent reporting and regular communication' },
-                  { icon: '✓', text: 'Customized solutions tailored to your business needs' },
-                  { icon: '✓', text: 'Dedicated support and ongoing optimization' },
-                  { icon: '✓', text: '5+ years of industry experience' },
-                  { icon: '✓', text: '24/7 customer support and assistance' },
-                ].map((reason, index) => (
-                  <li key={index} className="flex items-start gap-4">
-                    <span className="text-2xl text-secondary font-bold mt-1">{reason.icon}</span>
-                    <span className="text-lg text-gray-700">{reason.text}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <img
-              src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=80"
-              alt="Why Choose Us"
-              className="rounded-lg shadow-lg"
-            />
-          </div>
-        </section>
-
-        {/* Team Section */}
-        <section className="mb-20">
-          <h2 className="text-5xl font-bold text-primary mb-12 text-center">Our Team</h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {[
-              {
-                name: 'Sarah Williams',
-                role: 'Founder & CEO',
-                image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&q=80',
-              },
-              {
-                name: 'John Smith',
-                role: 'Digital Strategy Lead',
-                image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=80',
-              },
-              {
-                name: 'Emma Johnson',
-                role: 'Content Manager',
-                image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&q=80',
-              },
-              {
-                name: 'Mike Chen',
-                role: 'SEO Specialist',
-                image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&q=80',
-              },
-            ].map((member, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
-              >
-                <img src={member.image} alt={member.name} className="w-full h-64 object-cover" />
-                <div className="p-6 text-center">
-                  <h4 className="text-xl font-bold text-primary mb-2">{member.name}</h4>
-                  <p className="text-secondary font-medium">{member.role}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Stats Section */}
-        <section className="bg-gradient-to-r from-secondary to-accent text-white py-16 rounded-lg mb-20">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-            {[
-              { number: '500+', label: 'Happy Clients' },
-              { number: '1000+', label: 'Projects Completed' },
-              { number: '5+', label: 'Years Experience' },
-              { number: '50+', label: 'Team Members' },
-            ].map((stat, index) => (
-              <div key={index}>
-                <p className="text-5xl font-bold mb-2">{stat.number}</p>
-                <p className="text-xl">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* CTA */}
-        <section className="bg-gray-50 border-2 border-secondary p-12 rounded-lg text-center">
-          <h3 className="text-4xl font-bold text-primary mb-4">Ready to Work With Us?</h3>
-          <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-            Let's discuss how we can help your business reach new heights in the digital landscape.
-          </p>
-          <Link
-            to="/contact"
-            className="px-10 py-4 bg-secondary text-white rounded-lg hover:bg-blue-700 transition-colors inline-block font-bold text-lg"
-          >
-            Get in Touch Today
-          </Link>
-        </section>
       </div>
     </div>
   );

@@ -1,131 +1,183 @@
-/**
- * Admin Sidebar Component
- * Responsive sidebar with hamburger menu
- */
-
-import { useState } from 'react';
-import { MdDashboard, MdArticle, MdAdd, MdLogout, MdClose, MdMenu } from 'react-icons/md';
+import { MdDashboard, MdArticle, MdAdd, MdLogout, MdClose } from 'react-icons/md';
 
 export default function AdminSidebar({ activeTab, setActiveTab, isOpen, onToggleSidebar, onLogout }) {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: MdDashboard, description: 'View overview' },
-    { id: 'blogs', label: 'Manage Blogs', icon: MdArticle, description: 'Edit blogs' },
-    { id: 'add', label: 'Add New Blog', icon: MdAdd, description: 'Create blog' },
+    { id: 'blogs', label: 'Manage Blogs', icon: MdArticle, description: 'Edit & manage posts' },
+    { id: 'add', label: 'Add New Blog', icon: MdAdd, description: 'Create new post' },
   ];
 
   return (
     <>
-      {/* Mobile Overlay */}
+      {/* Mobile overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 md:hidden z-30 backdrop-blur-sm transition-opacity duration-300"
           onClick={onToggleSidebar}
-        ></div>
+          style={{
+            position: 'fixed', inset: 0,
+            background: 'rgba(0,0,0,0.6)',
+            backdropFilter: 'blur(4px)',
+            zIndex: 30,
+            display: 'block',
+          }}
+          className="md:hidden"
+        />
       )}
 
-      {/* Sidebar */}
-      <aside
-        className={`fixed md:static inset-y-0 left-0 w-72 bg-gradient-to-b from-primary to-primary/90 text-white transition-all duration-300 ease-in-out z-40 flex flex-col shadow-xl ${
-          isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
-        }`}
+      <aside style={{
+        position: 'fixed',
+        top: 0, left: 0, bottom: 0,
+        width: '260px',
+        background: 'linear-gradient(180deg, #0d1a2e 0%, #0a1220 100%)',
+        borderRight: '1px solid rgba(255,255,255,0.06)',
+        display: 'flex', flexDirection: 'column',
+        zIndex: 40,
+        transition: 'transform 0.3s ease',
+        transform: isOpen ? 'translateX(0)' : 'translateX(-100%)',
+        fontFamily: "'DM Sans', 'Segoe UI', sans-serif",
+      }}
+        className={`md:static md:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}
       >
-        {/* Header */}
-        <div className="relative px-6 py-8 border-b border-gray-700/50 backdrop-blur-md bg-black/10">
-          {/* Close Button (Mobile Only) */}
-          <button
-            onClick={onToggleSidebar}
-            className="absolute top-4 right-4 md:hidden p-2 hover:bg-gray-700 rounded-lg transition-colors"
-            aria-label="Close sidebar"
-          >
-            <MdClose className="w-6 h-6" />
-          </button>
+        {/* Top teal accent line */}
+        <div style={{ height: '2px', background: 'linear-gradient(90deg, #14b8a6, #0ea5e9, transparent)', flexShrink: 0 }} />
 
-          {/* Logo */}
-          <div>
-            <h2 className="text-2xl font-bold flex items-center gap-2">
-              <div className="text-3xl">🎯</div>
-              <span className="bg-gradient-to-r from-secondary via-blue-400 to-accent bg-clip-text text-transparent">
-                Mindframe
-              </span>
-            </h2>
-            <p className="text-xs text-gray-400 mt-1 font-semibold uppercase tracking-wider">Admin Panel</p>
+        {/* Header */}
+        <div style={{
+          padding: '1.5rem 1.25rem 1.25rem',
+          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          flexShrink: 0,
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{
+                width: '36px', height: '36px',
+                background: 'linear-gradient(135deg, #14b8a6, #0ea5e9)',
+                borderRadius: '9px',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '18px', flexShrink: 0,
+              }}>🎯</div>
+              <div>
+                <p style={{
+                  fontSize: '16px', fontWeight: '700',
+                  background: 'linear-gradient(90deg, #14b8a6, #38bdf8)',
+                  WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+                  margin: 0, letterSpacing: '-0.3px',
+                }}>Mindframe</p>
+                <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase', margin: 0 }}>
+                  Admin Panel
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={onToggleSidebar}
+              className="md:hidden"
+              style={{
+                background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)',
+                borderRadius: '8px', padding: '6px', cursor: 'pointer',
+                color: 'rgba(255,255,255,0.5)', display: 'flex',
+              }}
+            >
+              <MdClose style={{ fontSize: '16px' }} />
+            </button>
           </div>
         </div>
 
-        {/* Menu Items */}
-        <nav className="flex-1 px-4 py-8 space-y-3 overflow-y-auto scrollbar-hide">
+        {/* Nav */}
+        <nav style={{ flex: 1, padding: '1rem 0.75rem', display: 'flex', flexDirection: 'column', gap: '4px', overflowY: 'auto' }}>
+          <p style={{ color: 'rgba(255,255,255,0.2)', fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase', padding: '0 8px', marginBottom: '8px' }}>
+            Navigation
+          </p>
           {menuItems.map((item) => {
             const Icon = item.icon;
+            const isActive = activeTab === item.id;
             return (
               <button
                 key={item.id}
                 onClick={() => {
                   setActiveTab(item.id);
-                  // Close sidebar on mobile after selection
-                  if (window.innerWidth < 768) {
-                    onToggleSidebar();
-                  }
+                  if (window.innerWidth < 768) onToggleSidebar();
                 }}
-                className={`w-full text-left px-4 py-4 rounded-xl transition-all duration-200 flex items-center gap-4 group relative overflow-hidden ${
-                  activeTab === item.id
-                    ? 'bg-gradient-to-r from-secondary to-blue-600 text-white shadow-lg shadow-secondary/50 scale-105'
-                    : 'text-gray-300 hover:bg-gray-700/40 hover:text-white'
-                }`}
+                style={{
+                  width: '100%', textAlign: 'left',
+                  padding: '10px 12px',
+                  borderRadius: '10px',
+                  border: isActive ? '1px solid rgba(20,184,166,0.25)' : '1px solid transparent',
+                  background: isActive ? 'linear-gradient(135deg, rgba(20,184,166,0.15), rgba(14,165,233,0.1))' : 'transparent',
+                  cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', gap: '12px',
+                  transition: 'all 0.2s',
+                  position: 'relative', overflow: 'hidden',
+                }}
+                onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
+                onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
               >
-                {/* Background Gradient Animation */}
-                {activeTab === item.id && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-secondary/20 to-blue-600/20 opacity-50 animate-pulse"></div>
+                {isActive && (
+                  <div style={{
+                    position: 'absolute', left: 0, top: '20%', bottom: '20%',
+                    width: '3px', background: 'linear-gradient(180deg, #14b8a6, #0ea5e9)',
+                    borderRadius: '0 4px 4px 0',
+                  }} />
                 )}
-
-                {/* Content */}
-                <Icon className="text-2xl group-hover:scale-110 transition-transform duration-200" />
-                <div className="flex-1 relative z-10">
-                  <p className="font-semibold text-sm md:text-base leading-tight">{item.label}</p>
-                  <p className={`text-xs mt-1 ${activeTab === item.id ? 'text-blue-100' : 'text-gray-400'}`}>
+                <div style={{
+                  width: '34px', height: '34px', borderRadius: '8px', flexShrink: 0,
+                  background: isActive ? 'linear-gradient(135deg, rgba(20,184,166,0.3), rgba(14,165,233,0.2))' : 'rgba(255,255,255,0.05)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <Icon style={{ fontSize: '17px', color: isActive ? '#14b8a6' : 'rgba(255,255,255,0.4)' }} />
+                </div>
+                <div>
+                  <p style={{ color: isActive ? '#e2f8f5' : 'rgba(255,255,255,0.65)', fontSize: '13.5px', fontWeight: isActive ? '600' : '400', margin: 0 }}>
+                    {item.label}
+                  </p>
+                  <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: '11px', margin: 0 }}>
                     {item.description}
                   </p>
                 </div>
-
-                {/* Active Indicator */}
-                {activeTab === item.id && (
-                  <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                )}
               </button>
             );
           })}
         </nav>
 
-        {/* Divider */}
-        <div className="border-t border-gray-700/50"></div>
-
-        {/* User Info & Logout */}
-        <div className="px-4 py-6 space-y-4">
-          {/* User Card */}
-          <div className="bg-gradient-to-br from-gray-700/30 to-gray-800/30 rounded-xl p-4 border border-gray-600/50 backdrop-blur-sm">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-secondary to-accent rounded-lg flex items-center justify-center text-xl font-bold">
-                👤
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-white truncate">Admin User</p>
-                <p className="text-xs text-gray-400 truncate">Administrator</p>
-              </div>
+        {/* Bottom */}
+        <div style={{ padding: '0.75rem', borderTop: '1px solid rgba(255,255,255,0.06)', flexShrink: 0 }}>
+          {/* User card */}
+          <div style={{
+            background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)',
+            borderRadius: '10px', padding: '10px 12px',
+            display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px',
+          }}>
+            <div style={{
+              width: '34px', height: '34px', borderRadius: '9px', flexShrink: 0,
+              background: 'linear-gradient(135deg, #14b8a6, #0ea5e9)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: '16px',
+            }}>👤</div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '13px', fontWeight: '600', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                Admin User
+              </p>
+              <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '11px', margin: 0 }}>Administrator</p>
             </div>
+            <div style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#22c55e', flexShrink: 0 }} />
           </div>
 
-          {/* Logout Button */}
+          {/* Logout */}
           <button
             onClick={onLogout}
-            className="w-full px-4 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-xl transition-all duration-200 font-semibold flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
+            style={{
+              width: '100%', padding: '10px 12px',
+              background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)',
+              borderRadius: '10px', color: 'rgba(248,113,113,0.9)',
+              fontSize: '13px', fontWeight: '500', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+              transition: 'all 0.2s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.15)'; e.currentTarget.style.color = '#f87171'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.08)'; e.currentTarget.style.color = 'rgba(248,113,113,0.9)'; }}
           >
-            <MdLogout className="text-lg" />
-            <span>Logout</span>
+            <MdLogout style={{ fontSize: '16px' }} />
+            Logout
           </button>
-
-          {/* Quick Info */}
-          <div className="text-xs text-gray-400 text-center pt-2 border-t border-gray-700/50">
-            <p>Logged in as Admin</p>
-          </div>
         </div>
       </aside>
     </>

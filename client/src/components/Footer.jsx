@@ -1,140 +1,230 @@
 /**
- * Footer Component
+ * Footer Component — Updated Design (Mindframe India)
  */
 
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaFacebook, FaTwitter, FaLinkedin } from 'react-icons/fa';
+import { FaFacebook, FaLinkedinIn } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
+
+const goldColor = '#c9a84c';
+
+const SocialLink = ({ href, children }) => {
+  const baseStyle = {
+    width: 34, height: 34,
+    border: '1px solid #333',
+    color: '#888',
+    borderRadius: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transition: 'all 0.2s',
+    textDecoration: 'none',
+  };
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <a
+      href={href}
+      style={{
+        ...baseStyle,
+        borderColor: hovered ? goldColor : '#333',
+        color: hovered ? goldColor : '#888',
+      }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {children}
+    </a>
+  );
+};
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
-  const offices = [
+  const quickLinks = [
+    { label: 'About Us', to: '/about' },
+    { label: 'Our Team', to: '/team' },
+    { label: 'Our Work', to: '/work' },
+    { label: 'Brand Presentation', to: '/brand' },
+    { label: 'Blogs', to: '/blogs' },
+    { label: 'Careers', to: '/careers' },
+    { label: 'Disclaimer', to: '/disclaimer' },
+    { label: 'Privacy Policy', to: '/privacy' },
+    { label: 'Sitemap', to: '/sitemap' },
+  ];
+
+  const services = [
+    'Brand Identity',
+    'Branding and Marketing',
+    'Digital Marketing',
+    'Advertising Services',
+    'Best Television Advertising Agency in Mumbai | TV Ads Campaigns',
+    'Website Development',
+    'Mobile App Development',
+  ];
+
+  const locations = [
     {
-      name: 'HEAD OFFICE - MUMBAI',
-      address: '6th Floor Bhukanvala Chambers B-22, Off Link Road, Veera Desai Rd, Andheri West, Mumbai, Maharashtra 400053',
-      email: 'info@mindframeindia.com',
-      phone: '+91 9892000733'
+      label: 'Head Office',
+      address:
+        'B28 Venue – 6th Floor, Bhukanvala Chambers, Behind Crystal Plaza, Next to Mourya House, Off Link Road, Andheri West, Mumbai, Maharashtra 400053',
     },
     {
-      name: 'BRANCH - MUMBAI',
-      address: '302, 3rd Floor, Crescent Towers, Behind Crystal Plaza, Next to Morya House, Off Link Road, Andheri (West), Mumbai – 400 053',
-      email: 'info@mindframeindia.com',
-      phone: '+91 9892000733 / +91 9167830733'
+      label: 'Branch Office',
+      address:
+        '302, 3rd Floor, Crescent Towers, Behind Crystal Plaza, Next to Mourya House, Off Link Road, Andheri West, Mumbai, Maharashtra 400053',
     },
     {
-      name: 'BRANCH - HYDERABAD',
-      address: '501, Fifth floor, Pioneer Heights, Lane Opp International Public School, Manikonda Road, Hyderabad 500008',
-      email: 'info@mindframeindia.com',
-      phone: ''
+      label: 'U.S. Office',
+      address:
+        'Bishop Ranch 3, 2603 Camino Ramon, Suite 200, San Ramon, California 94583, United States of America',
     },
     {
-      name: 'BRANCH - DUBAI',
-      address: 'No: 606, 6th floor, Gardens 4, Near Ibn Battuta Mall, P. O. Box 234637, Dubai, United Arab Emirates',
-      email: 'info@mindframeindia.com',
-      phone: '+91 9892000733'
+      label: 'Dubai Office',
+      address:
+        'No. 606, 6th Floor, Gardens 4, Near Ibn Battuta Mall, P.O. Box 234637, Dubai, UAE',
     },
     {
-      name: 'BRANCH - CALIFORNIA',
-      address: 'Bishop Ranch 3, 2603 Camino Ramon, Suite 200, San Ramon, California 94583, United States of America',
-      email: 'info@mindframeglobal.com',
-      phone: '+1 (925) 205 8356'
-    }
+      label: 'Hyderabad Branch',
+      address:
+        '501, Fifth Floor, Pioneer Heights, Manikonda Road, Hyderabad 500008',
+    },
   ];
 
   return (
-    <footer className="bg-primary text-white py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-          {/* Brand */}
-          <div className="md:col-span-2">
-            <h3 className="text-2xl font-bold mb-2">
-              <span className="bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent">
-                Mindframe
-              </span>
-              <span className="text-gray-300"> Agency</span>
-            </h3>
-            <p className="text-gray-400">
-              We create digital marketing solutions that drive results and transform businesses.
-            </p>
-          </div>
+    <footer style={{ background: '#0d0f1a', color: '#fff', padding: '56px 40px 28px', width: '100%' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
 
-          {/* Links */}
-          <div>
-            <h4 className="text-lg font-semibold mb-4">Navigation</h4>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/" className="text-gray-400 hover:text-secondary transition-colors">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link to="/blogs" className="text-gray-400 hover:text-secondary transition-colors">
-                  Blogs
-                </Link>
-              </li>
-              <li>
-                <Link to="/about" className="text-gray-400 hover:text-secondary transition-colors">
-                  About
-                </Link>
-              </li>
-              <li>
-                <Link to="/contact" className="text-gray-400 hover:text-secondary transition-colors">
-                  Contact
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h4 className="text-lg font-semibold mb-4">Quick Contact</h4>
-            <ul className="space-y-2 text-gray-400 text-sm">
-              <li>Email: info@mindframeindia.com</li>
-              <li>Phone: +91 9892000733</li>
-              <li>Location: Multiple Offices</li>
-              <li className="pt-2">
-                <Link to="/contact" className="text-secondary hover:text-accent transition-colors font-semibold">
-                  View All Offices →
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        {/* Office Locations */}
-        <div className="border-t border-gray-700 py-8 mb-8">
-          <h4 className="text-lg font-semibold mb-6">Our Offices</h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-            {offices.map((office, index) => (
-              <div key={index} className="text-sm bg-gray-800 p-4 rounded-lg">
-                <h5 className="font-semibold text-secondary mb-2">{office.name}</h5>
-                <p className="text-gray-400 text-xs leading-relaxed mb-2">{office.address}</p>
-                <p className="text-gray-400 text-xs">{office.email}</p>
-                {office.phone && <p className="text-gray-400 text-xs">{office.phone}</p>}
+        {/* Top Grid */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: 40,
+            marginBottom: 40,
+          }}
+        >
+          {/* Brand / Logo */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div
+              style={{
+                width: 90, height: 90, borderRadius: '50%',
+                background: '#fff', border: `2px solid ${goldColor}`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}
+            >
+              <div style={{ textAlign: 'center', lineHeight: 1 }}>
+                <span style={{ fontSize: 22, fontWeight: 900, color: goldColor, display: 'block' }}>MF</span>
+                <span style={{ fontSize: 6, letterSpacing: 3, color: '#555', textTransform: 'uppercase', display: 'block' }}>
+                  MIND FRAME
+                </span>
               </div>
-            ))}
+            </div>
+
+            <div>
+              <h3 style={{ fontSize: 14, fontWeight: 700, color: '#fff', margin: '0 0 6px', lineHeight: 1.4 }}>
+                Leading Advertising Agency in Mumbai
+              </h3>
+              <p style={{ fontSize: 12, color: goldColor, fontStyle: 'italic', lineHeight: 1.6, margin: 0 }}>
+                Our Commitment Is To Give Value To Your Business And Help You Soar Beyond The Horizons Of Success.
+              </p>
+            </div>
+
+            <div style={{ fontSize: 12, color: '#aaa' }}>
+              <p style={{ margin: '0 0 4px' }}>
+                Mob: <span style={{ color: '#fff' }}>+91 9892000733 / +91 9167830733</span>
+              </p>
+              <p style={{ margin: 0 }}>
+                Email: <span style={{ color: '#fff' }}>info@mindframeindia.com</span>
+              </p>
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h4 style={{
+              fontSize: 11, fontWeight: 700, textTransform: 'uppercase',
+              letterSpacing: 2, color: '#fff', margin: '0 0 16px',
+              paddingBottom: 8, borderBottom: `1px solid ${goldColor}`,
+            }}>
+              Quick Links
+            </h4>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              {quickLinks.map((item) => (
+                <li key={item.to} style={{ marginBottom: 10, display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                  <span style={{ color: goldColor, fontSize: 10, marginTop: 2, flexShrink: 0 }}>○</span>
+                  <Link
+                    to={item.to}
+                    style={{ color: '#bbb', fontSize: 13, textDecoration: 'none', lineHeight: 1.4 }}
+                    onMouseEnter={(e) => (e.target.style.color = goldColor)}
+                    onMouseLeave={(e) => (e.target.style.color = '#bbb')}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Our Services */}
+          <div>
+            <h4 style={{
+              fontSize: 11, fontWeight: 700, textTransform: 'uppercase',
+              letterSpacing: 2, color: '#fff', margin: '0 0 16px',
+              paddingBottom: 8, borderBottom: `1px solid ${goldColor}`,
+            }}>
+              Our Services
+            </h4>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              {services.map((s, i) => (
+                <li key={i} style={{ marginBottom: 10, display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                  <span style={{ color: goldColor, fontSize: 10, marginTop: 2, flexShrink: 0 }}>○</span>
+                  <span style={{ color: '#bbb', fontSize: 13, lineHeight: 1.4 }}>{s}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Our Locations */}
+          <div>
+            <h4 style={{
+              fontSize: 11, fontWeight: 700, textTransform: 'uppercase',
+              letterSpacing: 2, color: '#fff', margin: '0 0 16px',
+              paddingBottom: 8, borderBottom: `1px solid ${goldColor}`,
+            }}>
+              Our Locations
+            </h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              {locations.map((loc, i) => (
+                <div key={i}>
+                  <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, color: goldColor, margin: '0 0 4px' }}>
+                    {loc.label}
+                  </p>
+                  <p style={{ fontSize: 12, color: '#999', lineHeight: 1.55, margin: 0 }}>
+                    {loc.address}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Divider */}
-        <div className="border-t border-gray-700 pt-8">
-          <div className="flex justify-between items-center flex-col md:flex-row gap-4">
-            <p className="text-gray-400 text-sm">
-              © {currentYear} Mindframe Agency. All rights reserved.
-            </p>
-            <div className="flex gap-4">
-              <a href="#" className="text-gray-400 hover:text-secondary transition-colors text-2xl hover:scale-110 transform">
-                <FaFacebook />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-secondary transition-colors text-2xl hover:scale-110 transform">
-                <FaTwitter />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-secondary transition-colors text-2xl hover:scale-110 transform">
-                <FaLinkedin />
-              </a>
-            </div>
+        <hr style={{ border: 'none', borderTop: '1px solid #2a2d3a', margin: '0 0 20px' }} />
+
+        {/* Bottom Bar */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+          <p style={{ fontSize: 12, color: '#666', margin: 0 }}>
+            © {currentYear} Mindframe India. All rights reserved.
+          </p>
+          <div style={{ display: 'flex', gap: 10 }}>
+            <SocialLink href="#"><FaFacebook size={14} /></SocialLink>
+            <SocialLink href="#"><FaXTwitter size={14} /></SocialLink>
+            <SocialLink href="#"><FaLinkedinIn size={14} /></SocialLink>
           </div>
         </div>
+
       </div>
     </footer>
   );

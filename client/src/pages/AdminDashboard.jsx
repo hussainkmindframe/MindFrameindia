@@ -1,5 +1,5 @@
 /**
- * Admin Dashboard Page
+ * Admin Dashboard Page — Dark Professional Theme
  */
 
 import { useState, useEffect } from 'react';
@@ -10,7 +10,23 @@ import AdminSidebar from '../components/AdminSidebar';
 import BlogTable from '../components/BlogTable';
 import Loader from '../components/Loader';
 import toast from 'react-hot-toast';
-import { MdMenu, MdEdit, MdAdd, MdDelete, MdPublish, MdUnpublished, MdCloudUpload, MdStar, MdCheckCircle } from 'react-icons/md';
+import { MdMenu, MdEdit, MdAdd, MdDelete, MdPublish, MdUnpublished, MdCloudUpload, MdStar, MdCheckCircle, MdTrendingUp, MdArticle } from 'react-icons/md';
+
+const DARK = {
+  bg: '#080e1c',
+  bgCard: 'rgba(255,255,255,0.04)',
+  bgCard2: 'rgba(255,255,255,0.03)',
+  border: '1px solid rgba(255,255,255,0.07)',
+  text: '#e8eaf0',
+  textMuted: 'rgba(255,255,255,0.4)',
+  textDim: 'rgba(255,255,255,0.6)',
+  teal: '#14b8a6',
+  blue: '#0ea5e9',
+  green: '#22c55e',
+  yellow: '#f59e0b',
+  red: '#ef4444',
+  font: "'DM Sans', 'Segoe UI', sans-serif",
+};
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -21,20 +37,10 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(false);
   const [stats, setStats] = useState({ totalBlogs: 0, totalViews: 0 });
 
+  useEffect(() => { checkAuth(); }, []);
+  useEffect(() => { if (!admin) navigate('/admin/login'); }, [admin, navigate]);
   useEffect(() => {
-    checkAuth();
-  }, []);
-
-  useEffect(() => {
-    if (!admin) {
-      navigate('/admin/login');
-    }
-  }, [admin, navigate]);
-
-  useEffect(() => {
-    if (activeTab === 'dashboard' || activeTab === 'blogs') {
-      fetchBlogs();
-    }
+    if (activeTab === 'dashboard' || activeTab === 'blogs') fetchBlogs();
   }, [activeTab]);
 
   const fetchBlogs = async () => {
@@ -43,12 +49,8 @@ export default function AdminDashboard() {
       const response = await blogService.getAdminBlogs(1, 100);
       setBlogs(response.data.blogs);
       const totalViews = response.data.blogs.reduce((sum, blog) => sum + blog.views, 0);
-      setStats({
-        totalBlogs: response.data.total,
-        totalViews,
-      });
+      setStats({ totalBlogs: response.data.total, totalViews });
     } catch (error) {
-      console.error('Error fetching blogs:', error);
       toast.error('Failed to fetch blogs');
     } finally {
       setLoading(false);
@@ -74,160 +76,155 @@ export default function AdminDashboard() {
 
   if (!admin) return null;
 
+  const tabTitle = activeTab === 'dashboard' ? 'Dashboard' : activeTab === 'blogs' ? 'Manage Blogs' : 'Add New Blog';
+
   return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
+    <div style={{
+      display: 'flex', height: '100vh',
+      background: '#080e1c',
+      fontFamily: DARK.font, overflow: 'hidden',
+    }}>
       <AdminSidebar
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        isOpen={sidebarOpen}
-        onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+        activeTab={activeTab} setActiveTab={setActiveTab}
+        isOpen={sidebarOpen} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
         onLogout={handleLogout}
       />
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      {/* Main */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minWidth: 0 }}>
+
         {/* Header */}
-        <header className="bg-white shadow-md border-b border-gray-200 px-4 md:px-6 py-4 md:py-6">
-          <div className="flex justify-between items-center gap-4">
-            {/* Left Side - Title */}
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-3 md:gap-0">
-                {/* Hamburger Menu (Mobile) */}
-                <button
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
-                  className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                  aria-label="Toggle sidebar"
-                >
-                  <MdMenu className="w-6 h-6 text-primary" />
-                </button>
-
-                {/* Title Section */}
-                <div className="min-w-0 flex-1">
-                  <h1 className="text-2xl md:text-3xl font-bold text-primary truncate">
-                    {activeTab === 'dashboard'
-                      ? 'Dashboard'
-                      : activeTab === 'blogs'
-                        ? 'Manage Blogs'
-                        : 'Add New Blog'}
-                  </h1>
-                  <p className="text-gray-600 text-sm md:text-base mt-1 truncate">Welcome back, {admin?.name}!</p>
-                </div>
-              </div>
+        <header style={{
+          background: 'rgba(8,14,28,0.95)',
+          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          padding: '0 1.5rem',
+          height: '64px',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          flexShrink: 0, gap: '1rem',
+          backdropFilter: 'blur(10px)',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="md:hidden"
+              style={{
+                background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)',
+                borderRadius: '8px', padding: '7px', cursor: 'pointer',
+                color: 'rgba(255,255,255,0.6)', display: 'flex',
+              }}
+            >
+              <MdMenu style={{ fontSize: '18px' }} />
+            </button>
+            <div>
+              <h1 style={{ color: '#fff', fontSize: '20px', fontWeight: '700', margin: 0, letterSpacing: '-0.3px' }}>{tabTitle}</h1>
+              <p style={{ color: DARK.textMuted, fontSize: '12px', margin: 0 }}>Welcome back, {admin?.name}!</p>
             </div>
+          </div>
 
-            {/* Right Side - Quick Actions */}
-            <div className="flex items-center gap-2 md:gap-4">
-              {/* Status Badge */}
-              <div className="hidden sm:flex items-center gap-2 px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-semibold">
-                <span className="w-2 h-2 bg-green-600 rounded-full animate-pulse"></span>
-                Online
-              </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: '6px',
+              padding: '5px 12px',
+              background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.2)',
+              borderRadius: '20px',
+            }}>
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: DARK.green, display: 'inline-block' }} />
+              <span style={{ color: '#86efac', fontSize: '12px', fontWeight: '500' }}>Online</span>
             </div>
           </div>
         </header>
 
-        {/* Content Area */}
-        <main className="flex-1 overflow-auto p-3 md:p-6">
+        {/* Content */}
+        <main style={{ flex: 1, overflowY: 'auto', padding: '1.5rem' }}>
           {activeTab === 'dashboard' && (
-            <div className="space-y-4 md:space-y-6">
-              {/* Stats Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 md:p-6 rounded-lg shadow-md border-l-4 border-secondary hover:shadow-lg transition-shadow">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="text-gray-600 text-sm font-medium uppercase tracking-wider">Total Blogs</h3>
-                      <p className="text-3xl md:text-4xl font-bold text-primary mt-2">{stats.totalBlogs}</p>
-                      <p className="text-xs text-gray-500 mt-2">Blog posts created</p>
-                    </div>
-                    <div className="text-4xl text-secondary opacity-20">
-                      <MdEdit />
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-4 md:p-6 rounded-lg shadow-md border-l-4 border-accent hover:shadow-lg transition-shadow">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="text-gray-600 text-sm font-medium uppercase tracking-wider">Total Views</h3>
-                      <p className="text-3xl md:text-4xl font-bold text-primary mt-2">{stats.totalViews.toLocaleString()}</p>
-                      <p className="text-xs text-gray-500 mt-2">Total page views</p>
-                    </div>
-                    <div className="text-4xl text-accent opacity-20">
-                      <MdPublish />
-                    </div>
-                  </div>
-                </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+
+              {/* Stats */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+                <StatCard
+                  label="Total Blogs" value={stats.totalBlogs}
+                  icon={<MdArticle />} color={DARK.teal}
+                  sub="Blog posts created"
+                />
+                <StatCard
+                  label="Total Views" value={stats.totalViews.toLocaleString()}
+                  icon={<MdTrendingUp />} color={DARK.blue}
+                  sub="Total page views"
+                />
               </div>
 
               {/* Quick Actions */}
-              <div className="bg-white p-4 md:p-6 rounded-lg shadow-md">
-                <h3 className="text-lg md:text-xl font-bold text-primary mb-4">Quick Actions</h3>
-                <div className="flex flex-col sm:flex-row gap-3">
+              <div style={{ background: DARK.bgCard, border: DARK.border, borderRadius: '14px', padding: '1.25rem' }}>
+                <p style={{ color: DARK.textDim, fontSize: '14px', fontWeight: '600', marginBottom: '1rem' }}>Quick Actions</p>
+                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                   <button
                     onClick={() => setActiveTab('add')}
-                    className="flex-1 px-4 md:px-6 py-3 bg-gradient-to-r from-secondary to-blue-600 text-white rounded-lg hover:shadow-lg transition-all font-bold text-sm md:text-base active:scale-95 flex items-center justify-center gap-2"
+                    style={{
+                      flex: 1, minWidth: '160px', padding: '11px 16px',
+                      background: 'linear-gradient(135deg, #14b8a6, #0ea5e9)',
+                      border: 'none', borderRadius: '10px',
+                      color: '#fff', fontSize: '14px', fontWeight: '600',
+                      cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                      transition: 'opacity 0.2s',
+                    }}
                   >
-                    <MdAdd className="text-lg" />
-                    Add New Blog
+                    <MdAdd style={{ fontSize: '18px' }} /> Add New Blog
                   </button>
                   <button
                     onClick={() => setActiveTab('blogs')}
-                    className="flex-1 px-4 md:px-6 py-3 bg-gray-200 text-primary rounded-lg hover:bg-gray-300 transition-colors font-bold text-sm md:text-base active:scale-95 flex items-center justify-center gap-2"
+                    style={{
+                      flex: 1, minWidth: '160px', padding: '11px 16px',
+                      background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.09)',
+                      borderRadius: '10px', color: DARK.textDim,
+                      fontSize: '14px', fontWeight: '500',
+                      cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                      transition: 'all 0.2s',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.09)'; e.currentTarget.style.color = '#fff'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.color = DARK.textDim; }}
                   >
-                    <MdEdit className="text-lg" />
-                    View All Blogs
+                    <MdEdit style={{ fontSize: '16px' }} /> View All Blogs
                   </button>
                 </div>
               </div>
 
               {/* Recent Blogs */}
-              <div className="bg-white p-4 md:p-6 rounded-lg shadow-md">
-                <h3 className="text-lg md:text-xl font-bold text-primary mb-4">Recent Blogs</h3>
+              <div style={{ background: DARK.bgCard, border: DARK.border, borderRadius: '14px', padding: '1.25rem', overflow: 'hidden' }}>
+                <p style={{ color: DARK.textDim, fontSize: '14px', fontWeight: '600', marginBottom: '1rem' }}>Recent Blogs</p>
                 {loading ? (
-                  <div className="flex justify-center py-8">
+                  <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}>
                     <Loader size="md" text="Loading blogs..." />
                   </div>
                 ) : blogs.length > 0 ? (
-                  <div className="overflow-x-auto -mx-4 md:mx-0">
-                    <table className="w-full text-xs md:text-sm">
-                      <thead className="border-b bg-gray-50">
-                        <tr>
-                          <th className="text-left py-2 px-3 md:px-4 font-semibold text-gray-700">Image</th>
-                          <th className="text-left py-2 px-3 md:px-4 font-semibold text-gray-700">Title</th>
-                          <th className="text-left py-2 px-3 md:px-4 font-semibold text-gray-700">Views</th>
-                          <th className="text-left py-2 px-3 md:px-4 font-semibold text-gray-700">Status</th>
+                  <div style={{ overflowX: 'auto' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+                      <thead>
+                        <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                          {['Image', 'Title', 'Views', 'Status'].map(h => (
+                            <th key={h} style={{ textAlign: 'left', padding: '8px 12px', color: DARK.textMuted, fontWeight: '500', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.8px' }}>{h}</th>
+                          ))}
                         </tr>
                       </thead>
                       <tbody>
                         {blogs.slice(0, 5).map((blog) => (
-                          <tr key={blog._id} className="border-b hover:bg-gray-50">
-                            <td className="py-3 px-3 md:px-4">
-                              <img
-                                src={blog.image}
-                                alt={blog.title}
-                                className="w-10 h-10 md:w-12 md:h-12 object-cover rounded"
-                              />
+                          <tr key={blog._id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                            <td style={{ padding: '10px 12px' }}>
+                              <img src={blog.image} alt={blog.title} style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '8px' }} />
                             </td>
-                            <td className="py-3 px-3 md:px-4 font-medium text-gray-900 truncate max-w-xs">{blog.title}</td>
-                            <td className="py-3 px-3 md:px-4 text-gray-600">{blog.views}</td>
-                            <td className="py-3 px-3 md:px-4">
-                              <span className={`inline-flex items-center gap-1 px-2 md:px-3 py-1 rounded-full text-xs font-semibold ${
-                                  blog.published
-                                    ? 'bg-green-100 text-green-800'
-                                    : 'bg-yellow-100 text-yellow-800'
-                                }`}
-                              >
-                                {blog.published ? (
-                                  <>
-                                    <MdPublish className="text-sm" />
-                                    Published
-                                  </>
-                                ) : (
-                                  <>
-                                    <MdUnpublished className="text-sm" />
-                                    Draft
-                                  </>
-                                )}
+                            <td style={{ padding: '10px 12px', color: DARK.text, maxWidth: '260px' }}>
+                              <span style={{ display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{blog.title}</span>
+                            </td>
+                            <td style={{ padding: '10px 12px', color: DARK.textMuted }}>{blog.views}</td>
+                            <td style={{ padding: '10px 12px' }}>
+                              <span style={{
+                                display: 'inline-flex', alignItems: 'center', gap: '5px',
+                                padding: '3px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: '600',
+                                background: blog.published ? 'rgba(34,197,94,0.1)' : 'rgba(245,158,11,0.1)',
+                                color: blog.published ? '#86efac' : '#fcd34d',
+                                border: `1px solid ${blog.published ? 'rgba(34,197,94,0.2)' : 'rgba(245,158,11,0.2)'}`,
+                              }}>
+                                {blog.published ? <MdPublish style={{ fontSize: '12px' }} /> : <MdUnpublished style={{ fontSize: '12px' }} />}
+                                {blog.published ? 'Published' : 'Draft'}
                               </span>
                             </td>
                           </tr>
@@ -236,11 +233,17 @@ export default function AdminDashboard() {
                     </table>
                   </div>
                 ) : (
-                  <div className="text-center py-8">
-                    <p className="text-gray-600 mb-4">No blogs yet. Create your first blog!</p>
+                  <div style={{ textAlign: 'center', padding: '2.5rem 0' }}>
+                    <p style={{ color: DARK.textMuted, marginBottom: '1rem', fontSize: '14px' }}>No blogs yet. Create your first blog!</p>
                     <button
                       onClick={() => setActiveTab('add')}
-                      className="px-4 py-2 bg-secondary text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 mx-auto"
+                      style={{
+                        padding: '9px 20px',
+                        background: 'linear-gradient(135deg, #14b8a6, #0ea5e9)',
+                        border: 'none', borderRadius: '8px',
+                        color: '#fff', fontSize: '13px', fontWeight: '600', cursor: 'pointer',
+                        display: 'inline-flex', alignItems: 'center', gap: '6px',
+                      }}
                     >
                       <MdAdd /> Create Now
                     </button>
@@ -251,17 +254,14 @@ export default function AdminDashboard() {
           )}
 
           {activeTab === 'blogs' && (
-            <div className="max-w-full">
+            <div style={{ maxWidth: '100%' }}>
               <BlogTable blogs={blogs} loading={loading} onDelete={handleDeleteBlog} />
             </div>
           )}
 
           {activeTab === 'add' && (
-            <div className="max-w-4xl mx-auto">
-              <AddBlogForm onSuccess={() => {
-                setActiveTab('blogs');
-                fetchBlogs();
-              }} />
+            <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+              <AddBlogForm onSuccess={() => { setActiveTab('blogs'); fetchBlogs(); }} />
             </div>
           )}
         </main>
@@ -270,61 +270,70 @@ export default function AdminDashboard() {
   );
 }
 
-/**
- * Add Blog Form Component
- */
+/** Stat Card */
+function StatCard({ label, value, icon, color, sub }) {
+  return (
+    <div style={{
+      background: 'rgba(255,255,255,0.04)',
+      border: '1px solid rgba(255,255,255,0.07)',
+      borderRadius: '14px', padding: '1.25rem',
+      position: 'relative', overflow: 'hidden',
+    }}>
+      <div style={{
+        position: 'absolute', top: 0, left: 0, right: 0, height: '2px',
+        background: `linear-gradient(90deg, ${color}, transparent)`,
+      }} />
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+        <div>
+          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>{label}</p>
+          <p style={{ color: '#fff', fontSize: '32px', fontWeight: '700', letterSpacing: '-1px', margin: '0 0 4px' }}>{value}</p>
+          <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '11px', margin: 0 }}>{sub}</p>
+        </div>
+        <div style={{
+          width: '40px', height: '40px', borderRadius: '10px', flexShrink: 0,
+          background: `${color}18`,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: '20px', color,
+        }}>
+          {icon}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** Add Blog Form */
 function AddBlogForm({ onSuccess }) {
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    content: '',
-    image: '',
-    tags: '',
-    category: 'Other',
-    featured: false,
-    published: true,
+    title: '', description: '', content: '', image: '',
+    tags: '', category: 'Other', featured: false, published: true,
   });
   const [loading, setLoading] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === 'checkbox' ? checked : value,
-    });
+    setFormData({ ...formData, [name]: type === 'checkbox' ? checked : value });
   };
 
   const handleImageUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     setUploadingImage(true);
     try {
       const formDataForUpload = new FormData();
       formDataForUpload.append('image', file);
-
       const response = await fetch('/api/blogs/upload-image', {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        },
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
         body: formDataForUpload,
       });
-
-      if (!response.ok) {
-        throw new Error('Image upload failed');
-      }
-
+      if (!response.ok) throw new Error('Image upload failed');
       const data = await response.json();
-      setFormData({
-        ...formData,
-        image: data.image,
-      });
+      setFormData({ ...formData, image: data.image });
       toast.success('Image uploaded successfully!');
     } catch (error) {
       toast.error('Failed to upload image');
-      console.error(error);
     } finally {
       setUploadingImage(false);
     }
@@ -332,20 +341,13 @@ function AddBlogForm({ onSuccess }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!formData.title || !formData.description || !formData.content || !formData.image) {
       toast.error('Please fill in all required fields');
       return;
     }
-
     setLoading(true);
-
     try {
-      const payload = {
-        ...formData,
-        tags: formData.tags.split(',').map((tag) => tag.trim()),
-      };
-
+      const payload = { ...formData, tags: formData.tags.split(',').map(t => t.trim()) };
       await blogService.createBlog(payload);
       toast.success('Blog created successfully!');
       onSuccess();
@@ -356,194 +358,152 @@ function AddBlogForm({ onSuccess }) {
     }
   };
 
+  const inputStyle = {
+    width: '100%', boxSizing: 'border-box',
+    padding: '11px 14px',
+    background: 'rgba(255,255,255,0.05)',
+    border: '1px solid rgba(255,255,255,0.09)',
+    borderRadius: '10px',
+    color: '#e8eaf0', fontSize: '14px', outline: 'none',
+    transition: 'border-color 0.2s',
+    fontFamily: "'DM Sans', 'Segoe UI', sans-serif",
+  };
+
+  const labelStyle = { display: 'block', color: 'rgba(255,255,255,0.55)', fontSize: '12px', fontWeight: '500', marginBottom: '7px', letterSpacing: '0.3px' };
+
   return (
-    <div className="bg-white p-4 md:p-6 rounded-lg shadow-md">
-      <div className="mb-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-primary mb-2 flex items-center gap-2">
-          <MdEdit className="text-3xl" />
-          Add New Blog
+    <div style={{
+      background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)',
+      borderRadius: '16px', padding: '1.5rem',
+      fontFamily: "'DM Sans', 'Segoe UI', sans-serif",
+    }}>
+      <div style={{ marginBottom: '1.5rem', paddingBottom: '1rem', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <h2 style={{ color: '#fff', fontSize: '20px', fontWeight: '700', margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <MdEdit style={{ color: '#14b8a6' }} /> Add New Blog
         </h2>
-        <p className="text-gray-600 text-sm">Create engaging content for your audience</p>
+        <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '13px', margin: 0 }}>Create engaging content for your audience</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
         {/* Title */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Title <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            className="w-full px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all"
-            placeholder="Enter blog title"
-            required
-            disabled={loading || uploadingImage}
+          <label style={labelStyle}>Title <span style={{ color: '#f87171' }}>*</span></label>
+          <input type="text" name="title" value={formData.title} onChange={handleChange}
+            style={inputStyle} placeholder="Enter blog title" required disabled={loading || uploadingImage}
+            onFocus={e => e.target.style.borderColor = 'rgba(20,184,166,0.5)'}
+            onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.09)'}
           />
         </div>
 
         {/* Description */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Description <span className="text-red-500">*</span>
-          </label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            rows="3"
-            className="w-full px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 resize-none transition-all"
-            placeholder="Brief description of your blog post"
-            required
-            disabled={loading || uploadingImage}
-          ></textarea>
+          <label style={labelStyle}>Description <span style={{ color: '#f87171' }}>*</span></label>
+          <textarea name="description" value={formData.description} onChange={handleChange}
+            rows="3" style={{ ...inputStyle, resize: 'none' }}
+            placeholder="Brief description of your blog post" required disabled={loading || uploadingImage}
+            onFocus={e => e.target.style.borderColor = 'rgba(20,184,166,0.5)'}
+            onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.09)'}
+          />
         </div>
 
         {/* Content */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Content <span className="text-red-500">*</span>
-          </label>
-          <textarea
-            name="content"
-            value={formData.content}
-            onChange={handleChange}
-            rows="6"
-            className="w-full px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 resize-none transition-all"
-            placeholder="Write your blog content here..."
-            required
-            disabled={loading || uploadingImage}
-          ></textarea>
+          <label style={labelStyle}>Content <span style={{ color: '#f87171' }}>*</span></label>
+          <textarea name="content" value={formData.content} onChange={handleChange}
+            rows="6" style={{ ...inputStyle, resize: 'none' }}
+            placeholder="Write your blog content here..." required disabled={loading || uploadingImage}
+            onFocus={e => e.target.style.borderColor = 'rgba(20,184,166,0.5)'}
+            onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.09)'}
+          />
         </div>
 
         {/* Image Upload */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Upload Image <span className="text-red-500">*</span>
-          </label>
-          <div className="flex flex-col gap-3">
-            <div className="relative">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-secondary cursor-pointer"
-                disabled={loading || uploadingImage}
-              />
-            </div>
-            {uploadingImage && (
-              <div className="flex items-center gap-2 text-blue-600">
-                <div className="animate-spin">
-                  <MdCloudUpload className="text-lg" />
-                </div>
-                <span className="text-sm font-medium">Uploading image...</span>
-              </div>
-            )}
-          </div>
-          <p className="text-xs text-gray-500 mt-2">
+          <label style={labelStyle}>Upload Image <span style={{ color: '#f87171' }}>*</span></label>
+          <input type="file" accept="image/*" onChange={handleImageUpload}
+            style={{ ...inputStyle, cursor: 'pointer', color: 'rgba(255,255,255,0.4)' }}
+            disabled={loading || uploadingImage}
+          />
+          <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: '11px', marginTop: '5px' }}>
             Supported: JPEG, PNG, GIF, WebP (Max 20MB)
           </p>
+          {uploadingImage && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#14b8a6', fontSize: '13px', marginTop: '8px' }}>
+              <MdCloudUpload style={{ fontSize: '16px' }} /> Uploading image...
+            </div>
+          )}
           {formData.image && (
-            <div className="mt-4">
-              <p className="text-sm font-medium text-gray-600 mb-2">Preview:</p>
-              <img
-                src={formData.image}
-                alt="Preview"
-                className="w-24 h-24 md:w-32 md:h-32 object-cover rounded-lg border-2 border-secondary"
-              />
+            <div style={{ marginTop: '10px' }}>
+              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '12px', marginBottom: '6px' }}>Preview:</p>
+              <img src={formData.image} alt="Preview" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '10px', border: '2px solid rgba(20,184,166,0.4)' }} />
             </div>
           )}
         </div>
 
-        {/* Category & Tags Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-          {/* Category */}
+        {/* Category & Tags */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Category</label>
-            <select
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              className="w-full px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all"
+            <label style={labelStyle}>Category</label>
+            <select name="category" value={formData.category} onChange={handleChange}
+              style={{ ...inputStyle }}
               disabled={loading || uploadingImage}
             >
-              <option>Marketing</option>
-              <option>Social Media</option>
-              <option>SEO</option>
-              <option>Content</option>
-              <option>Design</option>
-              <option>Other</option>
+              {['Marketing', 'Social Media', 'SEO', 'Content', 'Design', 'Other'].map(c => (
+                <option key={c} value={c} style={{ background: '#0d1a2e' }}>{c}</option>
+              ))}
             </select>
           </div>
-
-          {/* Tags */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Tags <span className="text-gray-400">(comma separated)</span>
-            </label>
-            <input
-              type="text"
-              name="tags"
-              value={formData.tags}
-              onChange={handleChange}
-              className="w-full px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all"
-              placeholder="digital marketing, seo"
+            <label style={labelStyle}>Tags <span style={{ color: 'rgba(255,255,255,0.3)' }}>(comma separated)</span></label>
+            <input type="text" name="tags" value={formData.tags} onChange={handleChange}
+              style={inputStyle} placeholder="digital marketing, seo"
               disabled={loading || uploadingImage}
+              onFocus={e => e.target.style.borderColor = 'rgba(20,184,166,0.5)'}
+              onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.09)'}
             />
           </div>
         </div>
 
         {/* Checkboxes */}
-        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 bg-gray-50 p-4 rounded-lg">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              name="featured"
-              checked={formData.featured}
-              onChange={handleChange}
-              className="w-5 h-5 rounded border-gray-300 cursor-pointer"
-              disabled={loading || uploadingImage}
-            />
-            <span className="text-sm font-medium text-gray-700 flex items-center gap-1">
-              <MdStar className="text-yellow-500" />
-              Featured Blog
-            </span>
-          </label>
-
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              name="published"
-              checked={formData.published}
-              onChange={handleChange}
-              className="w-5 h-5 rounded border-gray-300 cursor-pointer"
-              disabled={loading || uploadingImage}
-            />
-            <span className="text-sm font-medium text-gray-700 flex items-center gap-1">
-              <MdCheckCircle className="text-green-500" />
-              Publish Now
-            </span>
-          </label>
+        <div style={{
+          display: 'flex', gap: '1.5rem', flexWrap: 'wrap',
+          background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)',
+          borderRadius: '10px', padding: '12px 16px',
+        }}>
+          {[
+            { name: 'featured', checked: formData.featured, icon: <MdStar style={{ color: '#f59e0b', fontSize: '14px' }} />, label: 'Featured Blog' },
+            { name: 'published', checked: formData.published, icon: <MdCheckCircle style={{ color: '#22c55e', fontSize: '14px' }} />, label: 'Publish Now' },
+          ].map(({ name, checked, icon, label }) => (
+            <label key={name} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+              <input type="checkbox" name={name} checked={checked} onChange={handleChange}
+                style={{ width: '16px', height: '16px', accentColor: '#14b8a6', cursor: 'pointer' }}
+                disabled={loading || uploadingImage}
+              />
+              <span style={{ display: 'flex', alignItems: 'center', gap: '5px', color: 'rgba(255,255,255,0.6)', fontSize: '13px', fontWeight: '500' }}>
+                {icon} {label}
+              </span>
+            </label>
+          ))}
         </div>
 
-        {/* Submit Button */}
+        {/* Submit */}
         <button
-          type="submit"
-          disabled={loading || uploadingImage}
-          className="w-full px-6 py-3 bg-gradient-to-r from-secondary to-blue-600 text-white rounded-lg hover:shadow-lg transition-all font-bold text-base md:text-lg disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 flex items-center justify-center gap-2"
+          type="submit" disabled={loading || uploadingImage}
+          style={{
+            padding: '13px',
+            background: (loading || uploadingImage) ? 'rgba(20,184,166,0.35)' : 'linear-gradient(135deg, #14b8a6, #0ea5e9)',
+            border: 'none', borderRadius: '10px',
+            color: '#fff', fontSize: '15px', fontWeight: '600',
+            cursor: (loading || uploadingImage) ? 'not-allowed' : 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+            transition: 'opacity 0.2s',
+            marginTop: '0.25rem',
+          }}
         >
           {loading ? (
-            <>
-              <Loader size="sm" text="" />
-              <span>Creating Blog...</span>
-            </>
+            <><Loader size="sm" text="" /><span>Creating Blog...</span></>
           ) : (
-            <>
-              <MdAdd className="text-lg" />
-              Create Blog Post
-            </>
+            <><MdAdd style={{ fontSize: '18px' }} /> Create Blog Post</>
           )}
         </button>
       </form>
