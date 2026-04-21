@@ -6,6 +6,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaFacebook, FaLinkedinIn } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
+import logo from '../assets/Logo-MFI.png';
+
 
 const goldColor = '#c9a84c';
 
@@ -80,16 +82,7 @@ export default function Footer() {
       address:
         'Bishop Ranch 3, 2603 Camino Ramon, Suite 200, San Ramon, California 94583, United States of America',
     },
-    {
-      label: 'Dubai Office',
-      address:
-        'No. 606, 6th Floor, Gardens 4, Near Ibn Battuta Mall, P.O. Box 234637, Dubai, UAE',
-    },
-    {
-      label: 'Hyderabad Branch',
-      address:
-        '501, Fifth Floor, Pioneer Heights, Manikonda Road, Hyderabad 500008',
-    },
+    
   ];
 
   return (
@@ -105,41 +98,64 @@ export default function Footer() {
             marginBottom: 40,
           }}
         >
-          {/* Brand / Logo */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <div
-              style={{
-                width: 90, height: 90, borderRadius: '50%',
-                background: '#fff', border: `2px solid ${goldColor}`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}
-            >
-              <div style={{ textAlign: 'center', lineHeight: 1 }}>
-                <span style={{ fontSize: 22, fontWeight: 900, color: goldColor, display: 'block' }}>MF</span>
-                <span style={{ fontSize: 6, letterSpacing: 3, color: '#555', textTransform: 'uppercase', display: 'block' }}>
-                  MIND FRAME
-                </span>
-              </div>
-            </div>
 
-            <div>
-              <h3 style={{ fontSize: 14, fontWeight: 700, color: '#fff', margin: '0 0 6px', lineHeight: 1.4 }}>
-                Leading Advertising Agency in Mumbai
-              </h3>
-              <p style={{ fontSize: 12, color: goldColor, fontStyle: 'italic', lineHeight: 1.6, margin: 0 }}>
-                Our Commitment Is To Give Value To Your Business And Help You Soar Beyond The Horizons Of Success.
-              </p>
-            </div>
+{/* Brand / Logo */}
+<div 
+  style={{ 
+    display: 'flex', 
+    flexDirection: 'column', 
+    gap: 16,
+    alignItems: 'flex-start',   // 👈 main fix
+    textAlign: 'left'           // 👈 text bhi left
+  }}
+>
+  
+  {/* LOGO IMAGE */}
+  <img
+    src={logo}
+    alt="Mindframe India Logo"
+    style={{
+      height: 100,
+      width: 'auto',
+      objectFit: 'contain',
+      display: 'block'          // 👈 extra safety
+    }}
+  />
 
-            <div style={{ fontSize: 12, color: '#aaa' }}>
-              <p style={{ margin: '0 0 4px' }}>
-                Mob: <span style={{ color: '#fff' }}>+91 9892000733 / +91 9167830733</span>
-              </p>
-              <p style={{ margin: 0 }}>
-                Email: <span style={{ color: '#fff' }}>info@mindframeindia.com</span>
-              </p>
-            </div>
-          </div>
+  {/* TEXT */}
+  <div>
+    <h3 style={{ 
+      fontSize: 14, 
+      fontWeight: 700, 
+      color: '#fff', 
+      margin: '0 0 6px', 
+      lineHeight: 1.4 
+    }}>
+      Leading Advertising Agency in Mumbai
+    </h3>
+
+    <p style={{ 
+      fontSize: 12, 
+      color: goldColor, 
+      fontStyle: 'italic', 
+      lineHeight: 1.6, 
+      margin: 0 
+    }}>
+      Our Commitment Is To Give Value To Your Business And Help You Soar Beyond The Horizons Of Success.
+    </p>
+  </div>
+
+  {/* CONTACT */}
+  <div style={{ fontSize: 12, color: '#aaa' }}>
+    <p style={{ margin: '0 0 4px' }}>
+      Mob: <span style={{ color: '#fff' }}>+91 9892000733 / +91 9167830733</span>
+    </p>
+    <p style={{ margin: 0 }}>
+      Email: <span style={{ color: '#fff' }}>info@mindframeindia.com</span>
+    </p>
+  </div>
+</div>
+
 
           {/* Quick Links */}
           <div>
@@ -215,7 +231,7 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
-          <p style={{ fontSize: 12, color: '#666', margin: 0 }}>
+          <p style={{ fontSize: 12, color: '#c9a84c', margin: 0 }}>
             © {currentYear} Mindframe India. All rights reserved.
           </p>
           <div style={{ display: 'flex', gap: 10 }}>

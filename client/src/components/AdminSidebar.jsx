@@ -1,5 +1,7 @@
 import { MdDashboard, MdArticle, MdAdd, MdLogout, MdClose } from 'react-icons/md';
 
+const gold = '#c9a84c';
+
 export default function AdminSidebar({ activeTab, setActiveTab, isOpen, onToggleSidebar, onLogout }) {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: MdDashboard, description: 'View overview' },
@@ -15,8 +17,8 @@ export default function AdminSidebar({ activeTab, setActiveTab, isOpen, onToggle
           onClick={onToggleSidebar}
           style={{
             position: 'fixed', inset: 0,
-            background: 'rgba(0,0,0,0.6)',
-            backdropFilter: 'blur(4px)',
+            background: 'rgba(0,0,0,0.4)',
+            backdropFilter: 'blur(2px)',
             zIndex: 30,
             display: 'block',
           }}
@@ -28,42 +30,50 @@ export default function AdminSidebar({ activeTab, setActiveTab, isOpen, onToggle
         position: 'fixed',
         top: 0, left: 0, bottom: 0,
         width: '260px',
-        background: 'linear-gradient(180deg, #0d1a2e 0%, #0a1220 100%)',
-        borderRight: '1px solid rgba(255,255,255,0.06)',
+        background: '#ffffff',
+        borderRight: '1px solid #e8ecef',
         display: 'flex', flexDirection: 'column',
         zIndex: 40,
         transition: 'transform 0.3s ease',
         transform: isOpen ? 'translateX(0)' : 'translateX(-100%)',
-        fontFamily: "'DM Sans', 'Segoe UI', sans-serif",
+        fontFamily: "'Inter', 'Segoe UI', 'Georgia', serif",
+        boxShadow: '2px 0 8px rgba(0,0,0,0.02)',
       }}
         className={`md:static md:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}
       >
-        {/* Top teal accent line */}
-        <div style={{ height: '2px', background: 'linear-gradient(90deg, #14b8a6, #0ea5e9, transparent)', flexShrink: 0 }} />
+        {/* Top gold accent line */}
+        <div style={{ height: '3px', background: `linear-gradient(90deg, ${gold}, ${gold}66, transparent)`, flexShrink: 0 }} />
 
         {/* Header */}
         <div style={{
           padding: '1.5rem 1.25rem 1.25rem',
-          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          borderBottom: '1px solid #e8ecef',
           flexShrink: 0,
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={{
-                width: '36px', height: '36px',
-                background: 'linear-gradient(135deg, #14b8a6, #0ea5e9)',
-                borderRadius: '9px',
+                width: '42px', height: '42px',
+                borderRadius: '50%',
+                border: `2px solid ${gold}`,
+                background: '#fff',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '18px', flexShrink: 0,
-              }}>🎯</div>
+                flexShrink: 0,
+              }}>
+                <div style={{ textAlign: 'center', lineHeight: 1 }}>
+                  <span style={{ fontSize: 14, fontWeight: 900, color: gold, display: 'block' }}>MF</span>
+                  <span style={{ fontSize: 4.5, letterSpacing: 1.5, color: '#888', textTransform: 'uppercase', display: 'block', marginTop: 1 }}>
+                    MIND
+                  </span>
+                </div>
+              </div>
               <div>
                 <p style={{
                   fontSize: '16px', fontWeight: '700',
-                  background: 'linear-gradient(90deg, #14b8a6, #38bdf8)',
-                  WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+                  color: '#1a1a2e',
                   margin: 0, letterSpacing: '-0.3px',
                 }}>Mindframe</p>
-                <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase', margin: 0 }}>
+                <p style={{ color: '#6c757d', fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase', margin: 0 }}>
                   Admin Panel
                 </p>
               </div>
@@ -72,9 +82,9 @@ export default function AdminSidebar({ activeTab, setActiveTab, isOpen, onToggle
               onClick={onToggleSidebar}
               className="md:hidden"
               style={{
-                background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)',
+                background: '#f8f9fa', border: '1px solid #e8ecef',
                 borderRadius: '8px', padding: '6px', cursor: 'pointer',
-                color: 'rgba(255,255,255,0.5)', display: 'flex',
+                color: '#6c757d', display: 'flex',
               }}
             >
               <MdClose style={{ fontSize: '16px' }} />
@@ -84,7 +94,7 @@ export default function AdminSidebar({ activeTab, setActiveTab, isOpen, onToggle
 
         {/* Nav */}
         <nav style={{ flex: 1, padding: '1rem 0.75rem', display: 'flex', flexDirection: 'column', gap: '4px', overflowY: 'auto' }}>
-          <p style={{ color: 'rgba(255,255,255,0.2)', fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase', padding: '0 8px', marginBottom: '8px' }}>
+          <p style={{ color: '#adb5bd', fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase', padding: '0 8px', marginBottom: '8px', fontWeight: '600' }}>
             Navigation
           </p>
           {menuItems.map((item) => {
@@ -101,35 +111,35 @@ export default function AdminSidebar({ activeTab, setActiveTab, isOpen, onToggle
                   width: '100%', textAlign: 'left',
                   padding: '10px 12px',
                   borderRadius: '10px',
-                  border: isActive ? '1px solid rgba(20,184,166,0.25)' : '1px solid transparent',
-                  background: isActive ? 'linear-gradient(135deg, rgba(20,184,166,0.15), rgba(14,165,233,0.1))' : 'transparent',
+                  border: isActive ? `1px solid ${gold}40` : '1px solid transparent',
+                  background: isActive ? `${gold}10` : 'transparent',
                   cursor: 'pointer',
                   display: 'flex', alignItems: 'center', gap: '12px',
                   transition: 'all 0.2s',
                   position: 'relative', overflow: 'hidden',
                 }}
-                onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
+                onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = '#f8f9fa'; }}
                 onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
               >
                 {isActive && (
                   <div style={{
                     position: 'absolute', left: 0, top: '20%', bottom: '20%',
-                    width: '3px', background: 'linear-gradient(180deg, #14b8a6, #0ea5e9)',
+                    width: '3px', background: gold,
                     borderRadius: '0 4px 4px 0',
                   }} />
                 )}
                 <div style={{
                   width: '34px', height: '34px', borderRadius: '8px', flexShrink: 0,
-                  background: isActive ? 'linear-gradient(135deg, rgba(20,184,166,0.3), rgba(14,165,233,0.2))' : 'rgba(255,255,255,0.05)',
+                  background: isActive ? `${gold}15` : '#f8f9fa',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
-                  <Icon style={{ fontSize: '17px', color: isActive ? '#14b8a6' : 'rgba(255,255,255,0.4)' }} />
+                  <Icon style={{ fontSize: '17px', color: isActive ? gold : '#6c757d' }} />
                 </div>
                 <div>
-                  <p style={{ color: isActive ? '#e2f8f5' : 'rgba(255,255,255,0.65)', fontSize: '13.5px', fontWeight: isActive ? '600' : '400', margin: 0 }}>
+                  <p style={{ color: isActive ? '#1a1a2e' : '#495057', fontSize: '13.5px', fontWeight: isActive ? '600' : '400', margin: 0 }}>
                     {item.label}
                   </p>
-                  <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: '11px', margin: 0 }}>
+                  <p style={{ color: '#adb5bd', fontSize: '11px', margin: 0 }}>
                     {item.description}
                   </p>
                 </div>
@@ -139,26 +149,26 @@ export default function AdminSidebar({ activeTab, setActiveTab, isOpen, onToggle
         </nav>
 
         {/* Bottom */}
-        <div style={{ padding: '0.75rem', borderTop: '1px solid rgba(255,255,255,0.06)', flexShrink: 0 }}>
+        <div style={{ padding: '0.75rem', borderTop: '1px solid #e8ecef', flexShrink: 0 }}>
           {/* User card */}
           <div style={{
-            background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)',
+            background: '#f8f9fa', border: '1px solid #e8ecef',
             borderRadius: '10px', padding: '10px 12px',
             display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px',
           }}>
             <div style={{
               width: '34px', height: '34px', borderRadius: '9px', flexShrink: 0,
-              background: 'linear-gradient(135deg, #14b8a6, #0ea5e9)',
+              background: `linear-gradient(135deg, ${gold}, ${gold}99)`,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: '16px',
+              fontSize: '16px', color: '#fff',
             }}>👤</div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '13px', fontWeight: '600', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <p style={{ color: '#1a1a2e', fontSize: '13px', fontWeight: '600', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 Admin User
               </p>
-              <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '11px', margin: 0 }}>Administrator</p>
+              <p style={{ color: '#6c757d', fontSize: '11px', margin: 0 }}>Administrator</p>
             </div>
-            <div style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#22c55e', flexShrink: 0 }} />
+            <div style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#28a745', flexShrink: 0 }} />
           </div>
 
           {/* Logout */}
@@ -166,14 +176,14 @@ export default function AdminSidebar({ activeTab, setActiveTab, isOpen, onToggle
             onClick={onLogout}
             style={{
               width: '100%', padding: '10px 12px',
-              background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)',
-              borderRadius: '10px', color: 'rgba(248,113,113,0.9)',
+              background: '#f8d7da', border: '1px solid #f5c6cb',
+              borderRadius: '10px', color: '#721c24',
               fontSize: '13px', fontWeight: '500', cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
               transition: 'all 0.2s',
             }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.15)'; e.currentTarget.style.color = '#f87171'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.08)'; e.currentTarget.style.color = 'rgba(248,113,113,0.9)'; }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#f5c6cb'; e.currentTarget.style.color = '#721c24'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#f8d7da'; e.currentTarget.style.color = '#721c24'; }}
           >
             <MdLogout style={{ fontSize: '16px' }} />
             Logout

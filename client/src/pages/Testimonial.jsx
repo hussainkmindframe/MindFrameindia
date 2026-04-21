@@ -1,5 +1,5 @@
 /**
- * Testimonials Page — Updated Design (Mindframe India)
+ * Testimonials Page — Enhanced Design (Mindframe India)
  */
 
 import { useState, useEffect, useCallback } from 'react';
@@ -99,6 +99,14 @@ const testimonials = [
 export default function Testimonials() {
   const [current, setCurrent] = useState(0);
   const [visible, setVisible] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const goTo = useCallback((idx) => {
     setVisible(false);
@@ -109,40 +117,81 @@ export default function Testimonials() {
   }, []);
 
   useEffect(() => {
-    const timer = setInterval(() => goTo(current + 1), 5000);
+    const timer = setInterval(() => goTo(current + 1), 6000);
     return () => clearInterval(timer);
   }, [current, goTo]);
 
-  const arrowBtn = (onClick, label) => (
+  const ArrowButton = ({ direction, onClick }) => (
     <button
       onClick={onClick}
-      aria-label={label}
+      aria-label={direction === 'prev' ? 'Previous' : 'Next'}
       style={{
-        width: 38, height: 38, borderRadius: '50%',
-        border: '1.5px solid #999', background: '#fff',
-        cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontSize: 18, color: '#333', transition: 'all 0.2s',
+        width: isMobile ? 40 : 48,
+        height: isMobile ? 40 : 48,
+        borderRadius: '50%',
+        border: `2px solid ${gold}`,
+        background: '#fff',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: isMobile ? 20 : 24,
+        color: gold,
+        transition: 'all 0.3s ease',
         fontFamily: 'Georgia, serif',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
       }}
-      onMouseOver={(e) => { e.currentTarget.style.background = gold; e.currentTarget.style.borderColor = gold; e.currentTarget.style.color = '#fff'; }}
-      onMouseOut={(e) => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.borderColor = '#999'; e.currentTarget.style.color = '#333'; }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.background = gold;
+        e.currentTarget.style.color = '#fff';
+        e.currentTarget.style.transform = 'scale(1.05)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.background = '#fff';
+        e.currentTarget.style.color = gold;
+        e.currentTarget.style.transform = 'scale(1)';
+      }}
     >
-      {label === 'Previous' ? '‹' : '›'}
+      {direction === 'prev' ? '←' : '→'}
     </button>
+  );
+
+  const DotButton = ({ index, isActive, onClick }) => (
+    <button
+      onClick={onClick}
+      style={{
+        width: isActive ? 12 : 8,
+        height: isActive ? 12 : 8,
+        borderRadius: '50%',
+        background: isActive ? gold : '#ccc',
+        border: 'none',
+        cursor: 'pointer',
+        padding: 0,
+        transition: 'all 0.3s ease',
+        transform: isActive ? 'scale(1.2)' : 'scale(1)',
+        boxShadow: isActive ? `0 0 0 2px rgba(201,168,76,0.2)` : 'none',
+      }}
+      onMouseEnter={(e) => {
+        if (!isActive) e.currentTarget.style.background = '#999';
+      }}
+      onMouseLeave={(e) => {
+        if (!isActive) e.currentTarget.style.background = '#ccc';
+      }}
+    />
   );
 
   return (
     <div style={{ fontFamily: 'Georgia, serif', color: '#1a1a1a' }}>
 
-      {/* Logo Strip */}
+      {/* Logo Strip - Responsive */}
       <div
         style={{
           background: '#fff',
-          padding: '32px 48px',
+          padding: isMobile ? '24px 20px' : '32px 48px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: 56,
+          gap: isMobile ? 24 : 56,
           flexWrap: 'wrap',
           borderBottom: '1px solid #eee',
         }}
@@ -151,17 +200,26 @@ export default function Testimonials() {
           <div
             key={logo.name}
             style={{
-              height: 68,
+              height: isMobile ? 50 : 68,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              opacity: 0.8,
-              filter: 'grayscale(20%)',
-              transition: 'all 0.2s',
+              opacity: 0.7,
+              filter: 'grayscale(30%)',
+              transition: 'all 0.3s ease',
               cursor: 'pointer',
+              transform: 'scale(1)',
             }}
-            onMouseOver={(e) => { e.currentTarget.style.opacity = 1; e.currentTarget.style.filter = 'none'; }}
-            onMouseOut={(e) => { e.currentTarget.style.opacity = 0.8; e.currentTarget.style.filter = 'grayscale(20%)'; }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.opacity = '1';
+              e.currentTarget.style.filter = 'grayscale(0%)';
+              e.currentTarget.style.transform = 'scale(1.05)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.opacity = '0.7';
+              e.currentTarget.style.filter = 'grayscale(30%)';
+              e.currentTarget.style.transform = 'scale(1)';
+            }}
             title={logo.name}
           >
             {logo.render()}
@@ -169,64 +227,139 @@ export default function Testimonials() {
         ))}
       </div>
 
-      {/* Testimonials Carousel */}
+      {/* Testimonials Carousel - Enhanced */}
       <div
         style={{
-          background: '#f4f3ef',
-          padding: '72px 48px 64px',
+          background: 'linear-gradient(135deg, #f4f3ef 0%, #faf9f5 100%)',
+          padding: isMobile ? '48px 20px' : '72px 48px 64px',
           textAlign: 'center',
+          position: 'relative',
         }}
       >
-        <h2 style={{ fontSize: 48, fontWeight: 900, margin: '0 0 12px', letterSpacing: -1 }}>
+        {/* Decorative Quote Icon */}
+        <div style={{
+          fontSize: 80,
+          color: `${gold}15`,
+          fontFamily: 'Georgia, serif',
+          position: 'absolute',
+          top: isMobile ? 20 : 40,
+          left: isMobile ? 20 : 60,
+          opacity: 0.3,
+          pointerEvents: 'none',
+        }}>
+          "
+        </div>
+
+        <h2 style={{ 
+          fontSize: isMobile ? 32 : 48, 
+          fontWeight: 900, 
+          margin: '0 0 12px', 
+          letterSpacing: -1,
+          background: `linear-gradient(135deg, #1a1a1a 0%, #333 100%)`,
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text'
+        }}>
           Testimonials
         </h2>
         <div style={{ width: 60, height: 2, background: gold, margin: '0 auto 48px' }} />
 
-        {/* Quote */}
-        <div
-          style={{
-            opacity: visible ? 1 : 0,
-            transition: 'opacity 0.3s ease',
-            maxWidth: 760,
-            margin: '0 auto 32px',
-          }}
-        >
-          <p style={{ fontSize: 14, color: '#333', lineHeight: 1.95, textAlign: 'left', margin: '0 0 28px', minHeight: 120 }}>
-            {testimonials[current].text}
-          </p>
-          <p style={{ fontSize: 13.5, fontWeight: 700, color: '#1a1a1a', margin: '0 0 4px' }}>
-            {testimonials[current].author}
-          </p>
-          <p style={{ fontSize: 13, color: gold, margin: 0 }}>
-            {testimonials[current].company}
-          </p>
-        </div>
+        {/* Main Testimonial Content with Side Navigation */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: isMobile ? 16 : 32,
+          maxWidth: 1100,
+          margin: '0 auto',
+        }}>
+          {/* Previous Button */}
+          <ArrowButton direction="prev" onClick={() => goTo(current - 1)} />
 
-        {/* Navigation */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 24, marginTop: 36 }}>
-          {arrowBtn(() => goTo(current - 1), 'Previous')}
-
-          {/* Dots */}
-          <div style={{ display: 'flex', gap: 7, alignItems: 'center' }}>
-            {testimonials.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => goTo(i)}
-                style={{
-                  width: i === current ? 10 : 8,
-                  height: i === current ? 10 : 8,
-                  borderRadius: '50%',
-                  background: i === current ? gold : '#ccc',
-                  border: 'none',
-                  cursor: 'pointer',
-                  padding: 0,
-                  transition: 'all 0.2s',
-                }}
-              />
-            ))}
+          {/* Testimonial Text */}
+          <div
+            style={{
+              opacity: visible ? 1 : 0,
+              transition: 'opacity 0.3s ease',
+              flex: 1,
+              maxWidth: 760,
+            }}
+          >
+            {/* Quote marks */}
+            <div style={{ fontSize: 40, color: gold, opacity: 0.5, marginBottom: 16 }}>
+              <span>“</span>
+            </div>
+            
+            <p style={{ 
+              fontSize: isMobile ? 13 : 14, 
+              color: '#444', 
+              lineHeight: 1.9, 
+              textAlign: 'center', 
+              margin: '0 0 28px',
+              fontStyle: 'italic',
+              fontWeight: 400
+            }}>
+              {testimonials[current].text}
+            </p>
+            
+            <div style={{ 
+              width: 40, 
+              height: 2, 
+              background: gold, 
+              margin: '0 auto 20px',
+              opacity: 0.5
+            }} />
+            
+            <p style={{ 
+              fontSize: isMobile ? 13 : 14, 
+              fontWeight: 700, 
+              color: '#1a1a1a', 
+              margin: '0 0 4px',
+              letterSpacing: 0.5
+            }}>
+              {testimonials[current].author}
+            </p>
+            <p style={{ 
+              fontSize: isMobile ? 12 : 13, 
+              color: gold, 
+              margin: 0,
+              fontWeight: 500
+            }}>
+              {testimonials[current].company}
+            </p>
           </div>
 
-          {arrowBtn(() => goTo(current + 1), 'Next')}
+          {/* Next Button */}
+          <ArrowButton direction="next" onClick={() => goTo(current + 1)} />
+        </div>
+
+        {/* Navigation Dots */}
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          gap: isMobile ? 10 : 12, 
+          marginTop: 48,
+          flexWrap: 'wrap'
+        }}>
+          {testimonials.map((_, i) => (
+            <DotButton
+              key={i}
+              index={i}
+              isActive={i === current}
+              onClick={() => goTo(i)}
+            />
+          ))}
+        </div>
+
+        {/* Progress Indicator */}
+        <div style={{
+          marginTop: 32,
+          fontSize: 12,
+          color: '#999',
+          letterSpacing: 1
+        }}>
+          {current + 1} / {testimonials.length}
         </div>
       </div>
 
