@@ -43,6 +43,11 @@ import AdvertisingServices from "./pages/AdvertisingServices";
 import Careers from "./pages/Careers";
 import OurTeam from "./pages/OurTeam";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Creativedesign from "./pages/Creativedesign";
+import AugmentedReality from "./pages/Augmentedreality";
+import Animation  from "./pages/Animation";
+import Television from "./pages/Television";
+
 
 // Layout component for public pages (with header and footer)
 function PublicLayout() {
@@ -155,6 +160,29 @@ export default function App() {
            <Route
             path="/privacy"
             element={<PrivacyPolicy/>}
+          />
+
+          
+           <Route
+            path="/services/creative-design"
+            element={<Creativedesign/>}
+          />
+
+
+           <Route
+            path="/services/augumented-reality"
+            element={<AugmentedReality/>}
+          />
+
+           <Route
+            path="/services/creative/animation-videos"
+            element={<Animation/>}
+          />
+
+
+   <Route
+            path="/services/creative/best-television-advertising-agency"
+            element={<Television/>}
           />
 
         </Route>

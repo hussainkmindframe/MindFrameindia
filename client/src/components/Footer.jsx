@@ -4,7 +4,7 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaFacebook, FaLinkedinIn } from 'react-icons/fa';
+import { FaFacebook, FaLinkedinIn, FaInstagram, FaYoutube } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
 import logo from '../assets/Logo-MFI.png';
 
@@ -28,6 +28,8 @@ const SocialLink = ({ href, children }) => {
   return (
     <a
       href={href}
+      target="_blank"
+      rel="noopener noreferrer"
       style={{
         ...baseStyle,
         borderColor: hovered ? goldColor : '#333',
@@ -48,7 +50,7 @@ export default function Footer() {
     { label: 'About Us', to: '/about' },
     { label: 'Our Team', to: '/team' },
     { label: 'Our Work', to: '/work' },
-    { label: 'Brand Presentation', to: '/brand' },
+    { label: 'Brand Presentation', to: '/services/brand-identity' },
     { label: 'Blogs', to: '/blogs' },
     { label: 'Careers', to: '/careers' },
     { label: 'Disclaimer', to: '/disclaimer' },
@@ -57,13 +59,13 @@ export default function Footer() {
   ];
 
   const services = [
-    'Brand Identity',
-    'Branding and Marketing',
-    'Digital Marketing',
-    'Advertising Services',
-    'Best Television Advertising Agency in Mumbai | TV Ads Campaigns',
-    'Website Development',
-    'Mobile App Development',
+    { label: 'Brand Identity', to: '/services/brand-identity' },
+    { label: 'Branding and Marketing', to: '/services/marketing-branding' },
+    { label: 'Digital Marketing', to: '/services/digital-marketing' },
+    { label: 'Advertising Services', to: '/services/advertizing-services' },
+    { label: 'Best Television Advertising Agency in Mumbai | TV Ads Campaigns', to: '/services/creative/best-television-advertising-agency' },
+    { label: 'Website Development', to: '/services/web-development' },
+    { label: 'Mobile App Development', to: '/services/app-development' },
   ];
 
   const locations = [
@@ -99,63 +101,61 @@ export default function Footer() {
           }}
         >
 
-{/* Brand / Logo */}
-<div 
-  style={{ 
-    display: 'flex', 
-    flexDirection: 'column', 
-    gap: 16,
-    alignItems: 'flex-start',   // 👈 main fix
-    textAlign: 'left'           // 👈 text bhi left
-  }}
->
-  
-  {/* LOGO IMAGE */}
-  <img
-    src={logo}
-    alt="Mindframe India Logo"
-    style={{
-      height: 100,
-      width: 'auto',
-      objectFit: 'contain',
-      display: 'block'          // 👈 extra safety
-    }}
-  />
+          {/* Brand / Logo */}
+          <div 
+            style={{ 
+              display: 'flex', 
+              flexDirection: 'column', 
+              gap: 16,
+              alignItems: 'flex-start',
+              textAlign: 'left'
+            }}
+          >
+            {/* LOGO IMAGE */}
+            <img
+              src={logo}
+              alt="Mindframe India Logo"
+              style={{
+                height: 100,
+                width: 'auto',
+                objectFit: 'contain',
+                display: 'block'
+              }}
+            />
 
-  {/* TEXT */}
-  <div>
-    <h3 style={{ 
-      fontSize: 14, 
-      fontWeight: 700, 
-      color: '#fff', 
-      margin: '0 0 6px', 
-      lineHeight: 1.4 
-    }}>
-      Leading Advertising Agency in Mumbai
-    </h3>
+            {/* TEXT */}
+            <div>
+              <h3 style={{ 
+                fontSize: 14, 
+                fontWeight: 700, 
+                color: '#fff', 
+                margin: '0 0 6px', 
+                lineHeight: 1.4 
+              }}>
+                Leading Advertising Agency in Mumbai
+              </h3>
 
-    <p style={{ 
-      fontSize: 12, 
-      color: goldColor, 
-      fontStyle: 'italic', 
-      lineHeight: 1.6, 
-      margin: 0 
-    }}>
-      Our Commitment Is To Give Value To Your Business And Help You Soar Beyond The Horizons Of Success.
-    </p>
-  </div>
+              <p style={{ 
+                fontSize: 12, 
+                color: goldColor, 
+                fontStyle: 'italic', 
+                lineHeight: 1.6, 
+                margin: 0 
+              }}>
+                Our Commitment Is To Give Value To Your Business And Help You Soar Beyond The Horizons Of Success.
+              </p>
+            </div>
 
-  {/* CONTACT */}
-  <div style={{ fontSize: 12, color: '#aaa' }}>
-    <p style={{ margin: '0 0 4px' }}>
-      Mob: <span style={{ color: '#fff' }}>+91 9892000733 / +91 9167830733</span>
-    </p>
-    <p style={{ margin: 0 }}>
-      Email: <span style={{ color: '#fff' }}>info@mindframeindia.com</span>
-    </p>
-  </div>
-</div>
-
+            {/* CONTACT */}
+            <div style={{ fontSize: 12, color: '#aaa' }}>
+              <p style={{ margin: '0 0 4px' }}>
+                Mob: <span style={{ color: '#fff' }}>+91 9892000733 / +91 9167830733</span>
+              </p>
+              <p style={{ margin: 0 }}>
+                Email: <span style={{ color: '#fff' }}>info@mindframeindia.com</span>
+              </p>
+            </div>
+          </div>
 
           {/* Quick Links */}
           <div>
@@ -183,7 +183,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Our Services */}
+          {/* Our Services - NOW WITH NAVIGATION */}
           <div>
             <h4 style={{
               fontSize: 11, fontWeight: 700, textTransform: 'uppercase',
@@ -193,10 +193,17 @@ export default function Footer() {
               Our Services
             </h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              {services.map((s, i) => (
+              {services.map((service, i) => (
                 <li key={i} style={{ marginBottom: 10, display: 'flex', alignItems: 'flex-start', gap: 8 }}>
                   <span style={{ color: goldColor, fontSize: 10, marginTop: 2, flexShrink: 0 }}>○</span>
-                  <span style={{ color: '#bbb', fontSize: 13, lineHeight: 1.4 }}>{s}</span>
+                  <Link
+                    to={service.to}
+                    style={{ color: '#bbb', fontSize: 13, textDecoration: 'none', lineHeight: 1.4 }}
+                    onMouseEnter={(e) => (e.target.style.color = goldColor)}
+                    onMouseLeave={(e) => (e.target.style.color = '#bbb')}
+                  >
+                    {service.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -235,9 +242,21 @@ export default function Footer() {
             © {currentYear} Mindframe India. All rights reserved.
           </p>
           <div style={{ display: 'flex', gap: 10 }}>
-            <SocialLink href="#"><FaFacebook size={14} /></SocialLink>
-            <SocialLink href="#"><FaXTwitter size={14} /></SocialLink>
-            <SocialLink href="#"><FaLinkedinIn size={14} /></SocialLink>
+            <SocialLink href="https://www.facebook.com/mindframeindiapvtltd">
+              <FaFacebook size={14} />
+            </SocialLink>
+            <SocialLink href="https://x.com/MindFrameIndia">
+              <FaXTwitter size={14} />
+            </SocialLink>
+            <SocialLink href="https://www.instagram.com/mindframeindia">
+              <FaInstagram size={14} />
+            </SocialLink>
+            <SocialLink href="https://www.linkedin.com/company/mind-frame-india">
+              <FaLinkedinIn size={14} />
+            </SocialLink>
+            <SocialLink href="https://www.youtube.com/channel/UCQDHao37b1_WlbiU2z4Kt9Q">
+              <FaYoutube size={14} />
+            </SocialLink>
           </div>
         </div>
 

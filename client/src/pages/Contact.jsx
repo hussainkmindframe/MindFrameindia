@@ -1,9 +1,10 @@
-/**
- * Contact Page — Updated Design (Mindframe India)
- */
+// pages/Contact.jsx or components/Contact.jsx
 
 import { useState } from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import toast from 'react-hot-toast';
+import axios from 'axios';
 
 const gold = '#c9a84c';
 
@@ -17,6 +18,13 @@ const inputStyle = {
   padding: '8px 0',
   outline: 'none',
   width: '100%',
+};
+
+const errorStyle = {
+  color: '#d32f2f',
+  fontSize: 11,
+  marginTop: 4,
+  fontFamily: 'Georgia, serif',
 };
 
 const services = [
@@ -65,46 +73,62 @@ const branches = [
   },
 ];
 
+const validationSchema = Yup.object({
+  name: Yup.string()
+    .required('Name is required')
+    .min(2, 'Name must be at least 2 characters'),
+  email: Yup.string()
+    .required('Email is required')
+    .email('Invalid email format'),
+  phone: Yup.string()
+    .required('Phone number is required')
+    .matches(/^[0-9+\-\s()]+$/, 'Invalid phone number format')
+    .min(10, 'Phone number must be at least 10 digits'),
+  company: Yup.string(),
+  anything: Yup.string(),
+  services: Yup.array()
+    .min(1, 'Please select at least one service')
+    .required('Please select at least one service'),
+});
+
 export default function Contact() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    company: '',
-    anything: '',
-    services: [],
-  });
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      email: '',
+      phone: '',
+      company: '',
+      anything: '',
+      services: [],
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values, { resetForm }) => {
+      setLoading(true);
+      try {
+        const response = await axios.post('/api/contact', values);
+        if (response.data.success) {
+          toast.success('Thank you! We will get back to you soon.');
+          resetForm();
+        } else {
+          toast.error('Something went wrong. Please try again.');
+        }
+      } catch (error) {
+        console.error('Contact form error:', error);
+        toast.error(error.response?.data?.message || 'Failed to submit. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    },
+  });
 
   const handleServiceToggle = (service) => {
-    setFormData((prev) => ({
-      ...prev,
-      services: prev.services.includes(service)
-        ? prev.services.filter((s) => s !== service)
-        : [...prev.services, service],
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!formData.name || !formData.email || !formData.phone) {
-      toast.error('Please fill in all required fields');
-      return;
-    }
-    if (formData.services.length === 0) {
-      toast.error('Please select at least one service');
-      return;
-    }
-    setLoading(true);
-    setTimeout(() => {
-      toast.success('Thank you! We will get back to you soon.');
-      setFormData({ name: '', email: '', phone: '', company: '', anything: '', services: [] });
-      setLoading(false);
-    }, 1000);
+    const currentServices = formik.values.services;
+    const newServices = currentServices.includes(service)
+      ? currentServices.filter((s) => s !== service)
+      : [...currentServices, service];
+    formik.setFieldValue('services', newServices);
   };
 
   const dividerStyle = { border: 'none', borderTop: '1px solid #e0ddd5', margin: '0 0 28px' };
@@ -163,26 +187,36 @@ export default function Contact() {
           </div>
 
           {/* Right: Form */}
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={formik.handleSubmit}>
             {/* Name + Email */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 }}>
-              <input
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Name*"
-                style={inputStyle}
-                required
-              />
-              <input
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="E-mail*"
-                style={inputStyle}
-                required
-              />
+              <div style={{ width: '100%' }}>
+                <input
+                  name="name"
+                  value={formik.values.name}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  placeholder="Name*"
+                  style={inputStyle}
+                />
+                {formik.touched.name && formik.errors.name && (
+                  <div style={errorStyle}>{formik.errors.name}</div>
+                )}
+              </div>
+              <div style={{ width: '100%' }}>
+                <input
+                  name="email"
+                  type="email"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  placeholder="E-mail*"
+                  style={inputStyle}
+                />
+                {formik.touched.email && formik.errors.email && (
+                  <div style={errorStyle}>{formik.errors.email}</div>
+                )}
+              </div>
             </div>
 
             {/* Phone */}
@@ -190,23 +224,30 @@ export default function Contact() {
               <input
                 name="phone"
                 type="tel"
-                value={formData.phone}
-                onChange={handleChange}
+                value={formik.values.phone}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 placeholder="Phone*"
                 style={inputStyle}
-                required
               />
+              {formik.touched.phone && formik.errors.phone && (
+                <div style={errorStyle}>{formik.errors.phone}</div>
+              )}
             </div>
 
             {/* Company */}
             <div style={{ marginBottom: 24 }}>
               <input
                 name="company"
-                value={formData.company}
-                onChange={handleChange}
+                value={formik.values.company}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 placeholder="Your Company Name & Location*"
                 style={inputStyle}
               />
+              {formik.touched.company && formik.errors.company && (
+                <div style={errorStyle}>{formik.errors.company}</div>
+              )}
             </div>
 
             {/* Services */}
@@ -221,7 +262,7 @@ export default function Contact() {
                 >
                   <input
                     type="checkbox"
-                    checked={formData.services.includes(s)}
+                    checked={formik.values.services.includes(s)}
                     onChange={() => handleServiceToggle(s)}
                     style={{ width: 13, height: 13, accentColor: gold, cursor: 'pointer', flexShrink: 0 }}
                   />
@@ -229,19 +270,26 @@ export default function Contact() {
                 </label>
               ))}
             </div>
+            {formik.touched.services && formik.errors.services && (
+              <div style={{ ...errorStyle, marginBottom: 16 }}>{formik.errors.services}</div>
+            )}
 
             {/* Anything else */}
             <div style={{ marginBottom: 28 }}>
               <input
                 name="anything"
-                value={formData.anything}
-                onChange={handleChange}
+                value={formik.values.anything}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 placeholder="Anything else you would like us to know.."
                 style={inputStyle}
               />
+              {formik.touched.anything && formik.errors.anything && (
+                <div style={errorStyle}>{formik.errors.anything}</div>
+              )}
             </div>
 
-            {/* Submit */}
+            {/* Submit Button with Loader */}
             <button
               type="submit"
               disabled={loading}
@@ -257,13 +305,40 @@ export default function Contact() {
                 cursor: loading ? 'not-allowed' : 'pointer',
                 fontFamily: 'Georgia, serif',
                 opacity: loading ? 0.7 : 1,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '10px',
               }}
             >
-              {loading ? 'SENDING...' : 'SUBMIT'}
+              {loading ? (
+                <>
+                  <span className="spinner" style={{
+                    display: 'inline-block',
+                    width: '14px',
+                    height: '14px',
+                    border: '2px solid #fff',
+                    borderTop: '2px solid transparent',
+                    borderRadius: '50%',
+                    animation: 'spin 0.8s linear infinite'
+                  }}></span>
+                  SENDING...
+                </>
+              ) : (
+                'SUBMIT'
+              )}
             </button>
           </form>
         </div>
       </div>
+
+      {/* Add spinner animation */}
+      <style jsx>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 }

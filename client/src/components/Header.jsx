@@ -38,7 +38,15 @@ const navLinks = [
     { name: "Advertizing Services", path: "/services/advertizing-services" },
   ],
 },
-      { name: "Creative Solutions", path: "/services/creative" },
+      {
+  name: "Creative Solutions",
+  children: [
+    { name: "Creative Designing", path: "/services/creative-design" },
+    { name: "Augumented Reality / Virtual Reality ", path: "/services/augumented-reality" },
+    { name: "2D & 3D/Animation videos", path: "/services/creative/animation-videos" },
+    { name: "Best Television Advertising Agency in Mumbai | TV Ads Campaign", path: "/services/creative/best-television-advertising-agency" },
+  ],
+},
       { name: "Website Development", path: "/services/web-development" },
       { name: "Mobile App Development", path: "/services/app-development" },
     ],
