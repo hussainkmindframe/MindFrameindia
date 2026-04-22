@@ -1,13 +1,20 @@
-import { MdDashboard, MdArticle, MdAdd, MdLogout, MdClose } from 'react-icons/md';
+import { MdDashboard, MdArticle, MdAdd, MdLogout, MdClose, MdEmail } from 'react-icons/md';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const gold = '#c9a84c';
 
-export default function AdminSidebar({ activeTab, setActiveTab, isOpen, onToggleSidebar, onLogout }) {
+export default function AdminSidebar({ isOpen, onToggleSidebar, onLogout }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: MdDashboard, description: 'View overview' },
-    { id: 'blogs', label: 'Manage Blogs', icon: MdArticle, description: 'Edit & manage posts' },
-    { id: 'add', label: 'Add New Blog', icon: MdAdd, description: 'Create new post' },
+    { id: 'dashboard', label: 'Dashboard', icon: MdDashboard, description: 'View overview', path: '/admin/dashboard' },
+    { id: 'blogs', label: 'Manage Blogs', icon: MdArticle, description: 'Edit & manage posts', path: '/admin/blogs' },
+    { id: 'add', label: 'Add New Blog', icon: MdAdd, description: 'Create new post', path: '/admin/blogs/add' },
+    { id: 'contacts', label: 'Contact Forms', icon: MdEmail, description: 'View submissions', path: '/admin/contacts' },
   ];
+
+  const isActive = (path) => location.pathname === path;
 
   return (
     <>
@@ -99,29 +106,29 @@ export default function AdminSidebar({ activeTab, setActiveTab, isOpen, onToggle
           </p>
           {menuItems.map((item) => {
             const Icon = item.icon;
-            const isActive = activeTab === item.id;
+            const active = isActive(item.path);
             return (
               <button
                 key={item.id}
                 onClick={() => {
-                  setActiveTab(item.id);
+                  navigate(item.path);
                   if (window.innerWidth < 768) onToggleSidebar();
                 }}
                 style={{
                   width: '100%', textAlign: 'left',
                   padding: '10px 12px',
                   borderRadius: '10px',
-                  border: isActive ? `1px solid ${gold}40` : '1px solid transparent',
-                  background: isActive ? `${gold}10` : 'transparent',
+                  border: active ? `1px solid ${gold}40` : '1px solid transparent',
+                  background: active ? `${gold}10` : 'transparent',
                   cursor: 'pointer',
                   display: 'flex', alignItems: 'center', gap: '12px',
                   transition: 'all 0.2s',
                   position: 'relative', overflow: 'hidden',
                 }}
-                onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = '#f8f9fa'; }}
-                onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
+                onMouseEnter={e => { if (!active) e.currentTarget.style.background = '#f8f9fa'; }}
+                onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent'; }}
               >
-                {isActive && (
+                {active && (
                   <div style={{
                     position: 'absolute', left: 0, top: '20%', bottom: '20%',
                     width: '3px', background: gold,
@@ -130,13 +137,13 @@ export default function AdminSidebar({ activeTab, setActiveTab, isOpen, onToggle
                 )}
                 <div style={{
                   width: '34px', height: '34px', borderRadius: '8px', flexShrink: 0,
-                  background: isActive ? `${gold}15` : '#f8f9fa',
+                  background: active ? `${gold}15` : '#f8f9fa',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
-                  <Icon style={{ fontSize: '17px', color: isActive ? gold : '#6c757d' }} />
+                  <Icon style={{ fontSize: '17px', color: active ? gold : '#6c757d' }} />
                 </div>
                 <div>
-                  <p style={{ color: isActive ? '#1a1a2e' : '#495057', fontSize: '13.5px', fontWeight: isActive ? '600' : '400', margin: 0 }}>
+                  <p style={{ color: active ? '#1a1a2e' : '#495057', fontSize: '13.5px', fontWeight: active ? '600' : '400', margin: 0 }}>
                     {item.label}
                   </p>
                   <p style={{ color: '#adb5bd', fontSize: '11px', margin: 0 }}>

@@ -11,6 +11,7 @@ export const useAuthStore = create((set) => ({
   loading: false,
   error: null,
   isAuthenticated: false,
+  authCheckComplete: false,
 
   login: async (email, password) => {
     set({ loading: true, error: null });
@@ -48,8 +49,10 @@ export const useAuthStore = create((set) => ({
   },
 
   checkAuth: async () => {
+    set({ loading: true });
+    
     if (!authService.isAuthenticated()) {
-      set({ isAuthenticated: false });
+      set({ isAuthenticated: false, authCheckComplete: true, loading: false });
       return;
     }
 
@@ -58,12 +61,17 @@ export const useAuthStore = create((set) => ({
       set({
         admin: response.data.admin,
         isAuthenticated: true,
+        authCheckComplete: true,
+        loading: false,
       });
     } catch (error) {
+      console.error('Auth check error:', error);
       authService.removeToken();
       set({
         admin: null,
         isAuthenticated: false,
+        authCheckComplete: true,
+        loading: false,
       });
     }
   },

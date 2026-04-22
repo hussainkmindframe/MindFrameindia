@@ -91,13 +91,23 @@ export const createBlog = asyncHandler(async (req, res, next) => {
     );
   }
 
+  // Handle tags - can be string or array, convert to array if needed
+  let tagsArray = [];
+  if (tags) {
+    if (typeof tags === 'string') {
+      tagsArray = tags.split(',').map((tag) => tag.trim()).filter(t => t);
+    } else if (Array.isArray(tags)) {
+      tagsArray = tags;
+    }
+  }
+
   // Create blog
   const blog = await Blog.create({
     title,
     description,
     content,
     image,
-    tags: tags ? tags.split(',').map((tag) => tag.trim()) : [],
+    tags: tagsArray,
     category: category || 'Other',
     featured: featured || false,
     createdBy: req.adminUser._id,

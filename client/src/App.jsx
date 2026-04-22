@@ -24,7 +24,10 @@ import SingleBlog from "./pages/SingleBlog";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import AdminLogin from "./pages/AdminLogin";
-import AdminDashboard from "./pages/AdminDashboard";
+import AdminDashboard from "./pages/AdminPages/Dashboard";
+import AdminBlogManagement from "./pages/AdminPages/BlogManagement";
+import AdminAddBlog from "./pages/AdminPages/AddBlog";
+import AdminContactManagement from "./pages/AdminPages/ContactManagement";
 import OurWork from "./pages/OurWork";
 import Testimonial from "./pages/Testimonial";
 import NewsRoom from "./pages/NewsRoom";
@@ -68,7 +71,7 @@ export default function App() {
   // Check authentication status on app load
   useEffect(() => {
     checkAuth();
-  }, []);
+  }, [checkAuth]);
 
   return (
     <Router>
@@ -187,8 +190,6 @@ export default function App() {
 
         </Route>
 
-     
-
         {/* Admin Routes */}
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route
@@ -196,6 +197,30 @@ export default function App() {
           element={
             <ProtectedRoute>
               <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/blogs"
+          element={
+            <ProtectedRoute>
+              <AdminBlogManagement />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/blogs/add"
+          element={
+            <ProtectedRoute>
+              <AdminAddBlog />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/contacts"
+          element={
+            <ProtectedRoute>
+              <AdminContactManagement />
             </ProtectedRoute>
           }
         />
