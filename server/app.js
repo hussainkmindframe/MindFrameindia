@@ -7,6 +7,7 @@ import cors from 'cors';
 import authRoutes from './routes/authRoutes.js';
 import blogRoutes from './routes/blogRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
+import careerRoutes from './routes/Careerroutes.js';
 import errorHandler from './middleware/errorHandler.js';
 import ErrorResponse from './utils/errorResponse.js';
 
@@ -21,6 +22,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/blogs', blogRoutes);
 app.use('/api', contactRoutes);
+app.use('/api', careerRoutes);
+
 
 // Health check
 app.get('/api/health', (req, res) => {

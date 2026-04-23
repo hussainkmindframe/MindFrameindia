@@ -1,71 +1,30 @@
 /**
  * Testimonials Page — Enhanced Design (Mindframe India)
+ * Features auto-sliding client logo carousel + testimonial slider with arrows
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import clt1 from '../assets/client-logo/clt-1.png';
+import clt2 from '../assets/client-logo/clt-2.png';
+import clt3 from '../assets/client-logo/clt-3.png';
+import clt4 from '../assets/client-logo/clt-4.png';
+import clt5 from '../assets/client-logo/clt-5.png';
+import clt6 from '../assets/client-logo/clt-6.png';
+import clt7 from '../assets/client-logo/clt-7.png';
+import clt8 from '../assets/client-logo/clt-8.png';
 
 const gold = '#c9a84c';
 
+// Logo data with imported images
 const logos = [
-  {
-    name: 'New India Assurance',
-    render: () => (
-      <svg width="60" height="60" viewBox="0 0 60 60">
-        <circle cx="30" cy="30" r="28" fill="none" stroke="#1a3a6b" strokeWidth="2" />
-        <circle cx="30" cy="30" r="20" fill="#e8eef8" />
-        <text x="30" y="34" textAnchor="middle" fontSize="8" fill="#1a3a6b" fontFamily="Georgia">INDIA</text>
-      </svg>
-    ),
-  },
-  {
-    name: 'InFocus',
-    render: () => (
-      <span style={{ fontSize: 22, fontWeight: 800, fontStyle: 'italic', letterSpacing: -0.5 }}>
-        <span style={{ color: '#003087' }}>In</span>
-        <span style={{ color: '#e8002d' }}>Focus</span>
-      </span>
-    ),
-  },
-  {
-    name: 'Pratimoksha',
-    render: () => (
-      <div style={{ textAlign: 'center' }}>
-        <span style={{ fontSize: 18, fontWeight: 800 }}>
-          <span style={{ color: '#555' }}>prati</span>
-          <span style={{ color: '#e8b84b' }}>moksha</span>
-        </span>
-        <span style={{ display: 'block', fontSize: 9, color: '#888', letterSpacing: 1 }}>Enlighten Yoga Center</span>
-      </div>
-    ),
-  },
-  {
-    name: 'Leadership Mavericks',
-    render: () => (
-      <div style={{ textAlign: 'center' }}>
-        <span style={{ fontSize: 14, fontWeight: 800, color: '#003087', letterSpacing: 1, display: 'block' }}>Leadership</span>
-        <span style={{ fontSize: 9, color: '#888', letterSpacing: 2, display: 'block' }}>MAVERICKS</span>
-      </div>
-    ),
-  },
-  {
-    name: 'Lilavati Hospital',
-    render: () => (
-      <div style={{ textAlign: 'center' }}>
-        <span style={{ fontSize: 12, fontWeight: 700, color: '#333', display: 'block' }}>Lilavati Hospital</span>
-        <span style={{ fontSize: 10, color: '#666', display: 'block' }}>And Research Centre</span>
-      </div>
-    ),
-  },
-  {
-    name: 'Supreme Furniture',
-    render: () => (
-      <div style={{ textAlign: 'center' }}>
-        <span style={{ fontSize: 18, fontWeight: 900, color: '#c8102e', letterSpacing: 1, display: 'block' }}>Supreme</span>
-        <span style={{ fontSize: 10, fontWeight: 700, color: '#555', letterSpacing: 1, display: 'block' }}>FURNITURE</span>
-        <span style={{ fontSize: 9, color: '#888', fontStyle: 'italic', display: 'block' }}>Truly Stylish</span>
-      </div>
-    ),
-  },
+  { name: 'New India Assurance', image: clt1 },
+  { name: 'InFocus', image: clt2 },
+  { name: 'Pratimoksha', image: clt3 },
+  { name: 'Leadership Mavericks', image: clt4 },
+  { name: 'Lilavati Hospital', image: clt5 },
+  { name: 'Supreme Furniture', image: clt6 },
+  { name: 'Mindframe India', image: clt7 },
+  { name: 'Additional Client', image: clt8 },
 ];
 
 const testimonials = [
@@ -96,16 +55,41 @@ const testimonials = [
   },
 ];
 
-export default function Testimonials() {
+const Testimonials = () => {
   const [current, setCurrent] = useState(0);
   const [visible, setVisible] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  
+  // Logo carousel state
+  const [logoStartIndex, setLogoStartIndex] = useState(0);
+  const [visibleLogosCount, setVisibleLogosCount] = useState(5);
+  const logoCarouselRef = useRef(null);
+
+  // Get visible logos count based on screen size
+  const getVisibleLogosCount = () => {
+    if (typeof window === 'undefined') return 5;
+    if (window.innerWidth < 640) return 2;
+    if (window.innerWidth < 768) return 3;
+    if (window.innerWidth < 1024) return 4;
+    return 5;
+  };
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+      setVisibleLogosCount(getVisibleLogosCount());
+    };
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // AUTO-SLIDE LOGOS - Changes every 2.5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLogoStartIndex((prev) => (prev + 1) % logos.length);
+    }, 2500);
+    return () => clearInterval(interval);
   }, []);
 
   const goTo = useCallback((idx) => {
@@ -116,11 +100,25 @@ export default function Testimonials() {
     }, 300);
   }, []);
 
+  // AUTO-SLIDE TESTIMONIALS - Changes every 6 seconds
   useEffect(() => {
-    const timer = setInterval(() => goTo(current + 1), 6000);
+    const timer = setInterval(() => {
+      goTo(current + 1);
+    }, 6000);
     return () => clearInterval(timer);
   }, [current, goTo]);
 
+  // Get visible logos for carousel
+  const getVisibleLogos = () => {
+    const result = [];
+    for (let i = 0; i < visibleLogosCount; i++) {
+      const idx = (logoStartIndex + i) % logos.length;
+      result.push(logos[idx]);
+    }
+    return result;
+  };
+
+  // Arrow Button Component (Only for Testimonials)
   const ArrowButton = ({ direction, onClick }) => (
     <button
       onClick={onClick}
@@ -140,6 +138,7 @@ export default function Testimonials() {
         transition: 'all 0.3s ease',
         fontFamily: 'Georgia, serif',
         boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+        flexShrink: 0,
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.background = gold;
@@ -183,51 +182,112 @@ export default function Testimonials() {
   return (
     <div style={{ fontFamily: 'Georgia, serif', color: '#1a1a1a' }}>
 
-      {/* Logo Strip - Responsive */}
+      {/* Professional Logo Carousel Section - No Arrows, Only Auto Slide */}
       <div
         style={{
           background: '#fff',
-          padding: isMobile ? '24px 20px' : '32px 48px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: isMobile ? 24 : 56,
-          flexWrap: 'wrap',
+          padding: isMobile ? '32px 20px' : '40px 48px',
           borderBottom: '1px solid #eee',
+          position: 'relative',
+          overflow: 'hidden',
         }}
       >
-        {logos.map((logo) => (
-          <div
-            key={logo.name}
-            style={{
-              height: isMobile ? 50 : 68,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              opacity: 0.7,
-              filter: 'grayscale(30%)',
-              transition: 'all 0.3s ease',
-              cursor: 'pointer',
-              transform: 'scale(1)',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.opacity = '1';
-              e.currentTarget.style.filter = 'grayscale(0%)';
-              e.currentTarget.style.transform = 'scale(1.05)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.opacity = '0.7';
-              e.currentTarget.style.filter = 'grayscale(30%)';
-              e.currentTarget.style.transform = 'scale(1)';
-            }}
-            title={logo.name}
-          >
-            {logo.render()}
-          </div>
-        ))}
+        {/* Section Title */}
+        <div style={{ textAlign: 'center', marginBottom: 32 }}>
+          <h3 style={{ 
+            fontSize: isMobile ? 18 : 22, 
+            fontWeight: 600, 
+            color: '#333',
+            letterSpacing: 2,
+            margin: 0,
+            textTransform: 'uppercase'
+          }}>
+            Trusted By Leading Brands
+          </h3>
+          <div style={{ width: 50, height: 2, background: gold, margin: '12px auto 0' }} />
+        </div>
+
+        {/* Logo Carousel - Auto Sliding */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: isMobile ? 24 : 48,
+            transition: 'all 0.5s ease-in-out',
+          }}
+          ref={logoCarouselRef}
+        >
+          {getVisibleLogos().map((logo, idx) => (
+            <div
+              key={`${logo.name}-${logoStartIndex}-${idx}`}
+              style={{
+                flex: '0 0 auto',
+                width: isMobile ? 100 : 140,
+                height: isMobile ? 70 : 90,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                opacity: 0.85,
+                filter: 'grayscale(20%)',
+                transition: 'all 0.4s cubic-bezier(0.2, 0.8, 0.4, 1)',
+                cursor: 'pointer',
+                transform: 'scale(1)',
+                animation: 'fadeInUp 0.5s ease-out',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.opacity = '1';
+                e.currentTarget.style.filter = 'grayscale(0%)';
+                e.currentTarget.style.transform = 'scale(1.08)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.opacity = '0.85';
+                e.currentTarget.style.filter = 'grayscale(20%)';
+                e.currentTarget.style.transform = 'scale(1)';
+              }}
+              title={logo.name}
+            >
+              <img
+                src={logo.image}
+                alt={logo.name}
+                style={{
+                  maxWidth: '100%',
+                  maxHeight: '100%',
+                  objectFit: 'contain',
+                }}
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Progress Dots for Logo Carousel */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: 8,
+          marginTop: 28,
+        }}>
+          {logos.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setLogoStartIndex(i)}
+              style={{
+                width: 6,
+                height: 6,
+                borderRadius: '50%',
+                background: i === logoStartIndex ? gold : '#ddd',
+                border: 'none',
+                cursor: 'pointer',
+                padding: 0,
+                transition: 'all 0.3s ease',
+                transform: i === logoStartIndex ? 'scale(1.3)' : 'scale(1)',
+              }}
+            />
+          ))}
+        </div>
       </div>
 
-      {/* Testimonials Carousel - Enhanced */}
+      {/* Testimonials Carousel - With Arrows and Auto Slide */}
       <div
         style={{
           background: 'linear-gradient(135deg, #f4f3ef 0%, #faf9f5 100%)',
@@ -264,7 +324,7 @@ export default function Testimonials() {
         </h2>
         <div style={{ width: 60, height: 2, background: gold, margin: '0 auto 48px' }} />
 
-        {/* Main Testimonial Content with Side Navigation */}
+        {/* Testimonial Content with Side Arrows */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
@@ -273,7 +333,7 @@ export default function Testimonials() {
           maxWidth: 1100,
           margin: '0 auto',
         }}>
-          {/* Previous Button */}
+          {/* Previous Arrow */}
           <ArrowButton direction="prev" onClick={() => goTo(current - 1)} />
 
           {/* Testimonial Text */}
@@ -285,15 +345,14 @@ export default function Testimonials() {
               maxWidth: 760,
             }}
           >
-            {/* Quote marks */}
             <div style={{ fontSize: 40, color: gold, opacity: 0.5, marginBottom: 16 }}>
               <span>“</span>
             </div>
             
             <p style={{ 
-              fontSize: isMobile ? 13 : 14, 
+              fontSize: isMobile ? 15 : 17, 
               color: '#444', 
-              lineHeight: 1.9, 
+              lineHeight: 1.8, 
               textAlign: 'center', 
               margin: '0 0 28px',
               fontStyle: 'italic',
@@ -311,7 +370,7 @@ export default function Testimonials() {
             }} />
             
             <p style={{ 
-              fontSize: isMobile ? 13 : 14, 
+              fontSize: isMobile ? 14 : 15, 
               fontWeight: 700, 
               color: '#1a1a1a', 
               margin: '0 0 4px',
@@ -323,13 +382,14 @@ export default function Testimonials() {
               fontSize: isMobile ? 12 : 13, 
               color: gold, 
               margin: 0,
-              fontWeight: 500
+              fontWeight: 500,
+              letterSpacing: 0.5
             }}>
               {testimonials[current].company}
             </p>
           </div>
 
-          {/* Next Button */}
+          {/* Next Arrow */}
           <ArrowButton direction="next" onClick={() => goTo(current + 1)} />
         </div>
 
@@ -352,17 +412,30 @@ export default function Testimonials() {
           ))}
         </div>
 
-        {/* Progress Indicator */}
         <div style={{
           marginTop: 32,
           fontSize: 12,
           color: '#999',
           letterSpacing: 1
-        }}>
+        }}> 
           {current + 1} / {testimonials.length}
         </div>
       </div>
 
+      <style>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </div>
   );
-}
+};
+
+export default Testimonials;

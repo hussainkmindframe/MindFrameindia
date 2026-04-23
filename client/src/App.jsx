@@ -28,6 +28,7 @@ import AdminDashboard from "./pages/AdminPages/Dashboard";
 import AdminBlogManagement from "./pages/AdminPages/BlogManagement";
 import AdminAddBlog from "./pages/AdminPages/AddBlog";
 import AdminContactManagement from "./pages/AdminPages/ContactManagement";
+import AdminCareerManagement from "./pages/AdminPages/CareerManagement";
 import OurWork from "./pages/OurWork";
 import Testimonial from "./pages/Testimonial";
 import NewsRoom from "./pages/NewsRoom";
@@ -221,6 +222,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <AdminContactManagement />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/careers"
+          element={
+            <ProtectedRoute>
+              <AdminCareerManagement />
             </ProtectedRoute>
           }
         />

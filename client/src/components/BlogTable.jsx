@@ -4,10 +4,10 @@
  */
 
 import { formatDate } from '../utils/formatters';
-import { MdDelete, MdPublish, MdUnpublished, MdVisibility, MdArticle } from 'react-icons/md';
+import { MdDelete, MdPublish, MdUnpublished, MdVisibility, MdArticle, MdEdit } from 'react-icons/md';
 import Loader from './Loader';
 
-export default function BlogTable({ blogs, loading, onDelete }) {
+export default function BlogTable({ blogs, loading, onDelete, onEdit }) {
   if (loading) {
     return (
       <div className="bg-white p-6 rounded-lg shadow-md text-center">
@@ -89,6 +89,13 @@ export default function BlogTable({ blogs, loading, onDelete }) {
                 <td className="py-4 px-6">
                   <div className="flex gap-2">
                     <button
+                      onClick={() => onEdit(blog._id)}
+                      className="px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors text-sm font-medium flex items-center gap-1 active:scale-95"
+                    >
+                      <MdEdit className="text-lg" />
+                      Edit
+                    </button>
+                    <button
                       onClick={() => onDelete(blog._id)}
                       className="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors text-sm font-medium flex items-center gap-1 active:scale-95"
                     >
@@ -151,14 +158,23 @@ export default function BlogTable({ blogs, loading, onDelete }) {
                 <p>📅 {formatDate(blog.createdAt)}</p>
               </div>
 
-              {/* Action Button */}
-              <button
-                onClick={() => onDelete(blog._id)}
-                className="w-full px-3 py-2 bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors text-sm font-medium flex items-center justify-center gap-1 active:scale-95"
-              >
-                <MdDelete className="text-lg" />
-                Delete Blog
-              </button>
+              {/* Action Buttons */}
+              <div className="flex gap-2">
+                <button
+                  onClick={() => onEdit(blog._id)}
+                  className="flex-1 px-3 py-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors text-sm font-medium flex items-center justify-center gap-1 active:scale-95"
+                >
+                  <MdEdit className="text-lg" />
+                  Edit
+                </button>
+                <button
+                  onClick={() => onDelete(blog._id)}
+                  className="flex-1 px-3 py-2 bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors text-sm font-medium flex items-center justify-center gap-1 active:scale-95"
+                >
+                  <MdDelete className="text-lg" />
+                  Delete
+                </button>
+              </div>
             </div>
           ))}
         </div>

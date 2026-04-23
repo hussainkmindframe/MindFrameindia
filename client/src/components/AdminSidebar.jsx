@@ -1,4 +1,4 @@
-import { MdDashboard, MdArticle, MdAdd, MdLogout, MdClose, MdEmail } from 'react-icons/md';
+import { MdDashboard, MdArticle, MdAdd, MdLogout, MdClose, MdEmail, MdWork } from 'react-icons/md';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const gold = '#c9a84c';
@@ -12,6 +12,7 @@ export default function AdminSidebar({ isOpen, onToggleSidebar, onLogout }) {
     { id: 'blogs', label: 'Manage Blogs', icon: MdArticle, description: 'Edit & manage posts', path: '/admin/blogs' },
     { id: 'add', label: 'Add New Blog', icon: MdAdd, description: 'Create new post', path: '/admin/blogs/add' },
     { id: 'contacts', label: 'Contact Forms', icon: MdEmail, description: 'View submissions', path: '/admin/contacts' },
+    { id: 'careers', label: 'Career Applications', icon: MdWork, description: 'Job applications', path: '/admin/careers' },
   ];
 
   const isActive = (path) => location.pathname === path;

@@ -95,21 +95,6 @@ export default function Dashboard() {
             >
               <MdAdd style={{ fontSize: '18px' }} /> Add New Blog
             </button>
-            <button
-              onClick={() => navigate('/admin/blogs')}
-              style={{
-                flex: 1, minWidth: '160px', padding: '11px 16px',
-                background: '#f8f9fa', border: '1px solid #e9ecef',
-                borderRadius: '10px', color: THEME.textDim,
-                fontSize: '14px', fontWeight: '500',
-                cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
-                transition: 'all 0.2s',
-              }}
-              onMouseEnter={e => { e.currentTarget.style.background = '#f1f3f5'; e.currentTarget.style.borderColor = '#dee2e6'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = '#f8f9fa'; e.currentTarget.style.borderColor = '#e9ecef'; }}
-            >
-              <MdEdit style={{ fontSize: '16px' }} /> View All Blogs
-            </button>
           </div>
         </div>
 

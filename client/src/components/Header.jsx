@@ -6,6 +6,8 @@ import { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuthStore } from "../utils/authStore";
 import logo from "../assets/Logo-MFI.png";
+import logo2 from "../assets/logo2.png";
+
 
 const gold = "#c9a84c";
 
@@ -442,15 +444,12 @@ export default function Header() {
               style={{ textDecoration: "none", display: "inline-block" }}
             >
               <img
-                src={logo}
+                src={logo2}
                 alt="Mindframe India Logo"
                 style={{
-                  width: 58,
-                  height: 58,
-                  borderRadius: "50%",
-                  objectFit: "cover",
-                  border: `1.5px solid ${gold}`,
-                  transition: "transform 0.3s ease",
+                  width: 80,
+                  height: 60,
+                 
                 }}
                 onMouseEnter={(e) =>
                   (e.currentTarget.style.transform = "scale(1.05)")

@@ -1,0 +1,221 @@
+/**
+ * Career Controller
+ * Handles all job application business logic
+ */
+
+import Career from '../models/Career.js';
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
+
+// Ensure uploads/resumes directory exists
+const resumeDir = 'uploads/resumes';
+if (!fs.existsSync(resumeDir)) {
+  fs.mkdirSync(resumeDir, { recursive: true });
+}
+
+// Multer config — store resume in uploads/resumes/
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, resumeDir),
+  filename: (req, file, cb) => {
+    const unique = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    cb(null, `resume-${unique}${path.extname(file.originalname)}`);
+  },
+});
+
+export const upload = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
+  fileFilter: (req, file, cb) => {
+    const allowed = /pdf|doc|docx/;
+    const ext = allowed.test(path.extname(file.originalname).toLowerCase());
+    const mime = allowed.test(file.mimetype) || file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+    if (ext || mime) return cb(null, true);
+    cb(new Error('Only PDF and Word documents are allowed'));
+  },
+});
+
+/**
+ * @desc    Submit job application
+ * @route   POST /api/career
+ * @access  Public
+ */
+export const createApplication = async (req, res, next) => {
+  try {
+    const { name, email, mobile, subject, age, experience, location, applyFor } = req.body;
+
+    // Spam prevention
+    const hasRecent = await Career.hasRecentApplication(email, applyFor);
+    if (hasRecent) {
+      return res.status(429).json({
+        success: false,
+        message: 'You have already applied for this position recently. Please try again after 7 days.',
+      });
+    }
+
+    const application = await Career.create({
+      name: name.trim(),
+      email: email.toLowerCase().trim(),
+      mobile: mobile.trim(),
+      subject: subject.trim(),
+      age: age.trim(),
+      experience: experience.trim(),
+      location: location.trim(),
+      applyFor,
+      resumeUrl: req.file ? req.file.path : '',
+      resumeOriginalName: req.file ? req.file.originalname : '',
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Your application has been submitted successfully! We will get back to you soon.',
+      data: {
+        id: application._id,
+        name: application.name,
+        email: application.email,
+        applyFor: application.applyFor,
+        createdAt: application.createdAt,
+      },
+    });
+  } catch (error) {
+    console.error('Error creating application:', error);
+    if (error.name === 'ValidationError') {
+      const errors = Object.values(error.errors).map(e => e.message);
+      return res.status(400).json({ success: false, message: 'Validation error', errors });
+    }
+    next(error);
+  }
+};
+
+/**
+ * @desc    Get all applications
+ * @route   GET /api/careers
+ * @access  Private/Admin
+ */
+export const getAllApplications = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+    const status = req.query.status;
+    const applyFor = req.query.applyFor;
+    const search = req.query.search;
+
+    let query = {};
+    if (status && ['new', 'reviewing', 'shortlisted', 'rejected'].includes(status)) query.status = status;
+    if (applyFor) query.applyFor = applyFor;
+    if (search) {
+      query.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { email: { $regex: search, $options: 'i' } },
+        { mobile: { $regex: search, $options: 'i' } },
+      ];
+    }
+
+    const applications = await Career.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit);
+    const total = await Career.countDocuments(query);
+
+    res.status(200).json({
+      success: true,
+      data: applications,
+      pagination: {
+        page, limit, total,
+        pages: Math.ceil(total / limit),
+        hasNextPage: page < Math.ceil(total / limit),
+        hasPrevPage: page > 1,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * @desc    Get single application
+ * @route   GET /api/career/:id
+ * @access  Private/Admin
+ */
+export const getApplicationById = async (req, res, next) => {
+  try {
+    const application = await Career.findById(req.params.id);
+    if (!application) {
+      return res.status(404).json({ success: false, message: 'Application not found' });
+    }
+    res.status(200).json({ success: true, data: application });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * @desc    Update application status
+ * @route   PUT /api/career/:id/status
+ * @access  Private/Admin
+ */
+export const updateApplicationStatus = async (req, res, next) => {
+  try {
+    const { status } = req.body;
+    if (!['new', 'reviewing', 'shortlisted', 'rejected'].includes(status)) {
+      return res.status(400).json({ success: false, message: 'Invalid status value' });
+    }
+    const application = await Career.findByIdAndUpdate(
+      req.params.id, { status }, { new: true, runValidators: true }
+    );
+    if (!application) {
+      return res.status(404).json({ success: false, message: 'Application not found' });
+    }
+    res.status(200).json({ success: true, message: 'Status updated successfully', data: application });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * @desc    Delete application
+ * @route   DELETE /api/career/:id
+ * @access  Private/Admin
+ */
+export const deleteApplication = async (req, res, next) => {
+  try {
+    const application = await Career.findByIdAndDelete(req.params.id);
+    if (!application) {
+      return res.status(404).json({ success: false, message: 'Application not found' });
+    }
+    res.status(200).json({ success: true, message: 'Application deleted successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * @desc    Get application statistics
+ * @route   GET /api/careers/stats
+ * @access  Private/Admin
+ */
+export const getApplicationStats = async (req, res, next) => {
+  try {
+    const total = await Career.countDocuments();
+    const newApps = await Career.countDocuments({ status: 'new' });
+    const reviewing = await Career.countDocuments({ status: 'reviewing' });
+    const shortlisted = await Career.countDocuments({ status: 'shortlisted' });
+    const rejected = await Career.countDocuments({ status: 'rejected' });
+
+    const byPosition = await Career.aggregate([
+      { $group: { _id: '$applyFor', count: { $sum: 1 } } },
+      { $sort: { count: -1 } },
+    ]);
+
+    const last7Days = await Career.aggregate([
+      { $match: { createdAt: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) } } },
+      { $group: { _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } }, count: { $sum: 1 } } },
+      { $sort: { _id: 1 } },
+    ]);
+
+    res.status(200).json({
+      success: true,
+      data: { total, new: newApps, reviewing, shortlisted, rejected, byPosition, last7Days },
+    });
+  } catch (error) {
+    next(error);
+  }
+};

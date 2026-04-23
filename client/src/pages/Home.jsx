@@ -8,7 +8,7 @@
  * 5. Our Work (YouTube 3-col)
  * 6. Behind The Scenes (YouTube 3-col)
  * 7. TV Commercials (YouTube 3-col)
- * 8. Celebrity Shoot (photo carousel)
+ * 8. Celebrity Shoot (auto-slide photo carousel)
  * 9. Outdoor & Print Media (4-col grid)
  * 10. Testimonials component
  */
@@ -17,8 +17,51 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import Testimonials from './Testimonial';
+import clb1 from '../assets/celebrity/clb-1.jpg';
+import clb2 from '../assets/celebrity/clb-2.jpg';
+import clb3 from '../assets/celebrity/clb-3.jpg';
+import clb4 from '../assets/celebrity/clb-4.jpg';
+import clb5 from '../assets/celebrity/clb-5.jpg';
+import clb6 from '../assets/celebrity/clb-6.jpg';
+import clb7 from '../assets/celebrity/clb-7.jpg';
+import clb8 from '../assets/celebrity/clb-8.jpg';
+import clb9 from '../assets/celebrity/clb-9.jpg';
+import clb10 from '../assets/celebrity/clb-10.jpg';
+import clb11 from '../assets/celebrity/clb-11.jpg';
+import clb12 from '../assets/celebrity/clb-12.jpg';
+import out1 from '../assets/outdoor/outdoor-1.jpg';
+import out2 from '../assets/outdoor/outdoor-2.jpg';
+import out3 from '../assets/outdoor/outdoor-3.jpg';
+import out4 from '../assets/outdoor/outdoor-4.jpg';
+import camp1 from '../assets/campaign/camp1.jpg';
+import camp2 from '../assets/campaign/camp2.jpg';
+import camp3 from '../assets/campaign/camp3.jpg';
+import cat1 from '../assets/catalogue/cat1.jpg';
+import cat2 from '../assets/catalogue/cat2.jpg';
+import cat3 from '../assets/catalogue/cat3.jpg';
+import cat4 from '../assets/catalogue/cat4.jpg';
+import cat5 from '../assets/catalogue/cat5.jpg';
+import cat6 from '../assets/catalogue/cat6.jpg';
+import cat7 from '../assets/catalogue/cat7.jpg';
+import cat8 from '../assets/catalogue/cat8.jpg';
+import pack1 from '../assets/package/pack1.png';
+import pack2 from '../assets/package/pack2.png';
+import pack3 from '../assets/package/pack3.png';
+import pack4 from '../assets/package/pack4.png';
+import pack5 from '../assets/package/pack5.png';
+
+
+
+
+
 
 const gold = '#c9a84c';
+
+// Celebrity photos array using imported images
+const celebrityPhotos = [
+  clb1, clb2, clb3, clb4, clb5, clb6,
+  clb7, clb8, clb9, clb10, clb11, clb12
+];
 
 const sectionTitle = (text) => (
   <div style={{ textAlign: 'center', marginBottom: 48 }}>
@@ -85,23 +128,25 @@ const coreServices = [
   },
 ];
 
+
 const campaigns = [
   {
-    img: 'https://images.unsplash.com/photo-1563986768494-4dee2763ff3f?w=600&q=80',
+    img: camp1,
     title: 'Metro Grande Blockbuster Outdoor Campaign',
     desc: "Bringing Metro Grande's Vision to Life Through Blockbuster Outdoor Campaign",
   },
   {
-    img: 'https://images.unsplash.com/photo-1508615039623-a25605d2b022?w=600&q=80',
+    img: camp2,
     title: 'New Beginnings — 2 & 3 BHK',
     desc: 'A bold outdoor hoarding campaign for West Pioneer real estate launch',
   },
   {
-    img: 'https://images.unsplash.com/photo-1555421689-491a97ff2040?w=600&q=80',
+    img: camp3,
     title: 'Tots Couture Week — Audition Call',
     desc: 'In-mall display campaign targeting Mumbai parents for the couture event',
   },
 ];
+
 
 const ourWork = [
   { videoId: 'HVlb4RQJlxQ', title: 'Bharat Agri TVC 1 with Nawazuddin Siddiqui' },
@@ -110,7 +155,7 @@ const ourWork = [
   { videoId: 'GhHBpdY8n3I', title: 'Bharat Agri TVC 1 with Nawazuddin Siddiqui' },
   { videoId: 'xxEGGhcWhZs', title: 'Bharat Agri TVC 2 with Nawazuddin Siddiqui' },
   { videoId: 'CwkZPVZ9S1Y', title: "Padma Bhushan Smt. Rajashree Birla's Corporate Film" },
-    { videoId: '43EDtFshuM8', title: 'Bharat Agri TVC 1 with Nawazuddin Siddiqui' },
+  { videoId: '43EDtFshuM8', title: 'Bharat Agri TVC 1 with Nawazuddin Siddiqui' },
   { videoId: 'NqGAfUfhA3I', title: 'Bharat Agri TVC 2 with Nawazuddin Siddiqui' },
   { videoId: '1IGCqY2TPJk', title: "Padma Bhushan Smt. Rajashree Birla's Corporate Film" },
   { videoId: 'Gdavi9Z8Gz8', title: 'Bharat Agri TVC 1 with Nawazuddin Siddiqui' },
@@ -128,7 +173,7 @@ const tvcs = [
   { videoId: 'QtD-QxzTe-w', title: 'Cancer Awareness in India | UMMEED Musical Journey' },
   { videoId: 'YQch1ko8Lgs', title: 'Supreme Furnitures TVC 60 Sec AD by Mind Frame India' },
   { videoId: 'Dd5dTy04hNg', title: 'Dil Se Khelo Latest Video Song 2019 | Shahnawaz Ali' },
-    { videoId: 'Ys9fIbVVhuU', title: 'Cancer Awareness in India | UMMEED Musical Journey' },
+  { videoId: 'Ys9fIbVVhuU', title: 'Cancer Awareness in India | UMMEED Musical Journey' },
   { videoId: 'cjJ153qKENU', title: 'Supreme Furnitures TVC 60 Sec AD by Mind Frame India' },
   { videoId: 'mL-zEtgcHBQ', title: 'Dil Se Khelo Latest Video Song 2019 | Shahnawaz Ali' },
   { videoId: 'mTLd_jczJwA', title: 'Cancer Awareness in India | UMMEED Musical Journey' },
@@ -136,86 +181,145 @@ const tvcs = [
   { videoId: 'Cq9UdCwl8QE', title: 'Dil Se Khelo Latest Video Song 2019 | Shahnawaz Ali' },
 ];
 
-const celebrityPhotos = [
-  'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=300&q=80',
-  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=80',
-  'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=300&q=80',
-  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&q=80',
-  'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&q=80',
-  'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&q=80',
-  'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=300&q=80',
-  'https://images.unsplash.com/photo-1552058544-f2b08422138a?w=300&q=80',
-  'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=300&q=80',
-  'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&q=80',
-  'https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?w=300&q=80',
-  'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=300&q=80',
-];
-
 const outdoorMedia = [
-  'https://images.unsplash.com/photo-1508615039623-a25605d2b022?w=500&q=80',
-  'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&q=80',
-  'https://images.unsplash.com/photo-1555421689-491a97ff2040?w=500&q=80',
-  'https://images.unsplash.com/photo-1563986768494-4dee2763ff3f?w=500&q=80',
+  { img: out1, title: 'Metro Grande Hoarding', desc: 'Blockbuster outdoor hoarding campaign for Metro Grande real estate' },
+  { img: out2, title: 'Dastak Khushiyon Ki', desc: 'Bold outdoor campaign for upcoming residential project launch' },
+  { img: out3, title: 'Gourmet Craft', desc: 'Magical culinary experience — restaurant outdoor branding' },
+  { img: out4, title: 'Smart Families Campaign', desc: 'West Pioneer real estate — outdoor hoarding campaign Mumbai' },
 ];
 
-// ─── Responsive Celebrity Shoot Carousel ─────────────────────────────────────
+
+
+const catalogueDesign = [
+  { img: cat1, title: 'Fashion Lookbook', desc: 'Premium fashion catalogue design for apparel brands' },
+  { img: cat2, title: 'Product Brochure', desc: 'Elegant open brochure layout for product showcasing' },
+  { img: cat3, title: 'Pet Product Catalog', desc: 'Delivering happiness and care for your pets' },
+  { img: cat4, title: 'Beauty Catalogue', desc: 'Luxury beauty and skincare catalogue design' },
+  { img: cat5, title: 'Skincare Range', desc: 'Minimalist skincare product catalogue design' },
+  { img: cat6, title: 'Beauty Magazine', desc: 'Editorial magazine spread for beauty brands' },
+  { img: cat7, title: 'Furniture Catalogue', desc: 'Interior and furniture product brochure design' },
+  { img: cat8, title: 'Hardware Catalogue', desc: 'Solid brass mortise & pulls — product index design' },
+];
+
+
+
+const packagingDesign = [
+  { img: pack1, title: 'Food Box Packaging', desc: 'Creative packaging design for food delivery brands' },
+  { img: pack2, title: 'Vitamin Serum Bottles', desc: 'Premium vitamin C serum packaging design — Mysticity' },
+  { img: pack3, title: 'FMCG Product Range', desc: 'Complete FMCG product line packaging — dairy & snacks' },
+  { img: pack4, title: 'Nutrition Supplements', desc: 'Soul Nutritions — slim, strength, super greens range' },
+  { img: pack5, title: 'Skincare Bottle Range', desc: 'Clean & minimal skincare packaging design' },
+];
+
+
+// ─── Responsive Celebrity Shoot Auto-Slide Carousel ─────────────────────────────────────
 function CelebCarousel() {
-  const [page, setPage] = useState(0);
-  const [perPage, setPerPage] = useState(6);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
+
+  // Get number of visible images based on screen size
+  const getVisibleCount = () => {
+    if (window.innerWidth < 640) return 2;
+    if (window.innerWidth < 1024) return 3;
+    return 4;
+  };
+
+  const [visibleCount, setVisibleCount] = useState(4);
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 640) {
-        setPerPage(3);
-      } else if (window.innerWidth < 1024) {
-        setPerPage(4);
-      } else {
-        setPerPage(6);
-      }
+      setIsMobile(window.innerWidth < 768);
+      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
+      setVisibleCount(getVisibleCount());
     };
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const totalPages = Math.ceil(celebrityPhotos.length / perPage);
-  const visible = celebrityPhotos.slice(page * perPage, page * perPage + perPage);
+  // Auto-slide every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % (celebrityPhotos.length - visibleCount + 1));
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [visibleCount]);
+
+  const goToSlide = (index) => {
+    setCurrentIndex(index);
+  };
+
+  const visiblePhotos = celebrityPhotos.slice(currentIndex, currentIndex + visibleCount);
+  const totalDots = celebrityPhotos.length - visibleCount + 1;
 
   return (
     <div>
       <div style={{ 
         display: 'grid', 
-        gridTemplateColumns: `repeat(${perPage}, 1fr)`, 
+        gridTemplateColumns: `repeat(${visibleCount}, 1fr)`, 
         gap: 8, 
-        marginBottom: 20 
+        marginBottom: 20,
+        transition: 'all 0.5s ease'
       }}>
-        {visible.map((src, i) => (
-          <div key={i} style={{ aspectRatio: '3/4', overflow: 'hidden', background: '#eee' }}>
+        {visiblePhotos.map((src, i) => (
+          <div key={i} style={{ 
+            aspectRatio: '3/4', 
+            overflow: 'hidden', 
+            background: '#eee',
+            borderRadius: isMobile ? 8 : 0,
+          }}>
             <img 
               src={src} 
-              alt="" 
-              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} 
+              alt={`Celebrity shoot ${currentIndex + i + 1}`} 
+              style={{ 
+                width: '100%', 
+                height: '100%', 
+                objectFit: 'cover', 
+                display: 'block',
+                transition: 'transform 0.4s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.05)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)';
+              }}
             />
           </div>
         ))}
       </div>
+      
+      {/* Navigation Dots */}
       <div style={{ display: 'flex', justifyContent: 'center', gap: 8, flexWrap: 'wrap' }}>
-        {Array.from({ length: totalPages }).map((_, i) => (
+        {Array.from({ length: totalDots }).map((_, i) => (
           <button
             key={i}
-            onClick={() => setPage(i)}
+            onClick={() => goToSlide(i)}
             style={{
-              width: 10, 
-              height: 10, 
+              width: i === currentIndex ? 12 : 8,
+              height: i === currentIndex ? 12 : 8,
               borderRadius: '50%', 
               border: 'none',
-              background: i === page ? gold : '#ccc', 
+              background: i === currentIndex ? gold : '#ccc', 
               cursor: 'pointer', 
               padding: 0,
-              transition: 'background 0.2s',
+              transition: 'all 0.3s ease',
+              transform: i === currentIndex ? 'scale(1.2)' : 'scale(1)',
             }}
           />
         ))}
+      </div>
+      
+      {/* Progress Indicator */}
+      <div style={{
+        textAlign: 'center',
+        marginTop: 16,
+        fontSize: 12,
+        color: '#999',
+        letterSpacing: 1
+      }}>
+        {currentIndex + 1} / {totalDots}
       </div>
     </div>
   );
@@ -620,29 +724,142 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* ── 8. CELEBRITY SHOOT ─────────────────────────────────────────────── */}
+      {/* ── 8. CELEBRITY SHOOT (Auto-Slide Carousel) ─────────────────────────────── */}
       <Section bg="#fff" py={isMobile ? 48 : 72}>
         {sectionTitle('Celebrity Shoot')}
         <CelebCarousel />
       </Section>
 
-      {/* ── 9. OUTDOOR & PRINT MEDIA ───────────────────────────────────────── */}
-      <Section bg="#f0efe9" py={isMobile ? 48 : 72}>
-        {sectionTitle('Outdoor & Print Media')}
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', 
-          gap: isMobile ? 8 : 4 
+   {/* ── 9. OUTDOOR & PRINT MEDIA ───────────────────────────────────────── */}
+<Section bg="#f0efe9" py={isMobile ? 48 : 72}>
+  {sectionTitle('Outdoor & Print Media')}
+  <div style={{
+    display: 'grid',
+    gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
+    gap: isMobile ? 8 : 4,
+  }}>
+    {outdoorMedia.map((c, i) => (
+      <div
+        key={i}
+        style={{
+          position: 'relative',
+          aspectRatio: '4/3',
+          overflow: 'hidden',
+          borderRadius: isMobile ? 8 : 0,
+          cursor: 'pointer',
+        }}
+        onMouseOver={(e) => { if (!isMobile) e.currentTarget.querySelector('.out-overlay').style.opacity = 1; }}
+        onMouseOut={(e) => { if (!isMobile) e.currentTarget.querySelector('.out-overlay').style.opacity = 0; }}
+      >
+        <img
+          src={c.img}
+          alt={c.title}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            display: 'block',
+            transition: 'transform 0.4s',
+          }}
+          onMouseOver={(e) => { if (!isMobile) e.currentTarget.style.transform = 'scale(1.05)'; }}
+          onMouseOut={(e) => { if (!isMobile) e.currentTarget.style.transform = 'scale(1)'; }}
+        />
+        <div
+          className="out-overlay"
+          style={{
+            position: 'absolute', inset: 0,
+            background: 'rgba(20,18,14,0.62)',
+            display: 'flex', flexDirection: 'column', justifyContent: 'flex-end',
+            padding: 16,
+            opacity: isMobile ? 1 : 0,
+            transition: 'opacity 0.3s',
+          }}
+        >
+          <p style={{ fontSize: 13, fontWeight: 700, color: '#fff', margin: '0 0 5px', lineHeight: 1.3 }}>{c.title}</p>
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.8)', margin: 0, lineHeight: 1.5 }}>{c.desc}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+</Section>
+
+      {/* ── 9b. CATALOGUE DESIGN ───────────────────────────────────────────── */}
+      <Section bg="#fff" py={isMobile ? 48 : 72}>
+        {sectionTitle('Catalogue Design')}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
+          gap: isMobile ? 8 : 4,
         }}>
-          {outdoorMedia.map((src, i) => (
-            <div key={i} style={{ aspectRatio: '4/3', overflow: 'hidden', borderRadius: isMobile ? 8 : 0 }}>
+          {catalogueDesign.map((c, i) => (
+            <div
+              key={i}
+              style={{ position: 'relative', aspectRatio: '4/3', overflow: 'hidden', borderRadius: isMobile ? 8 : 0, cursor: 'pointer' }}
+              onMouseOver={(e) => { if (!isMobile) e.currentTarget.querySelector('.cat-overlay').style.opacity = 1; }}
+              onMouseOut={(e) => { if (!isMobile) e.currentTarget.querySelector('.cat-overlay').style.opacity = 0; }}
+            >
               <img
-                src={src} 
-                alt=""
+                src={c.img}
+                alt={c.title}
                 style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.4s' }}
-                onMouseOver={(e) => { if(!isMobile) e.currentTarget.style.transform = 'scale(1.05)'; }}
-                onMouseOut={(e) => { if(!isMobile) e.currentTarget.style.transform = 'scale(1)'; }}
+                onMouseOver={(e) => { if (!isMobile) e.currentTarget.style.transform = 'scale(1.05)'; }}
+                onMouseOut={(e) => { if (!isMobile) e.currentTarget.style.transform = 'scale(1)'; }}
               />
+              <div
+                className="cat-overlay"
+                style={{
+                  position: 'absolute', inset: 0,
+                  background: 'rgba(20,18,14,0.62)',
+                  display: 'flex', flexDirection: 'column', justifyContent: 'flex-end',
+                  padding: 16,
+                  opacity: isMobile ? 1 : 0,
+                  transition: 'opacity 0.3s',
+                }}
+              >
+                <p style={{ fontSize: 13, fontWeight: 700, color: '#fff', margin: '0 0 5px', lineHeight: 1.3 }}>{c.title}</p>
+                <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.8)', margin: 0, lineHeight: 1.5 }}>{c.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      {/* ── 9c. PACKAGING DESIGNS ──────────────────────────────────────────── */}
+      <Section bg="#f7f6f2" py={isMobile ? 48 : 72}>
+        {sectionTitle('Packaging Designs')}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(5, 1fr)',
+          gap: isMobile ? 8 : 4,
+        }}>
+          {packagingDesign.map((c, i) => (
+            <div
+              key={i}
+              style={{ position: 'relative', aspectRatio: isMobile ? '4/3' : '3/4', overflow: 'hidden', borderRadius: isMobile ? 8 : 0, cursor: 'pointer' }}
+              onMouseOver={(e) => { if (!isMobile) e.currentTarget.querySelector('.pkg-overlay').style.opacity = 1; }}
+              onMouseOut={(e) => { if (!isMobile) e.currentTarget.querySelector('.pkg-overlay').style.opacity = 0; }}
+            >
+              <img
+                src={c.img}
+                alt={c.title}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.4s' }}
+                onMouseOver={(e) => { if (!isMobile) e.currentTarget.style.transform = 'scale(1.05)'; }}
+                onMouseOut={(e) => { if (!isMobile) e.currentTarget.style.transform = 'scale(1)'; }}
+              />
+              <div
+                className="pkg-overlay"
+                style={{
+                  position: 'absolute', inset: 0,
+                  background: 'rgba(20,18,14,0.62)',
+                  display: 'flex', flexDirection: 'column', justifyContent: 'flex-end',
+                  padding: 16,
+                  opacity: isMobile ? 1 : 0,
+                  transition: 'opacity 0.3s',
+                }}
+              >
+                <p style={{ fontSize: 13, fontWeight: 700, color: '#fff', margin: '0 0 5px', lineHeight: 1.3 }}>{c.title}</p>
+                <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.8)', margin: 0, lineHeight: 1.5 }}>{c.desc}</p>
+              </div>
             </div>
           ))}
         </div>
