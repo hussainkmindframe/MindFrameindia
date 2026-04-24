@@ -131,23 +131,94 @@ export default function Contact() {
     formik.setFieldValue('services', newServices);
   };
 
-  const dividerStyle = { border: 'none', borderTop: '1px solid #e0ddd5', margin: '0 0 28px' };
   const cityStyle = { fontSize: 12, color: '#888', textTransform: 'uppercase', letterSpacing: 1, margin: '0 0 8px' };
   const addrStyle = { fontSize: 12.5, color: '#444', lineHeight: 1.65, margin: '0 0 4px' };
   const contactLineStyle = { fontSize: 12, color: '#666', margin: '2px 0' };
 
   return (
     <div style={{ background: '#f7f6f2', fontFamily: 'Georgia, serif', minHeight: '100vh' }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '56px 48px 80px' }}>
+      <style>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+
+        .contact-wrapper {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 56px 48px 80px;
+        }
+
+        .contact-grid {
+          display: grid;
+          grid-template-columns: 1fr 1.5fr;
+          gap: 64px;
+          align-items: flex-start;
+        }
+
+        .form-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 20px;
+          margin-bottom: 20px;
+        }
+
+        .services-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 8px 16px;
+          margin-bottom: 24px;
+        }
+
+        @media (max-width: 768px) {
+          .contact-wrapper {
+            padding: 36px 20px 60px;
+          }
+
+          .contact-grid {
+            grid-template-columns: 1fr;
+            gap: 40px;
+          }
+
+          .form-row {
+            grid-template-columns: 1fr;
+            gap: 16px;
+          }
+
+          .services-grid {
+            grid-template-columns: 1fr;
+            gap: 10px;
+          }
+
+          .contact-title {
+            font-size: 32px !important;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .contact-wrapper {
+            padding: 28px 16px 48px;
+          }
+
+          .contact-title {
+            font-size: 28px !important;
+          }
+        }
+      `}</style>
+
+      <div className="contact-wrapper">
 
         {/* Title */}
-        <h1 style={{ fontSize: 46, fontWeight: 900, color: '#1a1a1a', margin: '0 0 10px', letterSpacing: -1 }}>
+        <h1
+          className="contact-title"
+          style={{ fontSize: 46, fontWeight: 900, color: '#1a1a1a', margin: '0 0 10px', letterSpacing: -1 }}
+        >
           Get In Touch
         </h1>
         <div style={{ width: 60, height: 3, background: gold, marginBottom: 48 }} />
 
         {/* Two Column Layout */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: 64, alignItems: 'flex-start' }}>
+        <div className="contact-grid">
 
           {/* Left: Office Addresses */}
           <div>
@@ -188,8 +259,9 @@ export default function Contact() {
 
           {/* Right: Form */}
           <form onSubmit={formik.handleSubmit}>
+
             {/* Name + Email */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 }}>
+            <div className="form-row">
               <div style={{ width: '100%' }}>
                 <input
                   name="name"
@@ -254,7 +326,7 @@ export default function Contact() {
             <p style={{ fontSize: 12, color: '#444', margin: '0 0 14px', lineHeight: 1.5 }}>
               I require the following services ( select at least one )
             </p>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px 16px', marginBottom: 24 }}>
+            <div className="services-grid">
               {services.flat().filter(Boolean).map((s) => (
                 <label
                   key={s}
@@ -289,7 +361,7 @@ export default function Contact() {
               )}
             </div>
 
-            {/* Submit Button with Loader */}
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
@@ -309,19 +381,21 @@ export default function Contact() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '10px',
+                width: '100%',
+                maxWidth: 200,
               }}
             >
               {loading ? (
                 <>
-                  <span className="spinner" style={{
+                  <span style={{
                     display: 'inline-block',
                     width: '14px',
                     height: '14px',
                     border: '2px solid #fff',
                     borderTop: '2px solid transparent',
                     borderRadius: '50%',
-                    animation: 'spin 0.8s linear infinite'
-                  }}></span>
+                    animation: 'spin 0.8s linear infinite',
+                  }} />
                   SENDING...
                 </>
               ) : (
@@ -331,14 +405,6 @@ export default function Contact() {
           </form>
         </div>
       </div>
-
-      {/* Add spinner animation */}
-      <style jsx>{`
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      `}</style>
     </div>
   );
 }

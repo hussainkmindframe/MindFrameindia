@@ -410,10 +410,6 @@ export default function PublicRelation() {
           ))}
         </div>
       </div>
-
-     
-
-  
     </div>
   );
 }

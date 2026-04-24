@@ -70,28 +70,76 @@ export default function About() {
     return () => observer.disconnect();
   }, []);
 
-  const dividerStyle = { border: 'none', borderTop: '1px solid #ddd', margin: '0 0 48px' };
   const bodyText = { fontSize: 13, color: '#444', lineHeight: 1.9, margin: '0 0 18px' };
 
   return (
     <div style={{ background: '#f7f6f2', fontFamily: 'Georgia, serif', color: '#1a1a1a', minHeight: '100vh' }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '56px 48px 80px' }}>
+      <style>{`
+        .about-wrapper {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 56px 48px 80px;
+        }
+
+        .about-top-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 56px;
+          margin-bottom: 64px;
+          align-items: flex-start;
+        }
+
+        .about-divider {
+          border: none;
+          border-top: 1px solid #ddd;
+          margin: 0 0 48px;
+        }
+
+        @media (max-width: 768px) {
+          .about-wrapper {
+            padding: 36px 20px 60px;
+          }
+
+          .about-top-grid {
+            grid-template-columns: 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+          }
+
+          .about-title {
+            font-size: 26px !important;
+            margin-bottom: 28px !important;
+          }
+
+          .about-section-title {
+            font-size: 18px !important;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .about-wrapper {
+            padding: 28px 16px 48px;
+          }
+
+          .about-title {
+            font-size: 22px !important;
+          }
+        }
+      `}</style>
+
+      <div className="about-wrapper">
 
         {/* Title */}
-        <h1 style={{ fontSize: 32, fontWeight: 900, textAlign: 'center', margin: '0 0 40px', letterSpacing: 0 }}>
+        <h1
+          className="about-title"
+          style={{ fontSize: 32, fontWeight: 900, textAlign: 'center', margin: '0 0 40px', letterSpacing: 0 }}
+        >
           About Us
         </h1>
 
         {/* Top Two Column */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: 56,
-            marginBottom: 64,
-            alignItems: 'flex-start',
-          }}
-        >
+        <div className="about-top-grid">
+
           {/* Left: Text */}
           <div>
             <p style={bodyText}>
@@ -124,9 +172,12 @@ export default function About() {
         {/* Vision / Mission / Commitment */}
         {sections.map((sec, i) => (
           <div key={i}>
-            <hr style={dividerStyle} />
+            <hr className="about-divider" />
             <div style={{ marginBottom: 52 }}>
-              <h2 style={{ fontSize: 22, fontWeight: 700, textAlign: 'center', margin: '0 0 20px' }}>
+              <h2
+                className="about-section-title"
+                style={{ fontSize: 22, fontWeight: 700, textAlign: 'center', margin: '0 0 20px' }}
+              >
                 {sec.title}
               </h2>
               {Array.isArray(sec.text) ? (
