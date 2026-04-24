@@ -26,9 +26,9 @@ const THEME = {
 };
 
 const STATUS_COLORS = {
-  pending:   { bg: 'rgba(245,158,11,0.08)',  text: '#b45309', border: 'rgba(245,158,11,0.25)',  icon: MdAccessTime },
-  contacted: { bg: 'rgba(59,130,246,0.08)',  text: '#1e40af', border: 'rgba(59,130,246,0.25)',  icon: MdEmail },
-  completed: { bg: 'rgba(16,185,129,0.08)',  text: '#0a7c4e', border: 'rgba(16,185,129,0.25)',  icon: MdDone },
+  pending: { bg: 'rgba(245,158,11,0.08)', text: '#b45309', border: 'rgba(245,158,11,0.25)', icon: MdAccessTime },
+  contacted: { bg: 'rgba(59,130,246,0.08)', text: '#1e40af', border: 'rgba(59,130,246,0.25)', icon: MdEmail },
+  completed: { bg: 'rgba(16,185,129,0.08)', text: '#0a7c4e', border: 'rgba(16,185,129,0.25)', icon: MdDone },
 };
 
 /* ── MODAL ── */

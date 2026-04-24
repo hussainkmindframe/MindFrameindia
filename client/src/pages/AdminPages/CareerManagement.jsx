@@ -269,11 +269,26 @@ export default function CareerManagement() {
   const [pagination, setPagination] = useState({ page: 1, limit: 20, total: 0, pages: 0 });
   const [selectedApp, setSelectedApp] = useState(null);
   const [stats, setStats] = useState(null);
+  const [availablePositions, setAvailablePositions] = useState([]);
 
   useEffect(() => { checkAuth(); }, []);
   useEffect(() => { if (!admin) navigate('/admin/login'); }, [admin, navigate]);
   useEffect(() => { fetchApplications(); }, [pagination.page, statusFilter, positionFilter]);
   useEffect(() => { fetchStats(); }, []);
+  useEffect(() => {
+    // Fetch available positions
+    const fetchPositions = async () => {
+      try {
+        const response = await axios.get('/api/positions');
+        if (response.data.success) {
+          setAvailablePositions(response.data.data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch positions:', error);
+      }
+    };
+    fetchPositions();
+  }, []);
 
   const fetchApplications = async () => {
     setLoading(true);
@@ -416,10 +431,9 @@ export default function CareerManagement() {
             }}
           >
             <option value="">All Positions</option>
-            <option value="Client Servicing Executive">Client Servicing Executive</option>
-            <option value="Business Development Executive">Business Development Executive</option>
-            <option value="Graphic Designer">Graphic Designer</option>
-            <option value="Other">Other</option>
+            {availablePositions.map(position => (
+              <option key={position} value={position}>{position}</option>
+            ))}
           </select>
         </div>
 

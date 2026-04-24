@@ -1,61 +1,28 @@
-/**
- * Career Routes
- * Handles all job application related endpoints
- */
-
 import express from 'express';
 import {
   createApplication,
+  upload,
   getAllApplications,
   getApplicationById,
   updateApplicationStatus,
   deleteApplication,
   getApplicationStats,
-  upload,
+  getAvailablePositions,
+  getActivePositions
 } from '../controllers/careerController.js';
 
 const router = express.Router();
 
-/**
- * @route   POST /api/career
- * @desc    Submit job application (with resume upload)
- * @access  Public
- */
+// Public routes
 router.post('/career', upload.single('resume'), createApplication);
+router.get('/positions', getAvailablePositions);
+router.get('/positions/active', getActivePositions);
 
-/**
- * @route   GET /api/careers
- * @desc    Get all applications (Admin only)
- * @access  Private/Admin
- */
+// Admin routes (add your auth middleware here)
 router.get('/careers', getAllApplications);
-
-/**
- * @route   GET /api/careers/stats
- * @desc    Get application statistics (Admin only)
- * @access  Private/Admin
- */
-router.get('/careers/stats', getApplicationStats);
-
-/**
- * @route   GET /api/career/:id
- * @desc    Get single application (Admin only)
- * @access  Private/Admin
- */
 router.get('/career/:id', getApplicationById);
-
-/**
- * @route   PUT /api/career/:id/status
- * @desc    Update application status (Admin only)
- * @access  Private/Admin
- */
 router.put('/career/:id/status', updateApplicationStatus);
-
-/**
- * @route   DELETE /api/career/:id
- * @desc    Delete application (Admin only)
- * @access  Private/Admin
- */
 router.delete('/career/:id', deleteApplication);
+router.get('/careers/stats', getApplicationStats);
 
 export default router;

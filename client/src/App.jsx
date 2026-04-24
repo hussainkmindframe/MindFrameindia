@@ -28,6 +28,7 @@ import AdminDashboard from "./pages/AdminPages/Dashboard";
 import AdminBlogManagement from "./pages/AdminPages/BlogManagement";
 import AdminAddBlog from "./pages/AdminPages/AddBlog";
 import AdminContactManagement from "./pages/AdminPages/ContactManagement";
+import AdminHiringManagement from './pages/AdminPages/HiringManagement';
 import AdminCareerManagement from "./pages/AdminPages/CareerManagement";
 import OurWork from "./pages/OurWork";
 import Testimonial from "./pages/Testimonial";
@@ -49,7 +50,7 @@ import OurTeam from "./pages/OurTeam";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Creativedesign from "./pages/Creativedesign";
 import AugmentedReality from "./pages/Augmentedreality";
-import Animation  from "./pages/Animation";
+import Animation from "./pages/Animation";
 import Television from "./pages/Television";
 
 
@@ -143,50 +144,50 @@ export default function App() {
             element={<CustomizedCampaignDesign />}
           />
 
-               <Route
+          <Route
             path="/services/advertizing-services"
-            element={<AdvertisingServices/>}
+            element={<AdvertisingServices />}
           />
 
 
-  <Route
+          <Route
             path="/careers"
-            element={<Careers/>}
+            element={<Careers />}
           />
 
 
-           <Route
+          <Route
             path="/team"
-            element={<OurTeam/>}
+            element={<OurTeam />}
           />
 
 
-           <Route
+          <Route
             path="/privacy"
-            element={<PrivacyPolicy/>}
+            element={<PrivacyPolicy />}
           />
 
-          
-           <Route
+
+          <Route
             path="/services/creative-design"
-            element={<Creativedesign/>}
+            element={<Creativedesign />}
           />
 
 
-           <Route
+          <Route
             path="/services/augumented-reality"
-            element={<AugmentedReality/>}
+            element={<AugmentedReality />}
           />
 
-           <Route
+          <Route
             path="/services/creative/animation-videos"
-            element={<Animation/>}
+            element={<Animation />}
           />
 
 
-   <Route
+          <Route
             path="/services/creative/best-television-advertising-agency"
-            element={<Television/>}
+            element={<Television />}
           />
 
         </Route>
@@ -230,6 +231,15 @@ export default function App() {
           element={
             <ProtectedRoute>
               <AdminCareerManagement />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/hiring"
+          element={
+            <ProtectedRoute>
+              <AdminHiringManagement />
             </ProtectedRoute>
           }
         />

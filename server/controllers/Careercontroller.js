@@ -219,3 +219,89 @@ export const getApplicationStats = async (req, res, next) => {
     next(error);
   }
 };
+
+/**
+ * @desc    Get available job positions
+ * @route   GET /api/positions
+ * @access  Public
+ */
+export const getAvailablePositions = async (req, res, next) => {
+  try {
+    const positions = ['Client Servicing Executive', 'Business Development Executive', 'Graphic Designer', 'Web Developer', 'App Developer', 'Other'];
+    res.status(200).json({
+      success: true,
+      data: positions,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+
+
+
+
+
+/**
+ * @desc    Get active positions with full details
+ * @route   GET /api/positions/active
+ * @access  Public
+ */
+export const getActivePositions = async (req, res, next) => {
+  try {
+    const positions = [
+      {
+        _id: '1',
+        title: 'Client Servicing Executive',
+        location: 'Mumbai',
+        experience: '0-2 years',
+        description: 'Client Servicing Executive plays a critical role in satisfying clients and thus bringing repeat business.',
+        requirements: ['MBA', 'Good communication skills', 'Problem solving skills'],
+        isActive: true
+      },
+      {
+        _id: '2',
+        title: 'Business Development Executive',
+        location: 'Mumbai',
+        experience: '2-3 years',
+        description: 'Shape your career as a Business Development Executive with Mind Frame India Advertising and Communication.',
+        requirements: ['MBA Sales & Marketing', 'Excellent Communication Skills', 'Advertising experience'],
+        isActive: true
+      },
+      {
+        _id: '3',
+        title: 'Graphic Designer',
+        location: 'Mumbai',
+        experience: '3 years',
+        description: 'Shape your career with Mind Frame India Advertising and Communication.',
+        requirements: ['Corel Draw', 'Illustrator', 'Adobe Photoshop', 'Web design experience'],
+        isActive: true
+      },
+      {
+        _id: '4',
+        title: 'Web Developer',
+        location: 'Mumbai',
+        experience: '1-3 years',
+        description: 'Build modern, responsive web applications using latest technologies and frameworks.',
+        requirements: ['HTML/CSS/JavaScript', 'React/Vue/Angular', 'REST APIs', 'Git'],
+        isActive: true
+      },
+      {
+        _id: '5',
+        title: 'App Developer',
+        location: 'Mumbai',
+        experience: '1-3 years',
+        description: 'Create innovative mobile applications using modern technologies.',
+        requirements: ['iOS/Android', 'Swift/Kotlin/React Native', 'Mobile UI/UX', 'API integration'],
+        isActive: true
+      }
+    ];
+    
+    res.status(200).json({
+      success: true,
+      data: positions
+    });
+  } catch (error) {
+    next(error);
+  }
+};

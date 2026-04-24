@@ -7,7 +7,8 @@ import cors from 'cors';
 import authRoutes from './routes/authRoutes.js';
 import blogRoutes from './routes/blogRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
-import careerRoutes from './routes/Careerroutes.js';
+import careerRoutes from './routes/careerRoutes.js';
+import positionRoutes from './routes/positionRoutes.js';
 import errorHandler from './middleware/errorHandler.js';
 import ErrorResponse from './utils/errorResponse.js';
 
@@ -23,6 +24,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/blogs', blogRoutes);
 app.use('/api', contactRoutes);
 app.use('/api', careerRoutes);
+app.use('/api', positionRoutes);
 
 
 // Health check
