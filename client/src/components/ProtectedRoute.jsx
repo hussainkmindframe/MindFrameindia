@@ -10,14 +10,16 @@ import Loading from './Loading';
 export default function ProtectedRoute({ children }) {
   const { isAuthenticated, authCheckComplete } = useAuthStore();
 
-  // Wait for auth check to complete
+  // If auth check is not complete, show loading
   if (!authCheckComplete) {
     return <Loading />;
   }
 
+  // If not authenticated, redirect to login
   if (!isAuthenticated) {
     return <Navigate to="/admin/login" replace />;
   }
 
+  // Only render children if authenticated
   return children;
 }

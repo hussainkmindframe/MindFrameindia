@@ -89,7 +89,9 @@ export const getAllPositions = async (req, res, next) => {
     const positions = await Position.find(query)
       .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+        .lean(); // ✅ add this
+
       
     const total = await Position.countDocuments(query);
 

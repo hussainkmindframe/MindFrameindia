@@ -31,21 +31,30 @@ const getId = (obj) => obj?._id || obj?.id || null;
 function PositionModal({ isOpen, position, isNew, onClose, onSave, onRefresh }) {
   const [formData, setFormData] = useState({
     title: '', description: '', location: 'Mumbai', experience: 'Entry Level',
+    requirements: [], responsibilities: [],
   });
   const [loading, setLoading] = useState(false);
+  const [requirementsInput, setRequirementsInput] = useState('');
+  const [responsibilitiesInput, setResponsibilitiesInput] = useState('');
 
   // ✅ Use getId(position) as dep so edit prefill always syncs
   useEffect(() => {
     if (!isOpen) return;
     if (isNew || !position) {
-      setFormData({ title: '', description: '', location: 'Mumbai', experience: 'Entry Level' });
+      setFormData({ title: '', description: '', location: 'Mumbai', experience: 'Entry Level', requirements: [], responsibilities: [] });
+      setRequirementsInput('');
+      setResponsibilitiesInput('');
     } else {
       setFormData({
         title: position.title || '',
         description: position.description || '',
         location: position.location || 'Mumbai',
         experience: position.experience || 'Entry Level',
+        requirements: position.requirements || [],
+        responsibilities: position.responsibilities || [],
       });
+      setRequirementsInput('');
+      setResponsibilitiesInput('');
     }
   }, [isOpen, isNew, getId(position)]);
 
@@ -61,7 +70,7 @@ function PositionModal({ isOpen, position, isNew, onClose, onSave, onRefresh }) 
         await api.post('/positions', formData);
         toast.success('Position created successfully');
       } else {
-        await api.put(`/position/${posId}`, formData);
+        await api.put(`/positions/${posId}`, formData);
         toast.success('Position updated successfully');
       }
       onSave();
@@ -78,7 +87,7 @@ function PositionModal({ isOpen, position, isNew, onClose, onSave, onRefresh }) 
     if (!confirm(`Delete "${position.title}"? This cannot be undone.`)) return;
     setLoading(true);
     try {
-      await api.delete(`/position/${posId}`);
+      await api.delete(`/positions/${posId}`);
       toast.success('Position deleted successfully');
       onRefresh();
       onClose();
@@ -102,6 +111,40 @@ function PositionModal({ isOpen, position, isNew, onClose, onSave, onRefresh }) 
     { label: 'Location', key: 'location', placeholder: 'e.g., Mumbai', type: 'input' },
     { label: 'Experience Level', key: 'experience', placeholder: 'e.g., 1-3 years', type: 'input' },
   ];
+
+  const addRequirement = () => {
+    if (requirementsInput.trim()) {
+      setFormData(f => ({
+        ...f,
+        requirements: [...(f.requirements || []), requirementsInput.trim()]
+      }));
+      setRequirementsInput('');
+    }
+  };
+
+  const removeRequirement = (index) => {
+    setFormData(f => ({
+      ...f,
+      requirements: f.requirements.filter((_, i) => i !== index)
+    }));
+  };
+
+  const addResponsibility = () => {
+    if (responsibilitiesInput.trim()) {
+      setFormData(f => ({
+        ...f,
+        responsibilities: [...(f.responsibilities || []), responsibilitiesInput.trim()]
+      }));
+      setResponsibilitiesInput('');
+    }
+  };
+
+  const removeResponsibility = (index) => {
+    setFormData(f => ({
+      ...f,
+      responsibilities: f.responsibilities.filter((_, i) => i !== index)
+    }));
+  };
 
   return (
     <>
@@ -135,7 +178,7 @@ function PositionModal({ isOpen, position, isNew, onClose, onSave, onRefresh }) 
         </div>
 
         {/* Body */}
-        <div style={{ padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div style={{ padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: '16px', maxHeight: 'calc(90vh - 150px)', overflowY: 'auto' }}>
           {fields.map(({ label, key, placeholder, type }) => (
             <div key={key}>
               <label style={{ fontSize: '11px', fontWeight: 700, color: THEME.textMuted, textTransform: 'uppercase', letterSpacing: '1px', display: 'block', marginBottom: '8px' }}>
@@ -164,6 +207,82 @@ function PositionModal({ isOpen, position, isNew, onClose, onSave, onRefresh }) 
               )}
             </div>
           ))}
+
+          {/* Requirements Section */}
+          <div style={{ marginTop: '8px' }}>
+            <label style={{ fontSize: '11px', fontWeight: 700, color: THEME.textMuted, textTransform: 'uppercase', letterSpacing: '1px', display: 'block', marginBottom: '8px' }}>
+              Requirements
+            </label>
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
+              <input
+                type="text"
+                value={requirementsInput}
+                onChange={e => setRequirementsInput(e.target.value)}
+                onKeyPress={e => e.key === 'Enter' && (addRequirement(), e.preventDefault())}
+                placeholder="Add a requirement and press Enter"
+                style={{ ...inputStyle, flex: 1 }}
+                onFocus={e => e.target.style.borderColor = gold}
+                onBlur={e => e.target.style.borderColor = '#eef2f6'}
+              />
+              <button
+                onClick={addRequirement}
+                style={{ padding: '10px 16px', background: gold, border: 'none', borderRadius: '8px', color: '#fff', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: THEME.font }}
+              >
+                Add
+              </button>
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+              {(formData.requirements || []).map((req, idx) => (
+                <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#f0f0f0', padding: '6px 10px', borderRadius: '6px', fontSize: '12px', color: THEME.text }}>
+                  {req}
+                  <button
+                    onClick={() => removeRequirement(idx)}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#dc2626', fontSize: '16px', padding: 0, display: 'flex', alignItems: 'center' }}
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Responsibilities Section */}
+          <div style={{ marginTop: '8px' }}>
+            <label style={{ fontSize: '11px', fontWeight: 700, color: THEME.textMuted, textTransform: 'uppercase', letterSpacing: '1px', display: 'block', marginBottom: '8px' }}>
+              Responsibilities
+            </label>
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
+              <input
+                type="text"
+                value={responsibilitiesInput}
+                onChange={e => setResponsibilitiesInput(e.target.value)}
+                onKeyPress={e => e.key === 'Enter' && (addResponsibility(), e.preventDefault())}
+                placeholder="Add a responsibility and press Enter"
+                style={{ ...inputStyle, flex: 1 }}
+                onFocus={e => e.target.style.borderColor = gold}
+                onBlur={e => e.target.style.borderColor = '#eef2f6'}
+              />
+              <button
+                onClick={addResponsibility}
+                style={{ padding: '10px 16px', background: gold, border: 'none', borderRadius: '8px', color: '#fff', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: THEME.font }}
+              >
+                Add
+              </button>
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+              {(formData.responsibilities || []).map((resp, idx) => (
+                <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#f0f0f0', padding: '6px 10px', borderRadius: '6px', fontSize: '12px', color: THEME.text }}>
+                  {resp}
+                  <button
+                    onClick={() => removeResponsibility(idx)}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#dc2626', fontSize: '16px', padding: 0, display: 'flex', alignItems: 'center' }}
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Footer */}
@@ -222,9 +341,13 @@ export default function HiringManagement() {
   useEffect(() => { checkAuth(); }, []);
   useEffect(() => {
     if (authCheckComplete && !isAuthenticated) navigate('/admin/login');
-  }, [authCheckComplete, isAuthenticated]);
-  useEffect(() => { if (admin) fetchPositions(); }, [pagination.page, searchTerm, admin]);
-  useEffect(() => { if (admin) fetchStats(); }, [admin]);
+  }, [authCheckComplete, isAuthenticated, navigate]);
+  useEffect(() => { 
+    if (admin && authCheckComplete) fetchPositions(); 
+  }, [pagination.page, searchTerm, admin, authCheckComplete]);
+  useEffect(() => { 
+    if (admin && authCheckComplete) fetchStats(); 
+  }, [admin, authCheckComplete]);
 
   const fetchPositions = async () => {
     setLoading(true);
@@ -235,6 +358,8 @@ export default function HiringManagement() {
       if (searchTerm) params.set('search', searchTerm);
 
       const res = await api.get(`/positions?${params.toString()}`);
+        console.log('positions data:', res.data.data); // <-- add this
+
       setPositions(res.data.data || []);
       if (res.data.pagination) {
         setPagination(prev => ({
@@ -261,14 +386,19 @@ export default function HiringManagement() {
       const res = await api.get('/positions/stats');
       if (res.data?.data) setStats(res.data.data);
     } catch (err) {
-      console.error('Failed to fetch stats:', err);
+      if (err.response?.status === 401) {
+        // Session expired - silently handle
+        navigate('/admin/login');
+      } else if (err.response?.status !== 404) {
+        console.error('Failed to fetch stats:', err);
+      }
     }
   };
 
   const handleToggle = async (posId, currentStatus) => {
     if (!posId) { toast.error('Invalid position ID'); return; }
     try {
-      await api.patch(`/position/${posId}/toggle`);
+      await api.patch(`/positions/${posId}/toggle`);
       toast.success(`Position ${currentStatus ? 'deactivated' : 'activated'}`);
       fetchPositions();
       fetchStats();
@@ -288,7 +418,7 @@ export default function HiringManagement() {
     if (!posId) { toast.error('Invalid position ID'); return; }
     if (!confirm(`Delete "${pos.title}"? This cannot be undone.`)) return;
     try {
-      await api.delete(`/position/${posId}`);
+      await api.delete(`/positions/${posId}`);
       toast.success('Position deleted');
       fetchPositions();
       fetchStats();

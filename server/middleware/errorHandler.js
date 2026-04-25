@@ -4,12 +4,14 @@
  */
 
 const errorHandler = (err, req, res, next) => {
-  // Log error for debugging
-  console.error('ERROR:', {
-    message: err.message,
-    statusCode: err.statusCode,
-    stack: err.stack,
-  });
+  // Only log errors that are not expected 401 auth errors
+  if (err.statusCode !== 401 || (err.message && !err.message.includes('Not authorized'))) {
+    console.error('ERROR:', {
+      message: err.message,
+      statusCode: err.statusCode,
+      stack: err.stack,
+    });
+  }
 
   // Mongoose validation error
   if (err.name === 'ValidationError') {

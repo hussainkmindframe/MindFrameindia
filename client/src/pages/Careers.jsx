@@ -3,9 +3,8 @@
 // import { Link } from 'react-router-dom';
 // import * as Yup from "yup";
 // import toast from "react-hot-toast";
-// import axios from "axios";
+// import apiClient from "../services/apiClient.js";
 
-// // This will be fetched dynamically
 // let applyOptions = [
 //   "Client Servicing Executive",
 //   "Business Development Executive",
@@ -13,94 +12,6 @@
 //   "Web Developer",
 //   "App Developer",
 //   "Other",
-// ];
-
-// const jobs = [
-//   {
-//     id: 1,
-//     location: "Mumbai",
-//     title: "Client Servicing Executive",
-//     experience: "Minimum Experience – 0-2 years.",
-//     description: [
-//       "Client Servicing Executive plays a critical role in satisfying clients and thus bringing repeat business.",
-//       "They are the primary point of contact for the company's clientele and need to have good communications, interpersonal and problem solving skills. The major skills and competencies other than desired educational qualification that Mind Frame India is looking for in a candidate are:",
-//     ],
-//     requirements: [
-//       "MBA",
-//       "Ability to handle pressure and multitasking skills",
-//       "Active problem solving skills",
-//       "Good interpersonal skills",
-//       "Good communication skills",
-//       "Customer Focus",
-//     ],
-//   },
-//   {
-//     id: 2,
-//     location: "Mumbai",
-//     title: "Business Development Executive",
-//     experience: "Minimum Experience – 2-3 years.",
-//     description: [
-//       "Fresher who completed 2-3 month internship.",
-//       "Shape your career as a Business Development Executive with Mind Frame India Advertising and Communication.",
-//     ],
-//     requirements: [
-//       "Excellent Communication Skills",
-//       "MBA's (Sales & Marketing)",
-//       "Min. Experience – 3 Years",
-//       "Advertising agency experience would be an added advantage",
-//     ],
-//   },
-//   {
-//     id: 3,
-//     location: "Mumbai",
-//     title: "Graphic Designer",
-//     experience: "Minimum Experience – 3 years.",
-//     description: [
-//       "Shape your career with Mind Frame India Advertising and Communication.",
-//       "Industries you will experience on are Healthcare, FMCG, Retail Brands, Luxury Brands, FnB Brands, Insurance etc.",
-//     ],
-//     requirements: [
-//       "Min. Experience – 3 Years",
-//       "Corel Draw",
-//       "Illustrator",
-//       "Adobe Photoshop and familiar with new versions.",
-//       "Experience in designing Website page.",
-//     ],
-//   },
-//   {
-//     id: 4,
-//     location: "Mumbai",
-//     title: "Web Developer",
-//     experience: "Minimum Experience – 1-3 years.",
-//     description: [
-//       "Join our dynamic development team as a Web Developer.",
-//       "Build modern, responsive web applications using latest technologies and frameworks.",
-//     ],
-//     requirements: [
-//       "Proficiency in HTML, CSS, JavaScript",
-//       "Experience with React, Vue, or Angular",
-//       "Understanding of REST APIs",
-//       "Git version control",
-//       "Problem solving skills",
-//     ],
-//   },
-//   {
-//     id: 5,
-//     location: "Mumbai",
-//     title: "App Developer",
-//     experience: "Minimum Experience – 1-3 years.",
-//     description: [
-//       "We are looking for talented App Developers to create innovative mobile applications.",
-//       "Work with modern technologies and contribute to our growing app ecosystem.",
-//     ],
-//     requirements: [
-//       "iOS or Android development experience",
-//       "Proficiency in Swift, Kotlin, React Native, or Flutter",
-//       "Understanding of mobile UI/UX principles",
-//       "API integration experience",
-//       "Strong problem solving abilities",
-//     ],
-//   },
 // ];
 
 // const socialIcons = {
@@ -142,8 +53,8 @@
 //   </svg>
 // );
 
-// // Yup validation schema - will be created dynamically with positions
-// const createValidationSchema = (positions) => Yup.object({
+// // Yup validation schema
+// const createValidationSchema = () => Yup.object({
 //   name: Yup.string()
 //     .required("Name is required")
 //     .min(2, "Name must be at least 2 characters")
@@ -172,8 +83,7 @@
 //     .required("Location is required")
 //     .max(200, "Location cannot exceed 200 characters"),
 //   applyFor: Yup.string()
-//     .required("Please select a position")
-//     .oneOf(positions.length > 0 ? positions : applyOptions, "Invalid position selected"),
+//     .required("Please select a position"),
 //   resume: Yup.mixed()
 //     .required("Resume is required")
 //     .test("fileSize", "File size must be less than 5MB", (file) => {
@@ -209,24 +119,225 @@
 
 // export default function Careers() {
 //   const [loading, setLoading] = useState(false);
-//   const [positions, setPositions] = useState([]);
+//   const [jobs, setJobs] = useState([]); // Dynamic jobs from backend
+//   const [positions, setPositions] = useState([]); // For dropdown
+//   const [isLoadingJobs, setIsLoadingJobs] = useState(true);
 
-//   // Fetch available positions on component mount
+//   // Fetch positions and jobs from backend
 //   useEffect(() => {
-//     const fetchPositions = async () => {
+//     const fetchData = async () => {
+//       setIsLoadingJobs(true);
 //       try {
-//         const response = await axios.get('/api/positions');
-//         if (response.data.success) {
-//           setPositions(response.data.data);
-//           applyOptions = response.data.data; // Update validation schema with dynamic positions
+//         // Fetch active positions from the backend API
+//         const response = await apiClient.get('/positions/active');
+//         if (response.data.success && response.data.data.length > 0) {
+//           const positionsData = response.data.data;
+//           setPositions(positionsData);
+
+//           // Convert positions to jobs format
+//           const jobsData = positionsData.map((pos, index) => ({
+//             id: pos._id,
+//             location: pos.location,
+//             title: pos.title,
+//             experience: `Minimum Experience – ${pos.experience}`,
+//             description: pos.description ? [pos.description] : ["Join our team for an exciting career opportunity."],
+//             requirements: pos.requirements && pos.requirements.length > 0
+//               ? pos.requirements
+//               : ["Good communication skills", "Team player", "Problem solving attitude"],
+//           }));
+//           setJobs(jobsData);
+
+//           // Update applyOptions for dropdown
+//           applyOptions = positionsData.map(p => p.title);
+//         } else {
+//           // Fallback to default static data if no positions from API
+//           const defaultJobs = [
+//             {
+//               id: 1,
+//               location: "Mumbai",
+//               title: "Client Servicing Executive",
+//               experience: "Minimum Experience – 0-2 years.",
+//               description: [
+//                 "Client Servicing Executive plays a critical role in satisfying clients and thus bringing repeat business.",
+//                 "They are the primary point of contact for the company's clientele and need to have good communications, interpersonal and problem solving skills.",
+//               ],
+//               requirements: [
+//                 "MBA",
+//                 "Ability to handle pressure and multitasking skills",
+//                 "Active problem solving skills",
+//                 "Good interpersonal skills",
+//                 "Good communication skills",
+//                 "Customer Focus",
+//               ],
+//             },
+//             {
+//               id: 2,
+//               location: "Mumbai",
+//               title: "Business Development Executive",
+//               experience: "Minimum Experience – 2-3 years.",
+//               description: [
+//                 "Fresher who completed 2-3 month internship.",
+//                 "Shape your career as a Business Development Executive with Mind Frame India Advertising and Communication.",
+//               ],
+//               requirements: [
+//                 "Excellent Communication Skills",
+//                 "MBA's (Sales & Marketing)",
+//                 "Min. Experience – 3 Years",
+//                 "Advertising agency experience would be an added advantage",
+//               ],
+//             },
+//             {
+//               id: 3,
+//               location: "Mumbai",
+//               title: "Graphic Designer",
+//               experience: "Minimum Experience – 3 years.",
+//               description: [
+//                 "Shape your career with Mind Frame India Advertising and Communication.",
+//                 "Industries you will experience on are Healthcare, FMCG, Retail Brands, Luxury Brands, FnB Brands, Insurance etc.",
+//               ],
+//               requirements: [
+//                 "Min. Experience – 3 Years",
+//                 "Corel Draw",
+//                 "Illustrator",
+//                 "Adobe Photoshop and familiar with new versions.",
+//                 "Experience in designing Website page.",
+//               ],
+//             },
+//             {
+//               id: 4,
+//               location: "Mumbai",
+//               title: "Web Developer",
+//               experience: "Minimum Experience – 1-3 years.",
+//               description: [
+//                 "Join our dynamic development team as a Web Developer.",
+//                 "Build modern, responsive web applications using latest technologies and frameworks.",
+//               ],
+//               requirements: [
+//                 "Proficiency in HTML, CSS, JavaScript",
+//                 "Experience with React, Vue, or Angular",
+//                 "Understanding of REST APIs",
+//                 "Git version control",
+//                 "Problem solving skills",
+//               ],
+//             },
+//             {
+//               id: 5,
+//               location: "Mumbai",
+//               title: "App Developer",
+//               experience: "Minimum Experience – 1-3 years.",
+//               description: [
+//                 "We are looking for talented App Developers to create innovative mobile applications.",
+//                 "Work with modern technologies and contribute to our growing app ecosystem.",
+//               ],
+//               requirements: [
+//                 "iOS or Android development experience",
+//                 "Proficiency in Swift, Kotlin, React Native, or Flutter",
+//                 "Understanding of mobile UI/UX principles",
+//                 "API integration experience",
+//                 "Strong problem solving abilities",
+//               ],
+//             },
+//           ];
+//           setJobs(defaultJobs);
+//           setPositions(applyOptions);
 //         }
 //       } catch (error) {
 //         console.error('Failed to fetch positions:', error);
-//         // Use default positions if API fails
+//         // Use default data if API fails
+//         const defaultJobs = [
+//           {
+//             id: 1,
+//             location: "Mumbai",
+//             title: "Client Servicing Executive",
+//             experience: "Minimum Experience – 0-2 years.",
+//             description: [
+//               "Client Servicing Executive plays a critical role in satisfying clients and thus bringing repeat business.",
+//               "They are the primary point of contact for the company's clientele and need to have good communications, interpersonal and problem solving skills.",
+//             ],
+//             requirements: [
+//               "MBA",
+//               "Ability to handle pressure and multitasking skills",
+//               "Active problem solving skills",
+//               "Good interpersonal skills",
+//               "Good communication skills",
+//               "Customer Focus",
+//             ],
+//           },
+//           {
+//             id: 2,
+//             location: "Mumbai",
+//             title: "Business Development Executive",
+//             experience: "Minimum Experience – 2-3 years.",
+//             description: [
+//               "Fresher who completed 2-3 month internship.",
+//               "Shape your career as a Business Development Executive with Mind Frame India Advertising and Communication.",
+//             ],
+//             requirements: [
+//               "Excellent Communication Skills",
+//               "MBA's (Sales & Marketing)",
+//               "Min. Experience – 3 Years",
+//               "Advertising agency experience would be an added advantage",
+//             ],
+//           },
+//           {
+//             id: 3,
+//             location: "Mumbai",
+//             title: "Graphic Designer",
+//             experience: "Minimum Experience – 3 years.",
+//             description: [
+//               "Shape your career with Mind Frame India Advertising and Communication.",
+//               "Industries you will experience on are Healthcare, FMCG, Retail Brands, Luxury Brands, FnB Brands, Insurance etc.",
+//             ],
+//             requirements: [
+//               "Min. Experience – 3 Years",
+//               "Corel Draw",
+//               "Illustrator",
+//               "Adobe Photoshop and familiar with new versions.",
+//               "Experience in designing Website page.",
+//             ],
+//           },
+//           {
+//             id: 4,
+//             location: "Mumbai",
+//             title: "Web Developer",
+//             experience: "Minimum Experience – 1-3 years.",
+//             description: [
+//               "Join our dynamic development team as a Web Developer.",
+//               "Build modern, responsive web applications using latest technologies and frameworks.",
+//             ],
+//             requirements: [
+//               "Proficiency in HTML, CSS, JavaScript",
+//               "Experience with React, Vue, or Angular",
+//               "Understanding of REST APIs",
+//               "Git version control",
+//               "Problem solving skills",
+//             ],
+//           },
+//           {
+//             id: 5,
+//             location: "Mumbai",
+//             title: "App Developer",
+//             experience: "Minimum Experience – 1-3 years.",
+//             description: [
+//               "We are looking for talented App Developers to create innovative mobile applications.",
+//               "Work with modern technologies and contribute to our growing app ecosystem.",
+//             ],
+//             requirements: [
+//               "iOS or Android development experience",
+//               "Proficiency in Swift, Kotlin, React Native, or Flutter",
+//               "Understanding of mobile UI/UX principles",
+//               "API integration experience",
+//               "Strong problem solving abilities",
+//             ],
+//           },
+//         ];
+//         setJobs(defaultJobs);
 //         setPositions(applyOptions);
+//       } finally {
+//         setIsLoadingJobs(false);
 //       }
 //     };
-//     fetchPositions();
+//     fetchData();
 //   }, []);
 
 //   const formik = useFormik({
@@ -241,7 +352,7 @@
 //       applyFor: "",
 //       resume: null,
 //     },
-//     validationSchema: createValidationSchema(positions),
+//     validationSchema: createValidationSchema(),
 //     enableReinitialize: true,
 //     onSubmit: async (values, { resetForm }) => {
 //       setLoading(true);
@@ -252,7 +363,7 @@
 //           if (val !== null && val !== undefined) formData.append(key, val);
 //         });
 
-//         const response = await axios.post("/api/career", formData, {
+//         const response = await apiClient.post("/career", formData, {
 //           headers: { "Content-Type": "multipart/form-data" },
 //         });
 
@@ -282,6 +393,17 @@
 //     { name: "mobile", label: "Mobile No.*", type: "tel", full: true },
 //     { name: "location", label: "Location*", type: "text", full: true },
 //   ];
+
+//   if (isLoadingJobs) {
+//     return (
+//       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", background: "#fff" }}>
+//         <div style={{ textAlign: "center" }}>
+//           <div className="spinner" style={{ width: "40px", height: "40px", borderWidth: "3px", marginBottom: "20px" }}></div>
+//           <p style={{ fontFamily: "'DM Sans', sans-serif", color: "#666" }}>Loading career opportunities...</p>
+//         </div>
+//       </div>
+//     );
+//   }
 
 //   return (
 //     <div style={{ fontFamily: "'DM Sans', sans-serif", background: "#fff", minHeight: "100vh" }}>
@@ -331,8 +453,8 @@
 //         .spinner {
 //           display: inline-block;
 //           width: 14px; height: 14px;
-//           border: 2px solid rgba(255,255,255,0.4);
-//           border-top-color: #fff;
+//           border: 2px solid rgba(0,0,0,0.2);
+//           border-top-color: #b08d57;
 //           border-radius: 50%;
 //           animation: spin 0.7s linear infinite;
 //           flex-shrink: 0;
@@ -361,7 +483,7 @@
 //         <div style={{ width: "48px", height: "2px", background: "#b08d57", margin: "0 auto" }} />
 //       </div>
 
-//       {/* ── JOB LISTINGS ── */}
+//       {/* ── DYNAMIC JOB LISTINGS ── */}
 //       <div style={{ background: "#fff" }}>
 //         {jobs.map((job, i) => (
 //           <div key={job.id} style={{ background: i % 2 === 0 ? "#fff" : "#f7f5f1", padding: "48px 0" }}>
@@ -401,8 +523,6 @@
 //           </div>
 //         ))}
 //       </div>
-
-
 
 //       {/* ── GET IN TOUCH / APPLY FORM ── */}
 //       <div style={{ background: "#1a1510", padding: "60px 24px 64px" }}>
@@ -472,8 +592,10 @@
 //                     style={{ cursor: "pointer", color: formik.values.applyFor ? "#fff" : "#666" }}
 //                   >
 //                     <option value="" disabled style={{ color: "#888", background: "#1a1510" }}>Select a position</option>
-//                     {(positions.length > 0 ? positions : applyOptions).map(opt => (
-//                       <option key={opt} value={opt} style={{ color: "#fff", background: "#1a1510" }}>{opt}</option>
+//                     {positions.map(opt => (
+//                       <option key={typeof opt === 'object' ? opt._id : opt} value={typeof opt === 'object' ? opt.title : opt} style={{ color: "#fff", background: "#1a1510" }}>
+//                         {typeof opt === 'object' ? opt.title : opt}
+//                       </option>
 //                     ))}
 //                   </select>
 //                   {formik.touched.applyFor && formik.errors.applyFor && (
@@ -595,23 +717,11 @@
 
 
 
-
-
 import { useState, useEffect } from "react";
 import { useFormik } from "formik";
-import { Link } from 'react-router-dom';
 import * as Yup from "yup";
 import toast from "react-hot-toast";
-import axios from "axios";
-
-let applyOptions = [
-  "Client Servicing Executive",
-  "Business Development Executive",
-  "Graphic Designer",
-  "Web Developer",
-  "App Developer",
-  "Other",
-];
+import apiClient from "../services/apiClient.js";
 
 const socialIcons = {
   facebook: (
@@ -652,8 +762,7 @@ const CheckIcon = () => (
   </svg>
 );
 
-// Yup validation schema
-const createValidationSchema = () => Yup.object({
+const validationSchema = Yup.object({
   name: Yup.string()
     .required("Name is required")
     .min(2, "Name must be at least 2 characters")
@@ -681,8 +790,7 @@ const createValidationSchema = () => Yup.object({
   location: Yup.string()
     .required("Location is required")
     .max(200, "Location cannot exceed 200 characters"),
-  applyFor: Yup.string()
-    .required("Please select a position"),
+  applyFor: Yup.string().required("Please select a position"),
   resume: Yup.mixed()
     .required("Resume is required")
     .test("fileSize", "File size must be less than 5MB", (file) => {
@@ -691,23 +799,14 @@ const createValidationSchema = () => Yup.object({
     })
     .test("fileType", "Only PDF and Word documents are allowed", (file) => {
       if (!file) return false;
-      const allowed = ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+      const allowed = [
+        "application/pdf",
+        "application/msword",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      ];
       return allowed.includes(file.type);
     }),
 });
-
-const inputBase = {
-  width: "100%",
-  background: "rgba(255,255,255,0.08)",
-  border: "1px solid #333",
-  borderRadius: "6px",
-  padding: "12px 14px",
-  fontFamily: "'DM Sans', sans-serif",
-  fontSize: "13px",
-  color: "#fff",
-  outline: "none",
-  transition: "all 0.3s ease",
-};
 
 const errStyle = {
   color: "#f87171",
@@ -718,220 +817,41 @@ const errStyle = {
 
 export default function Careers() {
   const [loading, setLoading] = useState(false);
-  const [jobs, setJobs] = useState([]); // Dynamic jobs from backend
-  const [positions, setPositions] = useState([]); // For dropdown
+  const [jobs, setJobs] = useState([]);
+  const [positions, setPositions] = useState([]);
   const [isLoadingJobs, setIsLoadingJobs] = useState(true);
 
-  // Fetch positions and jobs from backend
   useEffect(() => {
     const fetchData = async () => {
       setIsLoadingJobs(true);
       try {
-        // Fetch active positions
-        const response = await axios.get('/api/positions/active');
+        const response = await apiClient.get('/positions/active');
         if (response.data.success && response.data.data.length > 0) {
           const positionsData = response.data.data;
           setPositions(positionsData);
 
-          // Convert positions to jobs format
-          const jobsData = positionsData.map((pos, index) => ({
+          const jobsData = positionsData.map((pos) => ({
             id: pos._id,
             location: pos.location,
             title: pos.title,
             experience: `Minimum Experience – ${pos.experience}`,
-            description: pos.description ? [pos.description] : ["Join our team for an exciting career opportunity."],
-            requirements: pos.requirements && pos.requirements.length > 0
-              ? pos.requirements
-              : ["Good communication skills", "Team player", "Problem solving attitude"],
+            description: pos.description
+              ? [pos.description]
+              : ["Join our team for an exciting career opportunity."],
+            requirements:
+              pos.requirements && pos.requirements.length > 0
+                ? pos.requirements
+                : ["Good communication skills", "Team player", "Problem solving attitude"],
           }));
           setJobs(jobsData);
-
-          // Update applyOptions for dropdown
-          applyOptions = positionsData.map(p => p.title);
         } else {
-          // Fallback to default static data if no positions from API
-          const defaultJobs = [
-            {
-              id: 1,
-              location: "Mumbai",
-              title: "Client Servicing Executive",
-              experience: "Minimum Experience – 0-2 years.",
-              description: [
-                "Client Servicing Executive plays a critical role in satisfying clients and thus bringing repeat business.",
-                "They are the primary point of contact for the company's clientele and need to have good communications, interpersonal and problem solving skills.",
-              ],
-              requirements: [
-                "MBA",
-                "Ability to handle pressure and multitasking skills",
-                "Active problem solving skills",
-                "Good interpersonal skills",
-                "Good communication skills",
-                "Customer Focus",
-              ],
-            },
-            {
-              id: 2,
-              location: "Mumbai",
-              title: "Business Development Executive",
-              experience: "Minimum Experience – 2-3 years.",
-              description: [
-                "Fresher who completed 2-3 month internship.",
-                "Shape your career as a Business Development Executive with Mind Frame India Advertising and Communication.",
-              ],
-              requirements: [
-                "Excellent Communication Skills",
-                "MBA's (Sales & Marketing)",
-                "Min. Experience – 3 Years",
-                "Advertising agency experience would be an added advantage",
-              ],
-            },
-            {
-              id: 3,
-              location: "Mumbai",
-              title: "Graphic Designer",
-              experience: "Minimum Experience – 3 years.",
-              description: [
-                "Shape your career with Mind Frame India Advertising and Communication.",
-                "Industries you will experience on are Healthcare, FMCG, Retail Brands, Luxury Brands, FnB Brands, Insurance etc.",
-              ],
-              requirements: [
-                "Min. Experience – 3 Years",
-                "Corel Draw",
-                "Illustrator",
-                "Adobe Photoshop and familiar with new versions.",
-                "Experience in designing Website page.",
-              ],
-            },
-            {
-              id: 4,
-              location: "Mumbai",
-              title: "Web Developer",
-              experience: "Minimum Experience – 1-3 years.",
-              description: [
-                "Join our dynamic development team as a Web Developer.",
-                "Build modern, responsive web applications using latest technologies and frameworks.",
-              ],
-              requirements: [
-                "Proficiency in HTML, CSS, JavaScript",
-                "Experience with React, Vue, or Angular",
-                "Understanding of REST APIs",
-                "Git version control",
-                "Problem solving skills",
-              ],
-            },
-            {
-              id: 5,
-              location: "Mumbai",
-              title: "App Developer",
-              experience: "Minimum Experience – 1-3 years.",
-              description: [
-                "We are looking for talented App Developers to create innovative mobile applications.",
-                "Work with modern technologies and contribute to our growing app ecosystem.",
-              ],
-              requirements: [
-                "iOS or Android development experience",
-                "Proficiency in Swift, Kotlin, React Native, or Flutter",
-                "Understanding of mobile UI/UX principles",
-                "API integration experience",
-                "Strong problem solving abilities",
-              ],
-            },
-          ];
-          setJobs(defaultJobs);
-          setPositions(applyOptions);
+          setJobs([]);
+          setPositions([]);
         }
       } catch (error) {
         console.error('Failed to fetch positions:', error);
-        // Use default data if API fails
-        const defaultJobs = [
-          {
-            id: 1,
-            location: "Mumbai",
-            title: "Client Servicing Executive",
-            experience: "Minimum Experience – 0-2 years.",
-            description: [
-              "Client Servicing Executive plays a critical role in satisfying clients and thus bringing repeat business.",
-              "They are the primary point of contact for the company's clientele and need to have good communications, interpersonal and problem solving skills.",
-            ],
-            requirements: [
-              "MBA",
-              "Ability to handle pressure and multitasking skills",
-              "Active problem solving skills",
-              "Good interpersonal skills",
-              "Good communication skills",
-              "Customer Focus",
-            ],
-          },
-          {
-            id: 2,
-            location: "Mumbai",
-            title: "Business Development Executive",
-            experience: "Minimum Experience – 2-3 years.",
-            description: [
-              "Fresher who completed 2-3 month internship.",
-              "Shape your career as a Business Development Executive with Mind Frame India Advertising and Communication.",
-            ],
-            requirements: [
-              "Excellent Communication Skills",
-              "MBA's (Sales & Marketing)",
-              "Min. Experience – 3 Years",
-              "Advertising agency experience would be an added advantage",
-            ],
-          },
-          {
-            id: 3,
-            location: "Mumbai",
-            title: "Graphic Designer",
-            experience: "Minimum Experience – 3 years.",
-            description: [
-              "Shape your career with Mind Frame India Advertising and Communication.",
-              "Industries you will experience on are Healthcare, FMCG, Retail Brands, Luxury Brands, FnB Brands, Insurance etc.",
-            ],
-            requirements: [
-              "Min. Experience – 3 Years",
-              "Corel Draw",
-              "Illustrator",
-              "Adobe Photoshop and familiar with new versions.",
-              "Experience in designing Website page.",
-            ],
-          },
-          {
-            id: 4,
-            location: "Mumbai",
-            title: "Web Developer",
-            experience: "Minimum Experience – 1-3 years.",
-            description: [
-              "Join our dynamic development team as a Web Developer.",
-              "Build modern, responsive web applications using latest technologies and frameworks.",
-            ],
-            requirements: [
-              "Proficiency in HTML, CSS, JavaScript",
-              "Experience with React, Vue, or Angular",
-              "Understanding of REST APIs",
-              "Git version control",
-              "Problem solving skills",
-            ],
-          },
-          {
-            id: 5,
-            location: "Mumbai",
-            title: "App Developer",
-            experience: "Minimum Experience – 1-3 years.",
-            description: [
-              "We are looking for talented App Developers to create innovative mobile applications.",
-              "Work with modern technologies and contribute to our growing app ecosystem.",
-            ],
-            requirements: [
-              "iOS or Android development experience",
-              "Proficiency in Swift, Kotlin, React Native, or Flutter",
-              "Understanding of mobile UI/UX principles",
-              "API integration experience",
-              "Strong problem solving abilities",
-            ],
-          },
-        ];
-        setJobs(defaultJobs);
-        setPositions(applyOptions);
+        setJobs([]);
+        setPositions([]);
       } finally {
         setIsLoadingJobs(false);
       }
@@ -951,18 +871,17 @@ export default function Careers() {
       applyFor: "",
       resume: null,
     },
-    validationSchema: createValidationSchema(),
+    validationSchema,
     enableReinitialize: true,
     onSubmit: async (values, { resetForm }) => {
       setLoading(true);
       try {
-        // Build FormData for file upload
         const formData = new FormData();
         Object.entries(values).forEach(([key, val]) => {
           if (val !== null && val !== undefined) formData.append(key, val);
         });
 
-        const response = await axios.post("/api/career", formData, {
+        const response = await apiClient.post("/career", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
 
@@ -974,9 +893,7 @@ export default function Careers() {
         }
       } catch (error) {
         console.error("Career form error:", error);
-        toast.error(
-          error.response?.data?.message || "Failed to submit. Please try again."
-        );
+        toast.error(error.response?.data?.message || "Failed to submit. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -997,7 +914,11 @@ export default function Careers() {
     return (
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", background: "#fff" }}>
         <div style={{ textAlign: "center" }}>
-          <div className="spinner" style={{ width: "40px", height: "40px", borderWidth: "3px", marginBottom: "20px" }}></div>
+          <div style={{
+            display: "inline-block", width: "40px", height: "40px",
+            border: "3px solid rgba(176,141,87,0.2)", borderTopColor: "#b08d57",
+            borderRadius: "50%", animation: "spin 0.7s linear infinite", marginBottom: "20px"
+          }} />
           <p style={{ fontFamily: "'DM Sans', sans-serif", color: "#666" }}>Loading career opportunities...</p>
         </div>
       </div>
@@ -1025,7 +946,6 @@ export default function Careers() {
         .career-input::placeholder { color: #666; }
         .career-input:focus { border-color: #b08d57; background: rgba(176,141,87,0.1); }
         .career-input.error-field { border-color: #f87171; }
-
         select.career-input option { background: #1a1510; color: #fff; }
 
         .job-row {
@@ -1052,8 +972,8 @@ export default function Careers() {
         .spinner {
           display: inline-block;
           width: 14px; height: 14px;
-          border: 2px solid rgba(0,0,0,0.2);
-          border-top-color: #b08d57;
+          border: 2px solid rgba(255,255,255,0.3);
+          border-top-color: #fff;
           border-radius: 50%;
           animation: spin 0.7s linear infinite;
           flex-shrink: 0;
@@ -1082,48 +1002,64 @@ export default function Careers() {
         <div style={{ width: "48px", height: "2px", background: "#b08d57", margin: "0 auto" }} />
       </div>
 
-      {/* ── DYNAMIC JOB LISTINGS ── */}
+      {/* ── JOB LISTINGS ── */}
       <div style={{ background: "#fff" }}>
-        {jobs.map((job, i) => (
-          <div key={job.id} style={{ background: i % 2 === 0 ? "#fff" : "#f7f5f1", padding: "48px 0" }}>
-            <div style={{ maxWidth: "840px", margin: "0 auto", padding: "0 24px" }}>
-              <div className="job-row">
-                <div>
-                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "11px", letterSpacing: "1px", textTransform: "uppercase", color: "#b08d57", marginBottom: "8px" }}>
-                    {job.location}
-                  </p>
-                  <h2 style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "clamp(20px, 3vw, 28px)", fontWeight: 700, color: "#1a1510", marginBottom: "10px", lineHeight: 1.2 }}>
-                    {job.title}
-                  </h2>
-                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "12px", fontWeight: 600, color: "#1a1510", marginBottom: "18px" }}>
-                    {job.experience}
-                  </p>
-                  {job.description.map((para, j) => (
-                    <p key={j} style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "13px", color: "#666", lineHeight: 1.8, marginBottom: "12px" }}>
-                      {para}
+        {jobs.length === 0 ? (
+          <div style={{ textAlign: "center", padding: "80px 24px" }}>
+            <p style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: "clamp(28px, 4vw, 42px)",
+              fontWeight: 700, color: "#b08d57", marginBottom: "16px"
+            }}>
+              No Current Openings
+            </p>
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "14px", color: "#999", lineHeight: 1.8 }}>
+              We don't have any open positions at the moment.<br />
+              Please check back later or send us your resume below.
+            </p>
+          </div>
+        ) : (
+          jobs.map((job, i) => (
+            <div key={job.id} style={{ background: i % 2 === 0 ? "#fff" : "#f7f5f1", padding: "48px 0" }}>
+              <div style={{ maxWidth: "840px", margin: "0 auto", padding: "0 24px" }}>
+                <div className="job-row">
+                  <div>
+                    <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "11px", letterSpacing: "1px", textTransform: "uppercase", color: "#b08d57", marginBottom: "8px" }}>
+                      {job.location}
                     </p>
-                  ))}
-                </div>
-                <div>
-                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "13px", fontWeight: 600, color: "#1a1510", marginBottom: "16px" }}>
-                    Requirements:
-                  </p>
-                  <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px" }}>
-                    {job.requirements.map((req, k) => (
-                      <li key={k} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
-                        <CheckIcon />
-                        <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "13px", color: "#555", lineHeight: 1.5 }}>{req}</span>
-                      </li>
+                    <h2 style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "clamp(20px, 3vw, 28px)", fontWeight: 700, color: "#1a1510", marginBottom: "10px", lineHeight: 1.2 }}>
+                      {job.title}
+                    </h2>
+                    <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "12px", fontWeight: 600, color: "#1a1510", marginBottom: "18px" }}>
+                      {job.experience}
+                    </p>
+                    {job.description.map((para, j) => (
+                      <p key={j} style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "13px", color: "#666", lineHeight: 1.8, marginBottom: "12px" }}>
+                        {para}
+                      </p>
                     ))}
-                  </ul>
+                  </div>
+                  <div>
+                    <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "13px", fontWeight: 600, color: "#1a1510", marginBottom: "16px" }}>
+                      Requirements:
+                    </p>
+                    <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px" }}>
+                      {job.requirements.map((req, k) => (
+                        <li key={k} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+                          <CheckIcon />
+                          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "13px", color: "#555", lineHeight: 1.5 }}>{req}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
 
-      {/* ── GET IN TOUCH / APPLY FORM ── */}
+      {/* ── APPLY FORM ── */}
       <div style={{ background: "#1a1510", padding: "60px 24px 64px" }}>
         <div style={{ maxWidth: "840px", margin: "0 auto" }} className="contact-inner">
 
@@ -1154,7 +1090,7 @@ export default function Careers() {
             </div>
           </div>
 
-          {/* Right: Formik form */}
+          {/* Right: form */}
           <div style={{ flex: 1, minWidth: "280px" }}>
             <form onSubmit={formik.handleSubmit} noValidate>
               <div className="form-grid">
@@ -1169,6 +1105,7 @@ export default function Careers() {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       onFocus={e => { e.target.style.borderColor = "#b08d57"; e.target.style.background = "rgba(176,141,87,0.1)"; }}
+                      onBlurCapture={e => { e.target.style.borderColor = "#333"; e.target.style.background = "rgba(255,255,255,0.08)"; }}
                       className={`career-input${formik.touched[name] && formik.errors[name] ? " error-field" : ""}`}
                     />
                     {formik.touched[name] && formik.errors[name] && (
@@ -1190,10 +1127,16 @@ export default function Careers() {
                     className={`career-input${formik.touched.applyFor && formik.errors.applyFor ? " error-field" : ""}`}
                     style={{ cursor: "pointer", color: formik.values.applyFor ? "#fff" : "#666" }}
                   >
-                    <option value="" disabled style={{ color: "#888", background: "#1a1510" }}>Select a position</option>
+                    <option value="" disabled style={{ color: "#888", background: "#1a1510" }}>
+                      {positions.length === 0 ? "No positions available" : "Select a position"}
+                    </option>
                     {positions.map(opt => (
-                      <option key={typeof opt === 'object' ? opt._id : opt} value={typeof opt === 'object' ? opt.title : opt} style={{ color: "#fff", background: "#1a1510" }}>
-                        {typeof opt === 'object' ? opt.title : opt}
+                      <option
+                        key={opt._id}
+                        value={opt.title}
+                        style={{ color: "#fff", background: "#1a1510" }}
+                      >
+                        {opt.title}
                       </option>
                     ))}
                   </select>
@@ -1218,7 +1161,7 @@ export default function Careers() {
                         cursor: "pointer", background: "transparent",
                         transition: "all 0.25s",
                       }}
-                      onMouseEnter={e => { e.currentTarget.style.background = "#b08d57"; e.currentTarget.style.color = "#1a1510"; e.currentTarget.style.borderColor = "#b08d57"; }}
+                      onMouseEnter={e => { e.currentTarget.style.background = "#b08d57"; e.currentTarget.style.color = "#1a1510"; }}
                       onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = formik.touched.resume && formik.errors.resume ? "#f87171" : "#b08d57"; }}
                     >
                       Choose File
@@ -1242,7 +1185,7 @@ export default function Careers() {
                   )}
                 </div>
 
-              </div>{/* end form-grid */}
+              </div>
 
               {/* Submit */}
               <button

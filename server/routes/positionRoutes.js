@@ -1,4 +1,3 @@
-// routes/positionRoutes.js
 import express from 'express';
 import {
   createPosition,
@@ -13,23 +12,39 @@ import {
   bulkDeletePositions,
   updateApplicationCount,
 } from '../controllers/positionController.js';
-import { requireAdmin } from '../middleware/auth.js';
+import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Public routes — no auth
+// Public routes — no auth required (specific routes first)
 router.get('/positions/active', getActivePositions);
 router.get('/positions/featured', getFeaturedPositions);
-router.get('/position/:id', getPositionById);
-router.patch('/position/:id/increment-applications', updateApplicationCount);
 
-// Admin routes — requireAdmin (same as blog routes)
-router.get('/positions/stats', requireAdmin, getPositionStats);
-router.get('/positions', requireAdmin, getAllPositions);
-router.post('/positions', requireAdmin, createPosition);
-router.post('/positions/bulk-delete', requireAdmin, bulkDeletePositions);
-router.put('/position/:id', requireAdmin, updatePosition);
-router.patch('/position/:id/toggle', requireAdmin, togglePositionStatus);
-router.delete('/position/:id', requireAdmin, deletePosition);
+// Admin routes — require auth (specific routes before parameterized)
+router.get('/positions/stats', protect, getPositionStats);
+router.post('/positions/bulk-delete', protect, bulkDeletePositions);
+
+// Generic routes (must come after specific routes)
+router.get('/positions', protect, getAllPositions);
+router.post('/positions', protect, createPosition);
+router.get('/positions/:id', getPositionById);
+router.put('/positions/:id', protect, updatePosition);
+router.delete('/positions/:id', protect, deletePosition);
+router.patch('/positions/:id/toggle', protect, togglePositionStatus);
+router.patch('/positions/:id/increment-applications', updateApplicationCount);
 
 export default router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+

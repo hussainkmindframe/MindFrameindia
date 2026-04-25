@@ -11,7 +11,7 @@ import fs from 'fs';
 // Get current directory
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
+      
 // Upload folder path
 const uploadDir = path.join(__dirname, '../uploads');
 
