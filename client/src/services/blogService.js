@@ -29,6 +29,17 @@ export const blogService = {
     apiClient.get('/blogs/admin/all', {
       params: { page, limit, search },
     }),
+
+  // Image upload
+  uploadImage: (file) => {
+    const formData = new FormData();
+    formData.append('image', file);
+    return apiClient.post('/blogs/upload-image', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  },
 };
 
 export default blogService;

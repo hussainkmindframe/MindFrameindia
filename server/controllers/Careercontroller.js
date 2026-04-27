@@ -4,36 +4,10 @@
  */
 
 import Career from '../models/Career.js';
-import multer from 'multer';
-import path from 'path';
-import fs from 'fs';
+import { resumeUpload } from '../config/cloudinary.js';
 
-// Ensure uploads/resumes directory exists
-const resumeDir = 'uploads/resumes';
-if (!fs.existsSync(resumeDir)) {
-  fs.mkdirSync(resumeDir, { recursive: true });
-}
-
-// Multer config — store resume in uploads/resumes/
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, resumeDir),
-  filename: (req, file, cb) => {
-    const unique = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-    cb(null, `resume-${unique}${path.extname(file.originalname)}`);
-  },
-});
-
-export const upload = multer({
-  storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
-  fileFilter: (req, file, cb) => {
-    const allowed = /pdf|doc|docx/;
-    const ext = allowed.test(path.extname(file.originalname).toLowerCase());
-    const mime = allowed.test(file.mimetype) || file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-    if (ext || mime) return cb(null, true);
-    cb(new Error('Only PDF and Word documents are allowed'));
-  },
-});
+// Export the Cloudinary resume upload middleware
+export const upload = resumeUpload;
 
 /**
  * @desc    Submit job application

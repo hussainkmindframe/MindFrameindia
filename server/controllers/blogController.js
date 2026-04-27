@@ -231,8 +231,8 @@ export const uploadImage = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('No file uploaded', 400));
   }
 
-  // Build image URL - relative path that can be served
-  const imageUrl = `/uploads/${req.file.filename}`;
+  // Get the secure HTTPS URL from Cloudinary response
+  const imageUrl = req.file.secure_url || req.file.path || req.file.url;
 
   res.status(200).json({
     success: true,
