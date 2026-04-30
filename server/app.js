@@ -1,6 +1,6 @@
 /**
  * Express Application Setup
- */
+*/
 
 import express from 'express';
 import cors from 'cors';
@@ -46,5 +46,7 @@ app.use((req, res, next) => {
 
 // Error handler
 app.use(errorHandler);
+
+
 
 export default app;
