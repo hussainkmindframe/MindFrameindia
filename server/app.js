@@ -46,6 +46,16 @@ app.use('/api', careerRoutes);
 app.use('/api', positionRoutes);
 
 
+// Root route — confirms API is live
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Mindframe Agency API is running 🚀',
+    version: '1.0.0',
+    endpoints: '/api/health | /api/blogs | /api/auth',
+  });
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ success: true, message: 'Server running' });
