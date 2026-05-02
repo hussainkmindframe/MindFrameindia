@@ -33,7 +33,7 @@ import AdminCareerManagement from "./pages/AdminPages/CareerManagement";
 import OurWork from "./pages/OurWork";
 import Testimonial from "./pages/Testimonial";
 import NewsRoom from "./pages/NewsRoom";
-import WebDevelopment from "./pages/Webdevelopment";
+import WebDevelopment from "./pages/WebDevelopment";
 import MobileAppDevelopment from "./pages/MobileAppDevelopment";
 import BrandingIdentity from "./pages/BrandingIdentity";
 import BrandServices from "./pages/BrandServices";
