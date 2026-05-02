@@ -32,6 +32,9 @@ import wrk30 from '../assets/work/wrk30.jpg';
 import wrk31 from '../assets/work/wrk31.jpg';
 import wrk32 from '../assets/work/wrk32.jpg';
 
+
+
+
 const projects = [
   {
     id: 1,
@@ -534,3 +537,5 @@ const styles = {
     fontWeight: 400,
   },
 };
+
+
