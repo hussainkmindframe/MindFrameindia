@@ -1,14 +1,14 @@
 import Shanawaz from '../assets/team/Shanawaz-sir.jpg';
 import Hina from '../assets/team/hina-mam.jpg';
-import Aaqib from '../assets/team/aaqib.jpg';
+import Aaqib from '../assets/team/Aaqib.jpg';
 import Harsha from '../assets/team/Harsha.png';
 import Shadab from '../assets/team/shadab.png';
 import Veena from '../assets/team/veena.png';
 import Aashi from '../assets/team/aashi.png';
-import Abdul from '../assets/team/abdul.png';
+import Abdul from '../assets/team/Abdul.png';
 import Taufiq from '../assets/team/taufiq.png';
 import Altaf from '../assets/team/altaf.png';
-import Aman from '../assets/team/aman.png';
+import Aman from '../assets/team/Aman.png';
 import salome from '../assets/team/salome.png';
 import Pranay from '../assets/team/Pranay.jpg';
 
