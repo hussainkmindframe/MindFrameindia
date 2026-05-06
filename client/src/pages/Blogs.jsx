@@ -8,7 +8,6 @@ import blogService from '../services/blogService';
 import BlogCard from '../components/BlogCard';
 import Loading from '../components/Loading';
 import { useSearchParams } from 'react-router-dom';
-
 export default function Blogs() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);

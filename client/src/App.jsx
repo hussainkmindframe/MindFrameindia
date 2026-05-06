@@ -52,6 +52,7 @@ import Creativedesign from "./pages/Creativedesign";
 import AugmentedReality from "./pages/Augmentedreality";
 import Animation from "./pages/Animation";
 import Television from "./pages/Television";
+import NotFound from "./pages/NotFound";
 
 
 // Layout component for public pages (with header and footer)
@@ -245,7 +246,7 @@ export default function App() {
         />
 
         {/* Catch all */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );

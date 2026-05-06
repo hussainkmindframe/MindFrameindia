@@ -3,7 +3,7 @@
  */
 
 import { useState, useRef, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../utils/authStore";
 import logo from "../assets/Logo-MFI.png";
 import logo2 from "../assets/logo2.png";
@@ -60,6 +60,35 @@ const navLinks = [
   { label: "Contact Us", to: "/contact" },
 ];
 
+const searchablePages = [
+  { name: "Home", path: "/" },
+  { name: "About Us", path: "/about" },
+  { name: "Our Work", path: "/work" },
+  { name: "Blogs", path: "/blogs" },
+  { name: "Contact Us", path: "/contact" },
+  { name: "News Room", path: "/News" },
+  { name: "Testimonials", path: "/testimonials" },
+  { name: "Careers", path: "/careers" },
+  { name: "Team", path: "/team" },
+  { name: "Brand Identity", path: "/services/brand-identity" },
+  { name: "Brand Services", path: "/services/brand-services" },
+  { name: "Above The Line (ATL)", path: "/services/atl" },
+  { name: "Below The Line (BTL)", path: "/services/btl" },
+  { name: "Media Buying", path: "/services/media-buying" },
+  { name: "Public Relations", path: "/services/public-realations" },
+  { name: "Digital Marketing", path: "/services/digital-marketing" },
+  { name: "Marketing Branding", path: "/services/marketing-branding" },
+  { name: "Performance Marketing", path: "/services/performance" },
+  { name: "Customized Campaign Design", path: "/services/customize-campaign" },
+  { name: "Advertising Services", path: "/services/advertizing-services" },
+  { name: "Creative Designing", path: "/services/creative-design" },
+  { name: "Augmented Reality / VR", path: "/services/augumented-reality" },
+  { name: "Animation Videos", path: "/services/creative/animation-videos" },
+  { name: "Television Advertising", path: "/services/creative/best-television-advertising-agency" },
+  { name: "Website Development", path: "/services/web-development" },
+  { name: "Mobile App Development", path: "/services/app-development" },
+];
+
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
@@ -69,6 +98,8 @@ export default function Header() {
   const [mobileActiveSubMenu, setMobileActiveSubMenu] = useState(null);
   const { isAuthenticated, logout } = useAuthStore();
   const location = useLocation();
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
   const dropdownRef = useRef(null);
   const closeTimeoutRef = useRef(null);
 
@@ -108,6 +139,7 @@ export default function Header() {
     setMobileActiveSubMenu(null);
     setSearchOpen(false);
     setActiveSubMenu(null);
+    setSearchQuery("");
   }, [location.pathname]);
 
   // Close dropdown when clicking outside
@@ -662,7 +694,27 @@ export default function Header() {
             <input
               autoFocus={searchOpen}
               type="text"
-              placeholder="Search..."
+              placeholder="Search pages (e.g. Services, About, Blogs...)"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  const query = searchQuery.toLowerCase().trim();
+                  const match = searchablePages.find(p => 
+                    p.name.toLowerCase().includes(query) || 
+                    p.path.toLowerCase().includes(query)
+                  );
+                  if (match) {
+                    navigate(match.path);
+                    setSearchOpen(false);
+                    setSearchQuery("");
+                  } else {
+                    // If no direct page match, navigate to a non-existent path to trigger 404
+                    navigate(`/search-not-found?q=${encodeURIComponent(searchQuery)}`);
+                    setSearchOpen(false);
+                  }
+                }
+              }}
               style={{
                 width: "100%",
                 border: "none",
