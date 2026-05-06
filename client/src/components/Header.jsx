@@ -3,7 +3,7 @@
  */
 
 import { useState, useRef, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAuthStore } from "../utils/authStore";
 import logo from "../assets/Logo-MFI.png";
 import logo2 from "../assets/logo2.png";
@@ -60,46 +60,15 @@ const navLinks = [
   { label: "Contact Us", to: "/contact" },
 ];
 
-const searchablePages = [
-  { name: "Home", path: "/" },
-  { name: "About Us", path: "/about" },
-  { name: "Our Work", path: "/work" },
-  { name: "Blogs", path: "/blogs" },
-  { name: "Contact Us", path: "/contact" },
-  { name: "News Room", path: "/News" },
-  { name: "Testimonials", path: "/testimonials" },
-  { name: "Careers", path: "/careers" },
-  { name: "Team", path: "/team" },
-  { name: "Brand Identity", path: "/services/brand-identity" },
-  { name: "Brand Services", path: "/services/brand-services" },
-  { name: "Above The Line (ATL)", path: "/services/atl" },
-  { name: "Below The Line (BTL)", path: "/services/btl" },
-  { name: "Media Buying", path: "/services/media-buying" },
-  { name: "Public Relations", path: "/services/public-realations" },
-  { name: "Digital Marketing", path: "/services/digital-marketing" },
-  { name: "Marketing Branding", path: "/services/marketing-branding" },
-  { name: "Performance Marketing", path: "/services/performance" },
-  { name: "Customized Campaign Design", path: "/services/customize-campaign" },
-  { name: "Advertising Services", path: "/services/advertizing-services" },
-  { name: "Creative Designing", path: "/services/creative-design" },
-  { name: "Augmented Reality / VR", path: "/services/augumented-reality" },
-  { name: "Animation Videos", path: "/services/creative/animation-videos" },
-  { name: "Television Advertising", path: "/services/creative/best-television-advertising-agency" },
-  { name: "Website Development", path: "/services/web-development" },
-  { name: "Mobile App Development", path: "/services/app-development" },
-];
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
   const [activeSubMenu, setActiveSubMenu] = useState(null);
   const [mobileActiveSubMenu, setMobileActiveSubMenu] = useState(null);
   const { isAuthenticated, logout } = useAuthStore();
   const location = useLocation();
-  const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState("");
   const dropdownRef = useRef(null);
   const closeTimeoutRef = useRef(null);
 
@@ -137,9 +106,7 @@ export default function Header() {
     setServicesOpen(false);
     setMobileServicesOpen(false);
     setMobileActiveSubMenu(null);
-    setSearchOpen(false);
     setActiveSubMenu(null);
-    setSearchQuery("");
   }, [location.pathname]);
 
   // Close dropdown when clicking outside
@@ -598,35 +565,6 @@ export default function Header() {
               gap: 18,
             }}
           >
-            {/* Search */}
-            <button
-              onClick={() => setSearchOpen(!searchOpen)}
-              style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                padding: 6,
-                color: "#444",
-                display: "flex",
-                alignItems: "center",
-                transition: "color 0.2s ease",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = gold)}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "#444")}
-            >
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <circle cx="11" cy="11" r="7" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-              </svg>
-            </button>
-
             {/* Hamburger */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
@@ -679,56 +617,6 @@ export default function Header() {
             </button>
           </div>
         </nav>
-
-        {/* Search Bar with Animation */}
-        <div
-          style={{
-            borderTop: "1px solid #eee",
-            maxHeight: searchOpen ? 80 : 0,
-            overflow: "hidden",
-            transition: "max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-            background: "#fafaf8",
-          }}
-        >
-          <div style={{ padding: "16px 24px" }}>
-            <input
-              autoFocus={searchOpen}
-              type="text"
-              placeholder="Search pages (e.g. Services, About, Blogs...)"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  const query = searchQuery.toLowerCase().trim();
-                  const match = searchablePages.find(p => 
-                    p.name.toLowerCase().includes(query) || 
-                    p.path.toLowerCase().includes(query)
-                  );
-                  if (match) {
-                    navigate(match.path);
-                    setSearchOpen(false);
-                    setSearchQuery("");
-                  } else {
-                    // If no direct page match, navigate to a non-existent path to trigger 404
-                    navigate(`/search-not-found?q=${encodeURIComponent(searchQuery)}`);
-                    setSearchOpen(false);
-                  }
-                }
-              }}
-              style={{
-                width: "100%",
-                border: "none",
-                borderBottom: `2px solid ${gold}`,
-                background: "transparent",
-                fontFamily: "Georgia, serif",
-                fontSize: 14,
-                padding: "8px 0",
-                outline: "none",
-                color: "#1a1a1a",
-              }}
-            />
-          </div>
-        </div>
 
         {/* Mobile Menu with Smooth Animation */}
         <div
