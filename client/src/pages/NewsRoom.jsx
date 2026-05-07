@@ -1,4 +1,34 @@
 import { useState } from "react";
+import bannerImage from "../assets/news-room/banner.jpg";
+import img1 from "../assets/news-room/2016-1.jpg";
+import img2 from "../assets/news-room/2016-2.jpg";
+import img3 from "../assets/news-room/2017-1.jpg";
+import img4 from "../assets/news-room/2017-2.jpg";
+import img5 from "../assets/news-room/2018-1.jpg";
+import img6 from "../assets/news-room/2018-2.jpg";
+import img7 from "../assets/news-room/2018-3.png";
+import img8 from "../assets/news-room/2020.png";
+import img9 from "../assets/news-room/2021-1.png";
+import img10 from "../assets/news-room/2021-2.png";
+import img11 from "../assets/news-room/2021-3.png";
+import img12 from "../assets/news-room/2021-4.png";
+import img13 from "../assets/news-room/2022-1.jpg";
+import img14 from "../assets/news-room/2022-2.png";
+import img15 from "../assets/news-room/2022-3.jpg";
+import img16 from "../assets/news-room/2022-4.png";
+import img17 from "../assets/news-room/2023-1.png";
+import img18 from "../assets/news-room/2023-2.png";
+import img19 from "../assets/news-room/2023-3.png";
+import img20 from "../assets/news-room/2023-4.png";
+import img21 from "../assets/news-room/2023-5.png";
+import img22 from "../assets/news-room/2023-6.png";
+import img23 from "../assets/news-room/2024-1.jpg";
+import img24 from "../assets/news-room/2024-2.png";
+import img25 from "../assets/news-room/2024-3.jpg";
+
+
+
+
 
 const styles = {
   page: {
@@ -10,82 +40,54 @@ const styles = {
 
 const newsData = {
   2024: [
-    {
-      id: 1,
-      title: "Elevating Fashion — Runway Campaign 2024",
-      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80",
-    },
-    {
-      id: 2,
-      title: "Tots Couture Week — Powered by Little Tags Luxury",
-      image: "https://images.unsplash.com/photo-1555529771-835f59fc5efe?w=600&q=80",
-    },
-    {
-      id: 3,
-      title: "8 Years & Counting — Mind Frame India Anniversary",
-      image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&q=80",
-    },
-    {
-      id: 4,
-      title: "JGF Global Expansion — New York Food Expo Coverage",
-      image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80",
-    },
+    { id: 1, title: "A Timeless Anthem: 8 Years & Counting…", image: img25},
+    { id: 2, title: "Mind Frame India Secures Fashion Week Brand Mandate for TOTS Couture Week", image: img24 },
+    { id: 3, title: "Mind Frame India Wins Rirasa: Elevating Luxury Indian Fashion to New Heights", image: img23 },
   ],
   2023: [
-    {
-      id: 5,
-      title: "Metro Grande Launch Campaign — Outdoor Media Blitz",
-      image: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&q=80",
-    },
-    {
-      id: 6,
-      title: "Soul Brand Identity — Packaging & Print",
-      image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=600&q=80",
-    },
-    {
-      id: 7,
-      title: "Gudi Padwa Festival Campaign — Real Estate",
-      image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=600&q=80",
-    },
+    { id: 4, title: "Mind Frame India Revamps Realty Brands Post-Pandemic with Strategic Digital Campaigns", image: img22 },
+    { id: 5, title: "Revamping Jayashri Gaytri Foods Pvt Ltd – From Bhopal to New York", image: img21 },
+    { id: 6, title: "Mind Frame India’s Influencer Campaigns Propel Kolorr to New Heights", image: img20 },
+    { id: 7, title: "Mind Frame India Transforms Nesco Foods With Successful QSR Launches & Branding of Gourmet Craft", image: img19 },
+    { id: 8, title: "Mind Frame India’s Barter Strategy Delivers Massive Reach for Persian Darbar", image: img18 },
+    { id: 9, title: "Transforming Geeta Aluminium: A Case Study of Strategic Branding Success", image: img17 },
   ],
   2022: [
-    {
-      id: 8,
-      title: "Mysticity Product Launch — Digital & Print",
-      image: "https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?w=600&q=80",
-    },
-    {
-      id: 9,
-      title: "Sqiinful Beauty — Brand Campaign Reveal",
-      image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&q=80",
-    },
+    { id: 10, title: "Mind Frame India Drives Online Sales For Arijit Singh and Pankaj Udhas Ji Concerts in Arizona", image: img16 },
+    { id: 11, title: "Mind Frame India Chooses Nawazuddin Siddiqui for Bharat Agri Kisan App Campaign", image: img15 },
+     { id: 12, title: "Mind Frame India Takes Thane Realty by Storm With Strategic Campaigns for Four Competing Brands", image: img14 },
+    { id: 13, title: "Roping in Celebrity Couple Shreyas & Prarthana for West Pioneer’s Metro Grande: A Mind Frame India Success Story", image: img13 },
   ],
   2021: [
-    {
-      id: 10,
-      title: "Oishi Oishi — Packaging Design Feature",
-      image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600&q=80",
-    },
+    { id: 14, title: "Mind Frame India Bags Digital Marketing Mandate for Mahatta Art", image: img12 },
+    { id: 15, title: "Creating a Landmark AYUSKA by Avadh :- Your Organic life Begins Here", image: img11 },
+     { id: 16, title: "Mind Frame India Powers Hdfc’s Largest Retail Webinar to Unprecedented Success", image: img10 },
+    { id: 17, title: "Ayuska by Avach Crafting Longevity in Real Estate Marketing", image: img9 },
   ],
   2020: [
-    {
-      id: 11,
-      title: "Mind Frame India — 5 Years of Creative Excellence",
-      image: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=600&q=80",
-    },
-    {
-      id: 12,
-      title: "Annual Report Campaign — Brand Storytelling",
-      image: "https://images.unsplash.com/photo-1542744094-3a31f272c490?w=600&q=80",
-    },
+    { id: 18, title: "Mind Frame India Elevates Travel Brands to New Heights With Innovative Marketing Strategies", image: img8 },
+  ],
+
+  2018: [
+    { id: 19, title: "Mind Frame India Reignites Supreme’s Market Presence with a Vibrant Campaign", image: img5 },
+    { id: 20, title: "How Mind Frame India Won the Supreme Furniture Mandate", image: img6 },
+        { id: 21, title: "Mind Frame India’s Innovative Campaign for Aditya Birla Memorial Hospital", image: img7 },
+
+  ],
+  2017: [
+    { id: 22, title: "In the campaign conceptualised by Mind Frame India, Aditya Birla Memorial Hospital gives hope to cancer patients with its ‘Ummeed’ campaign", image: img3 },
+    { id: 23, title: "Javed Ali marks debut as a Music Director for Ummeed, a cancer awareness campaign launched by Aditya Birla Memorial Hospital", image: img4 },
+  ],
+  2016: [
+    { id: 24, title: "Ummeed: Illuminating Hope in the Journey Against Cancer – Mind Frame India’s Compassionate Campaign for Aditya Birla Memorial Hospital", image: img1 },
+    { id: 25, title: "Ummeed: The Journey Behind the Music – Raising Cancer Awareness for ABMH Hospital", image: img2 },
   ],
 };
 
-const years = [2024, 2023, 2022, 2021, 2020];
+const years = [2024, 2023, 2022, 2021, 2020, 2018, 2017, 2016];
 
 export default function NewsRoom() {
   const [openYears, setOpenYears] = useState({ 2024: true });
-  const [hovered, setHovered] = useState(null);
 
   const toggle = (year) => {
     setOpenYears((prev) => ({ ...prev, [year]: !prev[year] }));
@@ -205,16 +207,9 @@ export default function NewsRoom() {
           scrollbar-color: #b08d57 #f0ece4;
         }
 
-        .scroll-track::-webkit-scrollbar {
-          height: 4px;
-        }
-        .scroll-track::-webkit-scrollbar-thumb {
-          background: #b08d57;
-          border-radius: 2px;
-        }
-        .scroll-track::-webkit-scrollbar-track {
-          background: #f0ece4;
-        }
+        .scroll-track::-webkit-scrollbar { height: 4px; }
+        .scroll-track::-webkit-scrollbar-thumb { background: #b08d57; border-radius: 2px; }
+        .scroll-track::-webkit-scrollbar-track { background: #f0ece4; }
 
         .accordion-body {
           overflow: hidden;
@@ -245,19 +240,17 @@ export default function NewsRoom() {
           background: "#1a1510",
         }}
       >
-        {/* Newspaper texture bg */}
         <div
           style={{
             position: "absolute",
             inset: 0,
-            backgroundImage: `url('https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1400&q=60')`,
+            backgroundImage: `url(${bannerImage})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             opacity: 0.35,
             filter: "grayscale(100%)",
           }}
         />
-        {/* Overlay */}
         <div
           style={{
             position: "absolute",
@@ -265,13 +258,9 @@ export default function NewsRoom() {
             background: "linear-gradient(to bottom, rgba(250,248,245,0.55) 0%, rgba(250,248,245,0.15) 100%)",
           }}
         />
-
-        {/* Breadcrumb */}
         <div style={{ position: "absolute", top: 20, left: "50%", transform: "translateX(-50%)", zIndex: 2 }}>
-          <span className="breadcrumb">Home &nbsp;$&nbsp; Blogs &nbsp;$&nbsp; News Room</span>
+          <span className="breadcrumb">Home &nbsp;›&nbsp; Blogs &nbsp;›&nbsp; News Room</span>
         </div>
-
-        {/* Title */}
         <div
           style={{
             position: "absolute",
@@ -292,7 +281,6 @@ export default function NewsRoom() {
 
       {/* CONTENT */}
       <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "40px 24px 80px" }}>
-
         {years.map((year, i) => {
           const isOpen = !!openYears[year];
           const items = newsData[year] || [];
@@ -301,17 +289,18 @@ export default function NewsRoom() {
               {/* Year Row */}
               <div className="year-row" onClick={() => toggle(year)}>
                 <div className={`year-label ${isOpen ? "open" : ""}`}>
-                  <span style={{
-                    fontSize: "18px",
-                    color: isOpen ? "#b08d57" : "#aaa",
-                    transition: "transform 0.3s",
-                    display: "inline-block",
-                    transform: isOpen ? "rotate(0deg)" : "rotate(0deg)",
-                    lineHeight: 1,
-                  }}>
+                  <span
+                    style={{
+                      fontSize: "18px",
+                      color: isOpen ? "#b08d57" : "#aaa",
+                      lineHeight: 1,
+                      width: "20px",
+                      textAlign: "center",
+                    }}
+                  >
                     {isOpen ? "—" : "+"}
                   </span>
-                  {year} Newsrooms
+                  {year} Newsroom
                 </div>
               </div>
 
@@ -325,13 +314,11 @@ export default function NewsRoom() {
               >
                 <div className="scroll-track">
                   {items.map((item) => (
-                    <div
-                      key={item.id}
-                      className="news-card"
-                      onMouseEnter={() => setHovered(item.id)}
-                      onMouseLeave={() => setHovered(null)}
-                    >
-                      <img src={item.image} alt={item.title} />
+                    <div key={item.id} className="news-card">
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                      />
                       <div className="card-overlay">
                         <p className="card-overlay-text">{item.title}</p>
                       </div>
@@ -340,7 +327,6 @@ export default function NewsRoom() {
                 </div>
               </div>
 
-              {/* bottom border for last item */}
               {i === years.length - 1 && (
                 <div style={{ borderTop: "1px solid #e0d9ce" }} />
               )}

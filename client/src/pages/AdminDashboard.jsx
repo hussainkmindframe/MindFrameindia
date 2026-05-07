@@ -1,7 +1,7 @@
 /**
  * Admin Dashboard Page — Gold & White Theme (Consistent with Login)
  */
-
+import logo2 from "../assets/logo2.png";
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../utils/authStore';
