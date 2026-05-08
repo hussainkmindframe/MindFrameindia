@@ -1,13 +1,13 @@
 /**
  * Header Component — Responsive (Mindframe India)
+ * Desktop: Center nav + hamburger opens right sidebar
+ * Mobile: Hamburger opens right sidebar
  */
 
 import { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuthStore } from "../utils/authStore";
-import logo from "../assets/Logo-MFI.png";
 import logo2 from "../assets/logo2.png";
-
 
 const gold = "#c9a84c";
 
@@ -43,9 +43,9 @@ const navLinks = [
         name: "Creative Solutions",
         children: [
           { name: "Creative Designing", path: "/services/creative-design" },
-          { name: "Augumented Reality / Virtual Reality", path: "/services/augumented-reality" },
-          { name: "2D & 3D/Animation videos", path: "/services/creative/animation-videos" },
-          { name: "Best Television Advertising Agency in Mumbai | TV Ads Campaign", path: "/services/creative/best-television-advertising-agency" },
+          { name: "Augmented Reality / Virtual Reality", path: "/services/augumented-reality" },
+          { name: "2D & 3D / Animation Videos", path: "/services/creative/animation-videos" },
+          { name: "Best Television Advertising Agency", path: "/services/creative/best-television-advertising-agency" },
         ],
       },
       { name: "Website Development", path: "/services/web-development" },
@@ -59,17 +59,43 @@ const navLinks = [
   { label: "Contact Us", to: "/contact" },
 ];
 
-
 export default function Header() {
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
-  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const [activeSubMenu, setActiveSubMenu] = useState(null);
-  const [mobileActiveSubMenu, setMobileActiveSubMenu] = useState(null);
+  const [sidebarServicesOpen, setSidebarServicesOpen] = useState(false);
+  const [sidebarActiveSubMenu, setSidebarActiveSubMenu] = useState(null);
   const { isAuthenticated, logout } = useAuthStore();
   const location = useLocation();
   const dropdownRef = useRef(null);
   const closeTimeoutRef = useRef(null);
+
+  // Close everything on route change
+  useEffect(() => {
+    setSidebarOpen(false);
+    setServicesOpen(false);
+    setActiveSubMenu(null);
+    setSidebarServicesOpen(false);
+    setSidebarActiveSubMenu(null);
+  }, [location.pathname]);
+
+  // Lock body scroll when sidebar open
+  useEffect(() => {
+    document.body.style.overflow = sidebarOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [sidebarOpen]);
+
+  // Close desktop dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setServicesOpen(false);
+        setActiveSubMenu(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleMouseLeaveServices = () => {
     closeTimeoutRef.current = setTimeout(() => {
@@ -83,35 +109,14 @@ export default function Header() {
     setServicesOpen(true);
   };
 
-  const handleMouseEnterSubMenu = (itemName) => {
+  const handleMouseEnterSubMenu = (name) => {
     if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
-    setActiveSubMenu(itemName);
+    setActiveSubMenu(name);
   };
 
   const handleMouseLeaveSubMenu = () => {
-    closeTimeoutRef.current = setTimeout(() => {
-      setActiveSubMenu(null);
-    }, 150);
+    closeTimeoutRef.current = setTimeout(() => setActiveSubMenu(null), 150);
   };
-
-  useEffect(() => {
-    setMobileOpen(false);
-    setServicesOpen(false);
-    setMobileServicesOpen(false);
-    setMobileActiveSubMenu(null);
-    setActiveSubMenu(null);
-  }, [location.pathname]);
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setServicesOpen(false);
-        setActiveSubMenu(null);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   const isActive = (to) => location.pathname === to;
 
@@ -128,354 +133,260 @@ export default function Header() {
     cursor: "pointer",
   });
 
+  // Desktop dropdown renderer
   const renderDropdownItems = () => {
-    const servicesItem = navLinks.find((link) => link.label === "Services");
+    const servicesItem = navLinks.find((l) => l.label === "Services");
     if (!servicesItem?.dropdown) return null;
-
     return servicesItem.dropdown.map((item) => {
       if (item.children) {
-        const isSubMenuOpen = activeSubMenu === item.name;
+        const isOpen = activeSubMenu === item.name;
         return (
-          <div
-            key={item.name}
-            style={{ position: "relative" }}
+          <div key={item.name} style={{ position: "relative" }}
             onMouseEnter={() => handleMouseEnterSubMenu(item.name)}
             onMouseLeave={handleMouseLeaveSubMenu}
           >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                padding: "12px 20px",
-                fontSize: 13.5,
-                color: "#333",
-                borderBottom: "1px solid #f0f0f0",
-                fontFamily: "Georgia, serif",
-                cursor: "pointer",
-                transition: "all 0.2s ease",
-                background: isSubMenuOpen ? "#fafaf8" : "#fff",
-              }}
-            >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 20px", fontSize: 13.5, color: "#333", borderBottom: "1px solid #f0f0f0", fontFamily: "Georgia, serif", cursor: "pointer", background: isOpen ? "#fafaf8" : "#fff", transition: "background 0.2s" }}>
               {item.name}
-              <span style={{ fontSize: 12, color: "#999", transition: "transform 0.2s ease", transform: isSubMenuOpen ? "translateX(3px)" : "none" }}>→</span>
+              <span style={{ fontSize: 12, color: "#999", transform: isOpen ? "translateX(3px)" : "none", transition: "transform 0.2s" }}>→</span>
             </div>
-            <div
-              style={{
-                position: "absolute",
-                top: 0,
-                left: "100%",
-                background: "#fff",
-                border: "1px solid #eee",
-                boxShadow: "0 6px 20px rgba(0,0,0,0.08)",
-                minWidth: 220,
-                zIndex: 102,
-                opacity: isSubMenuOpen ? 1 : 0,
-                visibility: isSubMenuOpen ? "visible" : "hidden",
-                transform: isSubMenuOpen ? "translateX(0)" : "translateX(-10px)",
-                transition: "all 0.25s ease",
-                pointerEvents: isSubMenuOpen ? "auto" : "none",
-              }}
-            >
+            <div style={{ position: "absolute", top: 0, left: "100%", background: "#fff", border: "1px solid #eee", boxShadow: "0 6px 20px rgba(0,0,0,0.08)", minWidth: 240, zIndex: 102, opacity: isOpen ? 1 : 0, visibility: isOpen ? "visible" : "hidden", transform: isOpen ? "translateX(0)" : "translateX(-10px)", transition: "all 0.25s ease", pointerEvents: isOpen ? "auto" : "none" }}>
               {item.children.map((child) => (
-                <Link
-                  key={child.path}
-                  to={child.path}
+                <Link key={child.path} to={child.path}
                   onClick={() => { setServicesOpen(false); setActiveSubMenu(null); }}
                   style={{ display: "block", padding: "12px 20px", fontSize: 13, color: "#555", textDecoration: "none", borderBottom: "1px solid #f5f5f5", fontFamily: "Georgia, serif", transition: "all 0.2s ease" }}
                   onMouseEnter={(e) => { e.currentTarget.style.background = "#fafaf8"; e.currentTarget.style.color = gold; e.currentTarget.style.paddingLeft = "24px"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.color = "#555"; e.currentTarget.style.paddingLeft = "20px"; }}
-                >
-                  {child.name}
-                </Link>
+                >{child.name}</Link>
               ))}
             </div>
           </div>
         );
       }
       return (
-        <Link
-          key={item.path}
-          to={item.path}
-          onClick={() => setServicesOpen(false)}
+        <Link key={item.path} to={item.path} onClick={() => setServicesOpen(false)}
           style={{ display: "block", padding: "12px 20px", fontSize: 13.5, color: "#333", textDecoration: "none", borderBottom: "1px solid #f0f0f0", fontFamily: "Georgia, serif", transition: "all 0.2s ease" }}
           onMouseEnter={(e) => { e.currentTarget.style.background = "#fafaf8"; e.currentTarget.style.color = gold; e.currentTarget.style.paddingLeft = "24px"; }}
           onMouseLeave={(e) => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.color = "#333"; e.currentTarget.style.paddingLeft = "20px"; }}
-        >
-          {item.name}
-        </Link>
+        >{item.name}</Link>
       );
     });
   };
 
-  const renderMobileDropdownItems = () => {
-    const servicesItem = navLinks.find((link) => link.label === "Services");
-    if (!servicesItem?.dropdown) return null;
-
-    return servicesItem.dropdown.map((item) => {
-      if (item.children) {
-        const isOpen = mobileActiveSubMenu === item.name;
+  // Sidebar nav renderer
+  const renderSidebarItems = () => {
+    return navLinks.map((link) => {
+      if (link.dropdown) {
         return (
-          <div key={item.name}>
+          <div key={link.to}>
             <button
-              onClick={() => setMobileActiveSubMenu(isOpen ? null : item.name)}
-              style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 24px", background: "none", border: "none", cursor: "pointer", fontFamily: "Georgia, serif", fontSize: 13.5, color: "#555", borderBottom: "1px solid #f0f0f0", textAlign: "left", transition: "all 0.2s ease" }}
+              onClick={() => setSidebarServicesOpen(!sidebarServicesOpen)}
+              style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "15px 28px", background: "none", border: "none", borderBottom: "1px solid #f0f0f0", cursor: "pointer", fontFamily: "Georgia, serif", fontSize: 14.5, color: "#1a1a1a", fontWeight: 500, textAlign: "left", transition: "color 0.2s" }}
+              onMouseEnter={(e) => e.currentTarget.style.color = gold}
+              onMouseLeave={(e) => e.currentTarget.style.color = "#1a1a1a"}
             >
-              {item.name}
-              <span style={{ fontSize: 12, color: "#999", transition: "transform 0.2s ease", transform: isOpen ? "rotate(90deg)" : "none", display: "inline-block" }}>→</span>
+              {link.label}
+              <span style={{ fontSize: 11, color: "#aaa", transform: sidebarServicesOpen ? "rotate(180deg)" : "none", transition: "transform 0.25s ease", display: "inline-block" }}>∨</span>
             </button>
-            <div style={{ maxHeight: isOpen ? 300 : 0, overflow: "hidden", transition: "max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1)", background: "#fafaf8" }}>
-              {item.children.map((child) => (
-                <Link
-                  key={child.path}
-                  to={child.path}
-                  onClick={() => { setMobileOpen(false); setMobileServicesOpen(false); setMobileActiveSubMenu(null); }}
-                  style={{ display: "block", padding: "11px 40px", fontSize: 12.5, color: "#666", textDecoration: "none", borderBottom: "1px solid #eaeaea", fontFamily: "Georgia, serif", transition: "all 0.2s ease" }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = "#f5f5f0"; e.currentTarget.style.color = gold; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#666"; }}
-                >
-                  — {child.name}
-                </Link>
-              ))}
+
+            <div style={{ maxHeight: sidebarServicesOpen ? "1000px" : 0, overflow: "hidden", transition: "max-height 0.4s cubic-bezier(0.4,0,0.2,1)", background: "#fafaf8" }}>
+              {link.dropdown.map((item) => {
+                if (item.children) {
+                  const isOpen = sidebarActiveSubMenu === item.name;
+                  return (
+                    <div key={item.name}>
+                      <button
+                        onClick={() => setSidebarActiveSubMenu(isOpen ? null : item.name)}
+                        style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "11px 28px 11px 36px", background: "none", border: "none", borderBottom: "1px solid #ebebeb", cursor: "pointer", fontFamily: "Georgia, serif", fontSize: 13, color: "#555", textAlign: "left", transition: "color 0.2s" }}
+                        onMouseEnter={(e) => e.currentTarget.style.color = gold}
+                        onMouseLeave={(e) => e.currentTarget.style.color = "#555"}
+                      >
+                        {item.name}
+                        <span style={{ fontSize: 13, color: "#bbb", transform: isOpen ? "rotate(90deg)" : "none", transition: "transform 0.2s", display: "inline-block" }}>›</span>
+                      </button>
+                      <div style={{ maxHeight: isOpen ? "400px" : 0, overflow: "hidden", transition: "max-height 0.3s cubic-bezier(0.4,0,0.2,1)", background: "#f5f4f1" }}>
+                        {item.children.map((child) => (
+                          <Link key={child.path} to={child.path}
+                            onClick={() => setSidebarOpen(false)}
+                            style={{ display: "block", padding: "10px 28px 10px 52px", fontSize: 12.5, color: "#666", textDecoration: "none", borderBottom: "1px solid #ebebeb", fontFamily: "Georgia, serif", transition: "all 0.2s" }}
+                            onMouseEnter={(e) => { e.currentTarget.style.color = gold; e.currentTarget.style.background = "#eeede9"; }}
+                            onMouseLeave={(e) => { e.currentTarget.style.color = "#666"; e.currentTarget.style.background = "transparent"; }}
+                          >— {child.name}</Link>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                }
+                return (
+                  <Link key={item.path} to={item.path}
+                    onClick={() => setSidebarOpen(false)}
+                    style={{ display: "block", padding: "11px 28px 11px 36px", fontSize: 13, color: "#555", textDecoration: "none", borderBottom: "1px solid #ebebeb", fontFamily: "Georgia, serif", transition: "all 0.2s" }}
+                    onMouseEnter={(e) => { e.currentTarget.style.color = gold; e.currentTarget.style.background = "#f0efeb"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.color = "#555"; e.currentTarget.style.background = "transparent"; }}
+                  >{item.name}</Link>
+                );
+              })}
             </div>
           </div>
         );
       }
+
       return (
-        <Link
-          key={item.path}
-          to={item.path}
-          onClick={() => setMobileOpen(false)}
-          style={{ display: "block", padding: "12px 24px", fontSize: 13.5, color: "#555", textDecoration: "none", borderBottom: "1px solid #f0f0f0", fontFamily: "Georgia, serif", transition: "all 0.2s ease" }}
-          onMouseEnter={(e) => { e.currentTarget.style.background = "#fafaf8"; e.currentTarget.style.color = gold; }}
-          onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#555"; }}
-        >
-          {item.name}
-        </Link>
+        <Link key={link.to} to={link.to}
+          onClick={() => setSidebarOpen(false)}
+          style={{
+            display: "block", padding: "15px 28px", fontSize: 14.5,
+            textDecoration: "none",
+            color: isActive(link.to) ? gold : "#1a1a1a",
+            fontWeight: isActive(link.to) ? 600 : 400,
+            fontFamily: "Georgia, serif",
+            borderBottom: "1px solid #f0f0f0",
+            borderLeft: isActive(link.to) ? `3px solid ${gold}` : "3px solid transparent",
+            transition: "all 0.2s ease",
+          }}
+          onMouseEnter={(e) => { if (!isActive(link.to)) { e.currentTarget.style.color = gold; e.currentTarget.style.background = "#fafaf8"; } }}
+          onMouseLeave={(e) => { if (!isActive(link.to)) { e.currentTarget.style.color = "#1a1a1a"; e.currentTarget.style.background = "transparent"; } }}
+        >{link.label}</Link>
       );
     });
   };
+
+  const bar = (extra) => ({
+    display: "block", width: 22, height: 2,
+    background: sidebarOpen ? gold : "#333",
+    borderRadius: 2,
+    transition: "all 0.3s ease",
+    ...extra,
+  });
 
   return (
     <>
       <style>{`
         .mf-desktop-nav { display: flex; }
-        .mf-mobile-menu { display: none; }
         @media (max-width: 900px) {
           .mf-desktop-nav { display: none !important; }
-          .mf-mobile-menu { display: block; }
         }
-        .mf-mobile-menu-scroll {
-          max-height: calc(100vh - 72px);
-          overflow-y: auto;
-          overflow-x: hidden;
-        }
-        .mf-mobile-menu-scroll::-webkit-scrollbar { width: 4px; }
-        .mf-mobile-menu-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
-        .mf-mobile-menu-scroll::-webkit-scrollbar-thumb { background: ${gold}; border-radius: 4px; }
-        
         .mf-logo {
-          height: 52px;
-          width: auto;
-          max-width: 180px;
-          object-fit: contain;
-          display: block;
+          height: 52px; width: auto; max-width: 180px;
+          object-fit: contain; display: block;
           transition: transform 0.2s ease, opacity 0.2s ease;
         }
-        .mf-logo:hover {
-          transform: scale(1.03);
-          opacity: 0.9;
-        }
+        .mf-logo:hover { transform: scale(1.03); opacity: 0.9; }
+        .mf-sidebar-scroll::-webkit-scrollbar { width: 4px; }
+        .mf-sidebar-scroll::-webkit-scrollbar-track { background: #f5f5f5; }
+        .mf-sidebar-scroll::-webkit-scrollbar-thumb { background: ${gold}; border-radius: 4px; }
       `}</style>
 
-      <header
-        style={{
-          background: "#fff",
-          borderBottom: "1px solid #eee",
-          position: "sticky",
-          top: 0,
-          zIndex: 50,
-          fontFamily: "Georgia, serif",
-          boxShadow: mobileOpen ? "0 2px 8px rgba(0,0,0,0.05)" : "none",
-          transition: "box-shadow 0.3s ease",
-        }}
-      >
-        <nav
-          style={{
-            maxWidth: 1300,
-            margin: "0 auto",
-            padding: "0 24px",
-            display: "flex",
-            alignItems: "center",
-            height: 72,
-            position: "relative",
-          }}
-        >
+      {/* ── HEADER ── */}
+      <header style={{ background: "#fff", borderBottom: "1px solid #eee", position: "sticky", top: 0, zIndex: 100, fontFamily: "Georgia, serif", boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}>
+        <nav style={{ maxWidth: 1300, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", height: 72, position: "relative" }}>
+
           {/* Logo */}
           <div style={{ flex: "0 0 auto", display: "flex", alignItems: "center" }}>
             <Link to="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-              <img
-                src={logo2}
-                alt="Mindframe India Logo"
-                className="mf-logo"
-              />
+              <img src={logo2} alt="Mindframe India Logo" className="mf-logo" />
             </Link>
           </div>
 
           {/* Desktop Center Nav */}
-          <div
-            className="mf-desktop-nav"
-            style={{
-              position: "absolute",
-              left: "50%",
-              transform: "translateX(-50%)",
-              alignItems: "center",
-              gap: 28,
-            }}
-          >
+          <div className="mf-desktop-nav" style={{ position: "absolute", left: "50%", transform: "translateX(-50%)", alignItems: "center", gap: 28 }}>
             {navLinks.map((link) =>
               link.dropdown ? (
-                <div
-                  key={link.to}
-                  style={{ position: "relative" }}
-                  ref={dropdownRef}
-                  onMouseEnter={handleMouseEnterServices}
-                  onMouseLeave={handleMouseLeaveServices}
+                <div key={link.to} style={{ position: "relative" }} ref={dropdownRef}
+                  onMouseEnter={handleMouseEnterServices} onMouseLeave={handleMouseLeaveServices}
                 >
                   <span
                     style={{ ...linkStyle(link.to), display: "flex", alignItems: "center", gap: 5, cursor: "pointer" }}
-                    onMouseOver={(e) => (e.currentTarget.style.borderBottomColor = gold)}
-                    onMouseOut={(e) => { if (!isActive(link.to)) e.currentTarget.style.borderBottomColor = "transparent"; }}
+                    onMouseOver={(e) => { e.currentTarget.style.borderBottomColor = gold; e.currentTarget.style.color = gold; }}
+                    onMouseOut={(e) => { if (!isActive(link.to)) { e.currentTarget.style.borderBottomColor = "transparent"; e.currentTarget.style.color = "#1a1a1a"; } }}
                   >
                     {link.label}
-                    <span
-                      style={{
-                        fontSize: 10,
-                        color: servicesOpen ? gold : "#888",
-                        transition: "transform 0.2s ease, color 0.2s ease",
-                        transform: servicesOpen ? "rotate(180deg)" : "none",
-                        display: "inline-block",
-                      }}
-                    >
-                      ∨
-                    </span>
+                    <span style={{ fontSize: 10, color: servicesOpen ? gold : "#888", transition: "transform 0.2s ease, color 0.2s ease", transform: servicesOpen ? "rotate(180deg)" : "none", display: "inline-block" }}>∨</span>
                   </span>
-
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "calc(100% + 8px)",
-                      left: 0,
-                      background: "#fff",
-                      border: "1px solid #eee",
-                      borderRadius: "4px",
-                      boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
-                      minWidth: 240,
-                      zIndex: 100,
-                      opacity: servicesOpen ? 1 : 0,
-                      visibility: servicesOpen ? "visible" : "hidden",
-                      transform: servicesOpen ? "translateY(0)" : "translateY(-10px)",
-                      transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
-                      pointerEvents: servicesOpen ? "auto" : "none",
-                    }}
-                  >
+                  <div style={{ position: "absolute", top: "calc(100% + 8px)", left: 0, background: "#fff", border: "1px solid #eee", borderRadius: 4, boxShadow: "0 8px 24px rgba(0,0,0,0.12)", minWidth: 240, zIndex: 100, opacity: servicesOpen ? 1 : 0, visibility: servicesOpen ? "visible" : "hidden", transform: servicesOpen ? "translateY(0)" : "translateY(-10px)", transition: "all 0.25s cubic-bezier(0.4,0,0.2,1)", pointerEvents: servicesOpen ? "auto" : "none" }}>
                     {renderDropdownItems()}
                   </div>
                 </div>
               ) : (
-                <Link
-                  key={link.to}
-                  to={link.to}
-                  style={linkStyle(link.to)}
+                <Link key={link.to} to={link.to} style={linkStyle(link.to)}
                   onMouseOver={(e) => { e.currentTarget.style.borderBottomColor = gold; e.currentTarget.style.color = gold; }}
                   onMouseOut={(e) => { if (!isActive(link.to)) { e.currentTarget.style.borderBottomColor = "transparent"; e.currentTarget.style.color = "#1a1a1a"; } }}
-                >
-                  {link.label}
-                </Link>
-              ),
+                >{link.label}</Link>
+              )
             )}
           </div>
 
-          {/* Right — Hamburger */}
-          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 18 }}>
+          {/* Hamburger — always visible right side */}
+          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center" }}>
             <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              style={{ background: "none", border: "none", cursor: "pointer", padding: 6, display: "flex", flexDirection: "column", gap: 5, justifyContent: "center" }}
-              aria-label="Menu"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              aria-label="Toggle menu"
+              style={{ background: "none", border: "none", cursor: "pointer", padding: "6px 4px", display: "flex", flexDirection: "column", gap: 5, justifyContent: "center" }}
             >
-              <span style={{ display: "block", width: 22, height: 1.8, background: mobileOpen ? gold : "#333", transition: "all 0.3s ease", transform: mobileOpen ? "rotate(45deg) translateY(6px)" : "none" }} />
-              <span style={{ display: "block", width: 22, height: 1.8, background: mobileOpen ? gold : "#333", transition: "all 0.3s ease", opacity: mobileOpen ? 0 : 1 }} />
-              <span style={{ display: "block", width: 22, height: 1.8, background: mobileOpen ? gold : "#333", transition: "all 0.3s ease", transform: mobileOpen ? "rotate(-45deg) translateY(-6px)" : "none" }} />
+              <span style={bar({ transform: sidebarOpen ? "rotate(45deg) translateY(7px)" : "none" })} />
+              <span style={bar({ opacity: sidebarOpen ? 0 : 1, transform: sidebarOpen ? "scaleX(0)" : "none" })} />
+              <span style={bar({ transform: sidebarOpen ? "rotate(-45deg) translateY(-7px)" : "none" })} />
             </button>
           </div>
         </nav>
+      </header>
 
-        {/* Mobile Menu */}
-        <div
-          className="mf-mobile-menu"
-          style={{
-            maxHeight: mobileOpen ? "calc(100vh - 72px)" : 0,
-            overflow: "hidden",
-            transition: "max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
-            borderTop: mobileOpen ? "1px solid #eee" : "none",
-            background: "#fff",
-          }}
-        >
-          <div className="mf-mobile-menu-scroll">
-            <div style={{ padding: "8px 0 24px" }}>
-              {navLinks.map((link) =>
-                link.dropdown ? (
-                  <div key={link.to}>
-                    <button
-                      onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
-                      style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 24px", background: "none", border: "none", cursor: "pointer", fontFamily: "Georgia, serif", fontSize: 14, color: isActive(link.to) ? gold : "#1a1a1a", fontWeight: isActive(link.to) ? 600 : 400, borderBottom: "1px solid #f0f0f0", textAlign: "left", transition: "all 0.2s ease" }}
-                    >
-                      {link.label}
-                      <span style={{ fontSize: 11, color: "#999", transform: mobileServicesOpen ? "rotate(180deg)" : "none", transition: "transform 0.25s ease", display: "inline-block" }}>∨</span>
-                    </button>
+      {/* ── BACKDROP ── */}
+      <div
+        onClick={() => setSidebarOpen(false)}
+        style={{
+          position: "fixed", inset: 0, zIndex: 149,
+          background: "rgba(10,8,5,0.5)",
+          opacity: sidebarOpen ? 1 : 0,
+          visibility: sidebarOpen ? "visible" : "hidden",
+          transition: "opacity 0.35s ease, visibility 0.35s ease",
+        }}
+      />
 
-                    <div style={{ maxHeight: mobileServicesOpen ? 500 : 0, overflow: "hidden", transition: "max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1)", background: "#fafaf8" }}>
-                      {renderMobileDropdownItems()}
-                    </div>
-                  </div>
-                ) : (
-                  <Link
-                    key={link.to}
-                    to={link.to}
-                    style={{ display: "block", padding: "14px 24px", fontSize: 14, textDecoration: "none", color: isActive(link.to) ? gold : "#1a1a1a", fontWeight: isActive(link.to) ? 600 : 400, fontFamily: "Georgia, serif", borderBottom: "1px solid #f0f0f0", borderLeft: isActive(link.to) ? `3px solid ${gold}` : "3px solid transparent", transition: "all 0.2s ease" }}
-                    onMouseEnter={(e) => { if (!isActive(link.to)) { e.currentTarget.style.background = "#fafaf8"; e.currentTarget.style.color = gold; } }}
-                    onMouseLeave={(e) => { if (!isActive(link.to)) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#1a1a1a"; } }}
-                  >
-                    {link.label}
-                  </Link>
-                ),
-              )}
+      {/* ── RIGHT SIDEBAR ── */}
+      <div style={{
+        position: "fixed", top: 0, right: 0, bottom: 0,
+        width: 320, maxWidth: "88vw",
+        background: "#fff",
+        zIndex: 150,
+        transform: sidebarOpen ? "translateX(0)" : "translateX(100%)",
+        transition: "transform 0.38s cubic-bezier(0.4,0,0.2,1)",
+        boxShadow: "-8px 0 40px rgba(0,0,0,0.18)",
+        display: "flex", flexDirection: "column",
+      }}>
 
-              {/* <div style={{ padding: "16px 24px 8px", borderTop: "1px solid #f0f0f0", marginTop: 8 }}>
-                {isAuthenticated ? (
-                  <button
-                    onClick={logout}
-                    style={{ fontSize: 13, color: "#c00", background: "none", border: "none", cursor: "pointer", fontFamily: "Georgia, serif", padding: 0, transition: "color 0.2s ease" }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = "#a00")}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = "#c00")}
-                  >
-                    Logout
-                  </button>
-                ) : (
-                  <Link
-                    to="/admin/login"
-                    style={{ fontSize: 13, color: gold, fontFamily: "Georgia, serif", textDecoration: "none", transition: "color 0.2s ease" }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = "#b8943a")}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = gold)}
-                  >
-                    Admin Login
-                  </Link>
-                )}
-              </div> */}
-            </div>
+        {/* Sidebar top bar */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 20px", height: 72, borderBottom: `2px solid ${gold}`, flexShrink: 0, background: "#fff" }}>
+          <Link to="/" onClick={() => setSidebarOpen(false)} style={{ textDecoration: "none" }}>
+            <img src={logo2} alt="Mindframe India" style={{ height: 44, width: "auto", objectFit: "contain" }} />
+          </Link>
+          <button
+            onClick={() => setSidebarOpen(false)}
+            aria-label="Close"
+            style={{ background: "none", border: `1px solid #e0e0e0`, borderRadius: "50%", width: 34, height: 34, cursor: "pointer", color: "#555", fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s", flexShrink: 0 }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = gold; e.currentTarget.style.color = "#fff"; e.currentTarget.style.borderColor = gold; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = "none"; e.currentTarget.style.color = "#555"; e.currentTarget.style.borderColor = "#e0e0e0"; }}
+          >✕</button>
+        </div>
+
+        {/* Nav links */}
+        <div className="mf-sidebar-scroll" style={{ flex: 1, overflowY: "auto", overflowX: "hidden" }}>
+          <nav style={{ paddingBottom: 16 }}>
+            {renderSidebarItems()}
+          </nav>
+
+          {/* Contact block */}
+          <div style={{ padding: "20px 28px 28px", borderTop: "1px solid #f0f0f0" }}>
+            <p style={{ fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: gold, fontFamily: "Georgia, serif", margin: "0 0 12px", fontWeight: 700 }}>Get In Touch</p>
+            <p style={{ fontSize: 13, color: "#444", margin: "0 0 3px", fontFamily: "Georgia, serif" }}>+91 9892000733 / +91 9167830733</p>
+            <p style={{ fontSize: 13, color: "#444", margin: "0 0 18px", fontFamily: "Georgia, serif" }}>info@mindframeindia.com</p>
+            <Link to="/contact" onClick={() => setSidebarOpen(false)}
+              style={{ display: "inline-block", padding: "10px 22px", background: gold, color: "#fff", fontSize: 12.5, fontFamily: "Georgia, serif", textDecoration: "none", letterSpacing: 0.5, borderRadius: 2, transition: "background 0.2s" }}
+              onMouseEnter={(e) => e.currentTarget.style.background = "#b8943a"}
+              onMouseLeave={(e) => e.currentTarget.style.background = gold}
+            >Contact Us →</Link>
           </div>
         </div>
-      </header>
+      </div>
     </>
   );
 }

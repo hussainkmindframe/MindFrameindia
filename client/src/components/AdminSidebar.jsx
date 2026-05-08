@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { MdDashboard, MdArticle, MdAdd, MdLogout, MdClose, MdEmail, MdWork, MdBusinessCenter } from 'react-icons/md';
 import { useLocation, useNavigate } from 'react-router-dom';
 import logo2 from "../assets/logo2.png";
@@ -7,6 +8,13 @@ const gold = '#c9a84c';
 export default function AdminSidebar({ isOpen, onToggleSidebar, onLogout }) {
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Auto-close sidebar on route change
+  useEffect(() => {
+    if (isOpen) {
+      onToggleSidebar();
+    }
+  }, [location.pathname]);
 
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: MdDashboard, description: 'View overview', path: '/admin/dashboard' },
@@ -62,26 +70,14 @@ export default function AdminSidebar({ isOpen, onToggleSidebar, onLogout }) {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              {/* logo2 replacing MF circle */}
               <img
                 src={logo2}
                 alt="Mindframe Logo"
-                style={{
-                  width: '42px',
-                  height: '42px',
-                  objectFit: 'contain',
-                  flexShrink: 0,
-                }}
+                style={{ width: '42px', height: '42px', objectFit: 'contain', flexShrink: 0 }}
               />
               <div>
-                <p style={{
-                  fontSize: '16px', fontWeight: '700',
-                  color: '#1a1a2e',
-                  margin: 0, letterSpacing: '-0.3px',
-                }}>Mindframe</p>
-                <p style={{ color: '#6c757d', fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase', margin: 0 }}>
-                  Admin Panel
-                </p>
+                <p style={{ fontSize: '16px', fontWeight: '700', color: '#1a1a2e', margin: 0, letterSpacing: '-0.3px' }}>Mindframe</p>
+                <p style={{ color: '#6c757d', fontSize: '10px', letterSpacing: '1.5px', textTransform: 'uppercase', margin: 0 }}>Admin Panel</p>
               </div>
             </div>
             <button
@@ -109,10 +105,7 @@ export default function AdminSidebar({ isOpen, onToggleSidebar, onLogout }) {
             return (
               <button
                 key={item.id}
-                onClick={() => {
-                  navigate(item.path);
-                  if (window.innerWidth < 768) onToggleSidebar();
-                }}
+                onClick={() => navigate(item.path)}
                 style={{
                   width: '100%', textAlign: 'left',
                   padding: '10px 12px',

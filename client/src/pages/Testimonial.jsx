@@ -216,13 +216,13 @@ const Testimonials = () => {
           <div style={{ width: 50, height: 2, background: gold, margin: '12px auto 0' }} />
         </div>
 
-        {/* Logo Carousel - Auto Sliding */}
+        {/* Logo Carousel - Auto Sliding - ENLARGED LOGOS */}
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: isMobile ? 24 : 48,
+            gap: isMobile ? 32 : 60,
             transition: 'all 0.5s ease-in-out',
           }}
           ref={logoCarouselRef}
@@ -232,8 +232,8 @@ const Testimonials = () => {
               key={`${logo.name}-${logoStartIndex}-${idx}`}
               style={{
                 flex: '0 0 auto',
-                width: isMobile ? 100 : 140,
-                height: isMobile ? 70 : 90,
+                width: isMobile ? 150 : 220,
+                height: isMobile ? 100 : 140,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -274,7 +274,7 @@ const Testimonials = () => {
           display: 'flex',
           justifyContent: 'center',
           gap: 8,
-          marginTop: 28,
+          marginTop: 32,
         }}>
           {logos.map((_, i) => (
             <button
