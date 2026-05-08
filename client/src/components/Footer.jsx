@@ -47,15 +47,15 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   const quickLinks = [
-    { label: 'About Us', to: '/about' },
-    { label: 'Our Team', to: '/team' },
-    { label: 'Our Work', to: '/work' },
-    { label: 'Brand Presentation', to: '/services/brand-identity' },
-    { label: 'Blogs', to: '/blogs' },
-    { label: 'Careers', to: '/careers' },
-    { label: 'Disclaimer', to: '/disclaimer' },
-    { label: 'Privacy Policy', to: '/privacy' },
-    { label: 'Sitemap', to: '/sitemap' },
+    { label: 'About Us', to: '/about', external: false },
+    { label: 'Our Team', to: '/team', external: false },
+    { label: 'Our Work', to: '/work', external: false },
+    { label: 'Brand Presentation', to: '/services/brand-identity', external: false },
+    { label: 'Blogs', to: '/blogs', external: false },
+    { label: 'Careers', to: '/careers', external: false },
+    { label: 'Disclaimer', to: '/disclaimer', external: false },
+    { label: 'Privacy Policy', to: '/privacy', external: false },
+    { label: 'Sitemap', to: '/sitemap.xml', external: true },
   ];
 
   const services = [
@@ -111,7 +111,6 @@ export default function Footer() {
               textAlign: 'left'
             }}
           >
-            {/* LOGO IMAGE */}
             <img
               src={logo}
               alt="Mindframe India Logo"
@@ -123,7 +122,6 @@ export default function Footer() {
               }}
             />
 
-            {/* TEXT */}
             <div>
               <h3 style={{ 
                 fontSize: 14, 
@@ -146,7 +144,6 @@ export default function Footer() {
               </p>
             </div>
 
-            {/* CONTACT */}
             <div style={{ fontSize: 12, color: '#aaa' }}>
               <p style={{ margin: '0 0 4px' }}>
                 Mob: <span style={{ color: '#fff' }}>+91 9892000733 / +91 9167830733</span>
@@ -170,20 +167,33 @@ export default function Footer() {
               {quickLinks.map((item) => (
                 <li key={item.to} style={{ marginBottom: 10, display: 'flex', alignItems: 'flex-start', gap: 8 }}>
                   <span style={{ color: goldColor, fontSize: 10, marginTop: 2, flexShrink: 0 }}>○</span>
-                  <Link
-                    to={item.to}
-                    style={{ color: '#bbb', fontSize: 13, textDecoration: 'none', lineHeight: 1.4 }}
-                    onMouseEnter={(e) => (e.target.style.color = goldColor)}
-                    onMouseLeave={(e) => (e.target.style.color = '#bbb')}
-                  >
-                    {item.label}
-                  </Link>
+                  {item.external ? (
+                    <a
+                      href={item.to}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: '#bbb', fontSize: 13, textDecoration: 'none', lineHeight: 1.4 }}
+                      onMouseEnter={(e) => (e.target.style.color = goldColor)}
+                      onMouseLeave={(e) => (e.target.style.color = '#bbb')}
+                    >
+                      {item.label}
+                    </a>
+                  ) : (
+                    <Link
+                      to={item.to}
+                      style={{ color: '#bbb', fontSize: 13, textDecoration: 'none', lineHeight: 1.4 }}
+                      onMouseEnter={(e) => (e.target.style.color = goldColor)}
+                      onMouseLeave={(e) => (e.target.style.color = '#bbb')}
+                    >
+                      {item.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Our Services - NOW WITH NAVIGATION */}
+          {/* Our Services */}
           <div>
             <h4 style={{
               fontSize: 11, fontWeight: 700, textTransform: 'uppercase',

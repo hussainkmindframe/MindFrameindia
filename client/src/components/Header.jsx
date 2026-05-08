@@ -26,29 +26,28 @@ const navLinks = [
           { name: "Above The Line", path: "/services/atl" },
           { name: "Below The Line", path: "/services/btl" },
           { name: "Media Buying", path: "/services/media-buying" },
-         { name: "Public Relation", path: "/services/public-realations" },
-
+          { name: "Public Relation", path: "/services/public-realations" },
         ],
       },
       {
-  name: "Digital Marketing",
-  children: [
-    { name: "Digital Marketing", path: "/services/digital-marketing" },
-    { name: "Marketing Branding", path: "/services/marketing-branding" },
-    { name: "Performance Marketing", path: "/services/performance" },
-    { name: "Customized Campaign Design", path: "/services/customize-campaign" },
-    { name: "Advertizing Services", path: "/services/advertizing-services" },
-  ],
-},
+        name: "Digital Marketing",
+        children: [
+          { name: "Digital Marketing", path: "/services/digital-marketing" },
+          { name: "Marketing Branding", path: "/services/marketing-branding" },
+          { name: "Performance Marketing", path: "/services/performance" },
+          { name: "Customized Campaign Design", path: "/services/customize-campaign" },
+          { name: "Advertizing Services", path: "/services/advertizing-services" },
+        ],
+      },
       {
-  name: "Creative Solutions",
-  children: [
-    { name: "Creative Designing", path: "/services/creative-design" },
-    { name: "Augumented Reality / Virtual Reality ", path: "/services/augumented-reality" },
-    { name: "2D & 3D/Animation videos", path: "/services/creative/animation-videos" },
-    { name: "Best Television Advertising Agency in Mumbai | TV Ads Campaign", path: "/services/creative/best-television-advertising-agency" },
-  ],
-},
+        name: "Creative Solutions",
+        children: [
+          { name: "Creative Designing", path: "/services/creative-design" },
+          { name: "Augumented Reality / Virtual Reality", path: "/services/augumented-reality" },
+          { name: "2D & 3D/Animation videos", path: "/services/creative/animation-videos" },
+          { name: "Best Television Advertising Agency in Mumbai | TV Ads Campaign", path: "/services/creative/best-television-advertising-agency" },
+        ],
+      },
       { name: "Website Development", path: "/services/web-development" },
       { name: "Mobile App Development", path: "/services/app-development" },
     ],
@@ -72,7 +71,6 @@ export default function Header() {
   const dropdownRef = useRef(null);
   const closeTimeoutRef = useRef(null);
 
-  // Close desktop dropdown with delay for better UX
   const handleMouseLeaveServices = () => {
     closeTimeoutRef.current = setTimeout(() => {
       setServicesOpen(false);
@@ -81,16 +79,12 @@ export default function Header() {
   };
 
   const handleMouseEnterServices = () => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-    }
+    if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
     setServicesOpen(true);
   };
 
   const handleMouseEnterSubMenu = (itemName) => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-    }
+    if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
     setActiveSubMenu(itemName);
   };
 
@@ -100,7 +94,6 @@ export default function Header() {
     }, 150);
   };
 
-  // Close mobile menu on route change
   useEffect(() => {
     setMobileOpen(false);
     setServicesOpen(false);
@@ -109,7 +102,6 @@ export default function Header() {
     setActiveSubMenu(null);
   }, [location.pathname]);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -136,7 +128,6 @@ export default function Header() {
     cursor: "pointer",
   });
 
-  // Helper to render dropdown items for desktop with proper hover
   const renderDropdownItems = () => {
     const servicesItem = navLinks.find((link) => link.label === "Services");
     if (!servicesItem?.dropdown) return null;
@@ -159,7 +150,6 @@ export default function Header() {
                 padding: "12px 20px",
                 fontSize: 13.5,
                 color: "#333",
-                textDecoration: "none",
                 borderBottom: "1px solid #f0f0f0",
                 fontFamily: "Georgia, serif",
                 cursor: "pointer",
@@ -168,16 +158,7 @@ export default function Header() {
               }}
             >
               {item.name}
-              <span
-                style={{
-                  fontSize: 12,
-                  color: "#999",
-                  transition: "transform 0.2s ease",
-                  transform: isSubMenuOpen ? "translateX(3px)" : "none",
-                }}
-              >
-                →
-              </span>
+              <span style={{ fontSize: 12, color: "#999", transition: "transform 0.2s ease", transform: isSubMenuOpen ? "translateX(3px)" : "none" }}>→</span>
             </div>
             <div
               style={{
@@ -200,30 +181,10 @@ export default function Header() {
                 <Link
                   key={child.path}
                   to={child.path}
-                  onClick={() => {
-                    setServicesOpen(false);
-                    setActiveSubMenu(null);
-                  }}
-                  style={{
-                    display: "block",
-                    padding: "12px 20px",
-                    fontSize: 13,
-                    color: "#555",
-                    textDecoration: "none",
-                    borderBottom: "1px solid #f5f5f5",
-                    fontFamily: "Georgia, serif",
-                    transition: "all 0.2s ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "#fafaf8";
-                    e.currentTarget.style.color = gold;
-                    e.currentTarget.style.paddingLeft = "24px";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "#fff";
-                    e.currentTarget.style.color = "#555";
-                    e.currentTarget.style.paddingLeft = "20px";
-                  }}
+                  onClick={() => { setServicesOpen(false); setActiveSubMenu(null); }}
+                  style={{ display: "block", padding: "12px 20px", fontSize: 13, color: "#555", textDecoration: "none", borderBottom: "1px solid #f5f5f5", fontFamily: "Georgia, serif", transition: "all 0.2s ease" }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = "#fafaf8"; e.currentTarget.style.color = gold; e.currentTarget.style.paddingLeft = "24px"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.color = "#555"; e.currentTarget.style.paddingLeft = "20px"; }}
                 >
                   {child.name}
                 </Link>
@@ -237,26 +198,9 @@ export default function Header() {
           key={item.path}
           to={item.path}
           onClick={() => setServicesOpen(false)}
-          style={{
-            display: "block",
-            padding: "12px 20px",
-            fontSize: 13.5,
-            color: "#333",
-            textDecoration: "none",
-            borderBottom: "1px solid #f0f0f0",
-            fontFamily: "Georgia, serif",
-            transition: "all 0.2s ease",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = "#fafaf8";
-            e.currentTarget.style.color = gold;
-            e.currentTarget.style.paddingLeft = "24px";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = "#fff";
-            e.currentTarget.style.color = "#333";
-            e.currentTarget.style.paddingLeft = "20px";
-          }}
+          style={{ display: "block", padding: "12px 20px", fontSize: 13.5, color: "#333", textDecoration: "none", borderBottom: "1px solid #f0f0f0", fontFamily: "Georgia, serif", transition: "all 0.2s ease" }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = "#fafaf8"; e.currentTarget.style.color = gold; e.currentTarget.style.paddingLeft = "24px"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.color = "#333"; e.currentTarget.style.paddingLeft = "20px"; }}
         >
           {item.name}
         </Link>
@@ -264,7 +208,6 @@ export default function Header() {
     });
   };
 
-  // Helper to render mobile dropdown items with nested support
   const renderMobileDropdownItems = () => {
     const servicesItem = navLinks.find((link) => link.label === "Services");
     if (!servicesItem?.dropdown) return null;
@@ -275,74 +218,21 @@ export default function Header() {
         return (
           <div key={item.name}>
             <button
-              onClick={() =>
-                setMobileActiveSubMenu(isOpen ? null : item.name)
-              }
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                padding: "12px 24px",
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                fontFamily: "Georgia, serif",
-                fontSize: 13.5,
-                color: "#555",
-                borderBottom: "1px solid #f0f0f0",
-                textAlign: "left",
-                transition: "all 0.2s ease",
-              }}
+              onClick={() => setMobileActiveSubMenu(isOpen ? null : item.name)}
+              style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 24px", background: "none", border: "none", cursor: "pointer", fontFamily: "Georgia, serif", fontSize: 13.5, color: "#555", borderBottom: "1px solid #f0f0f0", textAlign: "left", transition: "all 0.2s ease" }}
             >
               {item.name}
-              <span
-                style={{
-                  fontSize: 12,
-                  color: "#999",
-                  transition: "transform 0.2s ease",
-                  transform: isOpen ? "rotate(90deg)" : "none",
-                  display: "inline-block",
-                }}
-              >
-                →
-              </span>
+              <span style={{ fontSize: 12, color: "#999", transition: "transform 0.2s ease", transform: isOpen ? "rotate(90deg)" : "none", display: "inline-block" }}>→</span>
             </button>
-            <div
-              style={{
-                maxHeight: isOpen ? 300 : 0,
-                overflow: "hidden",
-                transition: "max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                background: "#fafaf8",
-              }}
-            >
+            <div style={{ maxHeight: isOpen ? 300 : 0, overflow: "hidden", transition: "max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1)", background: "#fafaf8" }}>
               {item.children.map((child) => (
                 <Link
                   key={child.path}
                   to={child.path}
-                  onClick={() => {
-                    setMobileOpen(false);
-                    setMobileServicesOpen(false);
-                    setMobileActiveSubMenu(null);
-                  }}
-                  style={{
-                    display: "block",
-                    padding: "11px 40px",
-                    fontSize: 12.5,
-                    color: "#666",
-                    textDecoration: "none",
-                    borderBottom: "1px solid #eaeaea",
-                    fontFamily: "Georgia, serif",
-                    transition: "all 0.2s ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "#f5f5f0";
-                    e.currentTarget.style.color = gold;
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "transparent";
-                    e.currentTarget.style.color = "#666";
-                  }}
+                  onClick={() => { setMobileOpen(false); setMobileServicesOpen(false); setMobileActiveSubMenu(null); }}
+                  style={{ display: "block", padding: "11px 40px", fontSize: 12.5, color: "#666", textDecoration: "none", borderBottom: "1px solid #eaeaea", fontFamily: "Georgia, serif", transition: "all 0.2s ease" }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = "#f5f5f0"; e.currentTarget.style.color = gold; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#666"; }}
                 >
                   — {child.name}
                 </Link>
@@ -356,24 +246,9 @@ export default function Header() {
           key={item.path}
           to={item.path}
           onClick={() => setMobileOpen(false)}
-          style={{
-            display: "block",
-            padding: "12px 24px",
-            fontSize: 13.5,
-            color: "#555",
-            textDecoration: "none",
-            borderBottom: "1px solid #f0f0f0",
-            fontFamily: "Georgia, serif",
-            transition: "all 0.2s ease",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = "#fafaf8";
-            e.currentTarget.style.color = gold;
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = "transparent";
-            e.currentTarget.style.color = "#555";
-          }}
+          style={{ display: "block", padding: "12px 24px", fontSize: 13.5, color: "#555", textDecoration: "none", borderBottom: "1px solid #f0f0f0", fontFamily: "Georgia, serif", transition: "all 0.2s ease" }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = "#fafaf8"; e.currentTarget.style.color = gold; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#555"; }}
         >
           {item.name}
         </Link>
@@ -390,26 +265,26 @@ export default function Header() {
           .mf-desktop-nav { display: none !important; }
           .mf-mobile-menu { display: block; }
         }
-        
-        /* Smooth scroll for mobile menu */
         .mf-mobile-menu-scroll {
           max-height: calc(100vh - 72px);
           overflow-y: auto;
           overflow-x: hidden;
         }
+        .mf-mobile-menu-scroll::-webkit-scrollbar { width: 4px; }
+        .mf-mobile-menu-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
+        .mf-mobile-menu-scroll::-webkit-scrollbar-thumb { background: ${gold}; border-radius: 4px; }
         
-        /* Custom scrollbar */
-        .mf-mobile-menu-scroll::-webkit-scrollbar {
-          width: 4px;
+        .mf-logo {
+          height: 52px;
+          width: auto;
+          max-width: 180px;
+          object-fit: contain;
+          display: block;
+          transition: transform 0.2s ease, opacity 0.2s ease;
         }
-        
-        .mf-mobile-menu-scroll::-webkit-scrollbar-track {
-          background: #f1f1f1;
-        }
-        
-        .mf-mobile-menu-scroll::-webkit-scrollbar-thumb {
-          background: ${gold};
-          border-radius: 4px;
+        .mf-logo:hover {
+          transform: scale(1.03);
+          opacity: 0.9;
         }
       `}</style>
 
@@ -437,25 +312,12 @@ export default function Header() {
           }}
         >
           {/* Logo */}
-          <div style={{ flex: "0 0 auto" }}>
-            <Link
-              to="/"
-              style={{ textDecoration: "none", display: "inline-block" }}
-            >
+          <div style={{ flex: "0 0 auto", display: "flex", alignItems: "center" }}>
+            <Link to="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
               <img
                 src={logo2}
                 alt="Mindframe India Logo"
-                style={{
-                  width: 80,
-                  height: 60,
-                 
-                }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.transform = "scale(1.05)")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.transform = "scale(1)")
-                }
+                className="mf-logo"
               />
             </Link>
           </div>
@@ -481,20 +343,9 @@ export default function Header() {
                   onMouseLeave={handleMouseLeaveServices}
                 >
                   <span
-                    style={{
-                      ...linkStyle(link.to),
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 5,
-                      cursor: "pointer",
-                    }}
-                    onMouseOver={(e) =>
-                      (e.currentTarget.style.borderBottomColor = gold)
-                    }
-                    onMouseOut={(e) => {
-                      if (!isActive(link.to))
-                        e.currentTarget.style.borderBottomColor = "transparent";
-                    }}
+                    style={{ ...linkStyle(link.to), display: "flex", alignItems: "center", gap: 5, cursor: "pointer" }}
+                    onMouseOver={(e) => (e.currentTarget.style.borderBottomColor = gold)}
+                    onMouseOut={(e) => { if (!isActive(link.to)) e.currentTarget.style.borderBottomColor = "transparent"; }}
                   >
                     {link.label}
                     <span
@@ -510,7 +361,6 @@ export default function Header() {
                     </span>
                   </span>
 
-                  {/* Desktop Dropdown Menu with Animation */}
                   <div
                     style={{
                       position: "absolute",
@@ -524,9 +374,7 @@ export default function Header() {
                       zIndex: 100,
                       opacity: servicesOpen ? 1 : 0,
                       visibility: servicesOpen ? "visible" : "hidden",
-                      transform: servicesOpen
-                        ? "translateY(0)"
-                        : "translateY(-10px)",
+                      transform: servicesOpen ? "translateY(0)" : "translateY(-10px)",
                       transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
                       pointerEvents: servicesOpen ? "auto" : "none",
                     }}
@@ -539,16 +387,8 @@ export default function Header() {
                   key={link.to}
                   to={link.to}
                   style={linkStyle(link.to)}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.borderBottomColor = gold;
-                    e.currentTarget.style.color = gold;
-                  }}
-                  onMouseOut={(e) => {
-                    if (!isActive(link.to)) {
-                      e.currentTarget.style.borderBottomColor = "transparent";
-                      e.currentTarget.style.color = "#1a1a1a";
-                    }
-                  }}
+                  onMouseOver={(e) => { e.currentTarget.style.borderBottomColor = gold; e.currentTarget.style.color = gold; }}
+                  onMouseOut={(e) => { if (!isActive(link.to)) { e.currentTarget.style.borderBottomColor = "transparent"; e.currentTarget.style.color = "#1a1a1a"; } }}
                 >
                   {link.label}
                 </Link>
@@ -556,69 +396,21 @@ export default function Header() {
             )}
           </div>
 
-          {/* Right Icons */}
-          <div
-            style={{
-              marginLeft: "auto",
-              display: "flex",
-              alignItems: "center",
-              gap: 18,
-            }}
-          >
-            {/* Hamburger */}
+          {/* Right — Hamburger */}
+          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 18 }}>
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                padding: 6,
-                display: "flex",
-                flexDirection: "column",
-                gap: 5,
-                justifyContent: "center",
-              }}
+              style={{ background: "none", border: "none", cursor: "pointer", padding: 6, display: "flex", flexDirection: "column", gap: 5, justifyContent: "center" }}
               aria-label="Menu"
             >
-              <span
-                style={{
-                  display: "block",
-                  width: 22,
-                  height: 1.8,
-                  background: mobileOpen ? gold : "#333",
-                  transition: "all 0.3s ease",
-                  transform: mobileOpen
-                    ? "rotate(45deg) translateY(6px)"
-                    : "none",
-                }}
-              />
-              <span
-                style={{
-                  display: "block",
-                  width: 22,
-                  height: 1.8,
-                  background: mobileOpen ? gold : "#333",
-                  transition: "all 0.3s ease",
-                  opacity: mobileOpen ? 0 : 1,
-                }}
-              />
-              <span
-                style={{
-                  display: "block",
-                  width: 22,
-                  height: 1.8,
-                  background: mobileOpen ? gold : "#333",
-                  transition: "all 0.3s ease",
-                  transform: mobileOpen
-                    ? "rotate(-45deg) translateY(-6px)"
-                    : "none",
-                }}
-              />
+              <span style={{ display: "block", width: 22, height: 1.8, background: mobileOpen ? gold : "#333", transition: "all 0.3s ease", transform: mobileOpen ? "rotate(45deg) translateY(6px)" : "none" }} />
+              <span style={{ display: "block", width: 22, height: 1.8, background: mobileOpen ? gold : "#333", transition: "all 0.3s ease", opacity: mobileOpen ? 0 : 1 }} />
+              <span style={{ display: "block", width: 22, height: 1.8, background: mobileOpen ? gold : "#333", transition: "all 0.3s ease", transform: mobileOpen ? "rotate(-45deg) translateY(-6px)" : "none" }} />
             </button>
           </div>
         </nav>
 
-        {/* Mobile Menu with Smooth Animation */}
+        {/* Mobile Menu */}
         <div
           className="mf-mobile-menu"
           style={{
@@ -635,53 +427,14 @@ export default function Header() {
                 link.dropdown ? (
                   <div key={link.to}>
                     <button
-                      onClick={() =>
-                        setMobileServicesOpen(!mobileServicesOpen)
-                      }
-                      style={{
-                        width: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        padding: "14px 24px",
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        fontFamily: "Georgia, serif",
-                        fontSize: 14,
-                        color: isActive(link.to) ? gold : "#1a1a1a",
-                        fontWeight: isActive(link.to) ? 600 : 400,
-                        borderBottom: "1px solid #f0f0f0",
-                        textAlign: "left",
-                        transition: "all 0.2s ease",
-                      }}
+                      onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
+                      style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 24px", background: "none", border: "none", cursor: "pointer", fontFamily: "Georgia, serif", fontSize: 14, color: isActive(link.to) ? gold : "#1a1a1a", fontWeight: isActive(link.to) ? 600 : 400, borderBottom: "1px solid #f0f0f0", textAlign: "left", transition: "all 0.2s ease" }}
                     >
                       {link.label}
-                      <span
-                        style={{
-                          fontSize: 11,
-                          color: "#999",
-                          transform: mobileServicesOpen
-                            ? "rotate(180deg)"
-                            : "none",
-                          transition: "transform 0.25s ease",
-                          display: "inline-block",
-                        }}
-                      >
-                        ∨
-                      </span>
+                      <span style={{ fontSize: 11, color: "#999", transform: mobileServicesOpen ? "rotate(180deg)" : "none", transition: "transform 0.25s ease", display: "inline-block" }}>∨</span>
                     </button>
 
-                    {/* Mobile Services Sub-items */}
-                    <div
-                      style={{
-                        maxHeight: mobileServicesOpen ? 500 : 0,
-                        overflow: "hidden",
-                        transition:
-                          "max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                        background: "#fafaf8",
-                      }}
-                    >
+                    <div style={{ maxHeight: mobileServicesOpen ? 500 : 0, overflow: "hidden", transition: "max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1)", background: "#fafaf8" }}>
                       {renderMobileDropdownItems()}
                     </div>
                   </div>
@@ -689,53 +442,20 @@ export default function Header() {
                   <Link
                     key={link.to}
                     to={link.to}
-                    style={{
-                      display: "block",
-                      padding: "14px 24px",
-                      fontSize: 14,
-                      textDecoration: "none",
-                      color: isActive(link.to) ? gold : "#1a1a1a",
-                      fontWeight: isActive(link.to) ? 600 : 400,
-                      fontFamily: "Georgia, serif",
-                      borderBottom: "1px solid #f0f0f0",
-                      borderLeft: isActive(link.to)
-                        ? `3px solid ${gold}`
-                        : "3px solid transparent",
-                      transition: "all 0.2s ease",
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!isActive(link.to)) {
-                        e.currentTarget.style.background = "#fafaf8";
-                        e.currentTarget.style.color = gold;
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isActive(link.to)) {
-                        e.currentTarget.style.background = "transparent";
-                        e.currentTarget.style.color = "#1a1a1a";
-                      }
-                    }}
+                    style={{ display: "block", padding: "14px 24px", fontSize: 14, textDecoration: "none", color: isActive(link.to) ? gold : "#1a1a1a", fontWeight: isActive(link.to) ? 600 : 400, fontFamily: "Georgia, serif", borderBottom: "1px solid #f0f0f0", borderLeft: isActive(link.to) ? `3px solid ${gold}` : "3px solid transparent", transition: "all 0.2s ease" }}
+                    onMouseEnter={(e) => { if (!isActive(link.to)) { e.currentTarget.style.background = "#fafaf8"; e.currentTarget.style.color = gold; } }}
+                    onMouseLeave={(e) => { if (!isActive(link.to)) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#1a1a1a"; } }}
                   >
                     {link.label}
                   </Link>
                 ),
               )}
 
-              {/* Auth Section */}
-              <div style={{ padding: "16px 24px 8px", borderTop: "1px solid #f0f0f0", marginTop: 8 }}>
+              {/* <div style={{ padding: "16px 24px 8px", borderTop: "1px solid #f0f0f0", marginTop: 8 }}>
                 {isAuthenticated ? (
                   <button
                     onClick={logout}
-                    style={{
-                      fontSize: 13,
-                      color: "#c00",
-                      background: "none",
-                      border: "none",
-                      cursor: "pointer",
-                      fontFamily: "Georgia, serif",
-                      padding: 0,
-                      transition: "color 0.2s ease",
-                    }}
+                    style={{ fontSize: 13, color: "#c00", background: "none", border: "none", cursor: "pointer", fontFamily: "Georgia, serif", padding: 0, transition: "color 0.2s ease" }}
                     onMouseEnter={(e) => (e.currentTarget.style.color = "#a00")}
                     onMouseLeave={(e) => (e.currentTarget.style.color = "#c00")}
                   >
@@ -744,20 +464,14 @@ export default function Header() {
                 ) : (
                   <Link
                     to="/admin/login"
-                    style={{
-                      fontSize: 13,
-                      color: gold,
-                      fontFamily: "Georgia, serif",
-                      textDecoration: "none",
-                      transition: "color 0.2s ease",
-                    }}
+                    style={{ fontSize: 13, color: gold, fontFamily: "Georgia, serif", textDecoration: "none", transition: "color 0.2s ease" }}
                     onMouseEnter={(e) => (e.currentTarget.style.color = "#b8943a")}
                     onMouseLeave={(e) => (e.currentTarget.style.color = gold)}
                   >
                     Admin Login
                   </Link>
                 )}
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

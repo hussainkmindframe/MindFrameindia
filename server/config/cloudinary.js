@@ -34,7 +34,7 @@ const resumeStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: 'mindframe/resumes',
-        resource_type: 'auto',  // ← 'auto' se 'raw' karo
+    resource_type: 'raw',  // ✅ PDF/DOC files ke liye 'raw' type
     allowed_formats: ['pdf', 'doc', 'docx'],
   },
 });

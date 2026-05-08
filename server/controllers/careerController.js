@@ -36,7 +36,7 @@ export const createApplication = async (req, res, next) => {
       experience: experience.trim(),
       location: location.trim(),
       applyFor,
-      resumeUrl: req.file ? req.file.path : '',
+      resumeUrl: req.file ? `${req.file.path}?fl_attachment:${req.file.originalname}` : '',
       resumeOriginalName: req.file ? req.file.originalname : '',
     });
 
