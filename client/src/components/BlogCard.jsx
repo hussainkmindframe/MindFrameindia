@@ -38,7 +38,7 @@ export default function BlogCard({ blog }) {
         </div>
 
         {/* Title */}
-        <h3 className="text-lg font-bold text-primary mb-2 line-clamp-2 hover:text-secondary transition-colors">
+        <h3 className="text-lg font-bold text-primary mb-2 line-clamp-2 hover:text-dark transition-colors">
           {blog.title}
         </h3>
 
@@ -58,7 +58,7 @@ export default function BlogCard({ blog }) {
           <span className="text-sm text-gray-500">{formatDate(blog.createdAt)}</span>
           <Link
             to={`/blog/${blog._id}`}
-            className="text-secondary font-semibold hover:text-blue-700 transition-colors"
+            className="text-dark font-semibold hover:text-dark-700 transition-colors"
           >
             Read More →
           </Link>
