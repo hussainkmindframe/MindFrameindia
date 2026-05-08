@@ -22,4 +22,3 @@ router.delete('/career/:id', deleteApplication);
 router.get('/careers/stats', getApplicationStats);
 
 export default router;
-

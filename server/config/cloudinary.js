@@ -15,6 +15,7 @@ cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true,
 });
 
 // Image upload storage (for blog images)
@@ -26,16 +27,23 @@ const imageStorage = new CloudinaryStorage({
     allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
     quality: 'auto:best',
     fetch_format: 'auto',
+    access_mode: 'public',
   },
 });
 
 // Resume upload storage (for career applications)
 const resumeStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
-  params: {
-    folder: 'mindframe/resumes',
-    resource_type: 'raw',  // ✅ PDF/DOC files ke liye 'raw' type
-    allowed_formats: ['pdf', 'doc', 'docx'],
+  params: async (req, file) => {
+    return {
+      folder: 'mindframe/resumes',
+      resource_type: 'raw',
+      allowed_formats: ['pdf', 'doc', 'docx'],
+      access_mode: 'public',
+      type: 'upload',
+      use_filename: true,
+      unique_filename: true,
+    };
   },
 });
 
@@ -52,7 +60,7 @@ export const imageUpload = multer({
     }
   },
   limits: {
-    fileSize: 5 * 1024 * 1024, // 5 MB
+    fileSize: 5 * 1024 * 1024,
   },
 });
 
@@ -73,8 +81,17 @@ export const resumeUpload = multer({
     }
   },
   limits: {
-    fileSize: 5 * 1024 * 1024, // 5 MB
+    fileSize: 5 * 1024 * 1024,
   },
 });
+
+// Helper function to get public URL
+export const getPublicUrl = (publicId, resourceType = 'auto') => {
+  return cloudinary.url(publicId, {
+    resource_type: resourceType,
+    secure: true,
+    sign_url: false,
+  });
+};
 
 export { cloudinary };

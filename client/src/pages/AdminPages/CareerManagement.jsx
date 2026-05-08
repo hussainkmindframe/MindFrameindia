@@ -162,70 +162,21 @@ function CareerModal({ application, onClose, onStatusChange, onDelete }) {
           {/* Resume */}
 {application.resumeOriginalName && (
   <div style={{ background: '#f8f9fa', borderRadius: '10px', padding: '12px 14px' }}>
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-      <p style={{ fontSize: '10px', fontWeight: '700', color: THEME.textMuted, textTransform: 'uppercase', letterSpacing: '1px', margin: 0 }}>Resume</p>
-      <div style={{ display: 'flex', gap: '8px' }}>
-        {/* View Button - Opens in new tab with PDF viewer */}
-        <a 
-          href={`${application.resumeUrl.split('?')[0]}?fl_attachment`}
-          target="_blank" 
-          rel="noopener noreferrer"
-          style={{ fontSize: '11px', color: gold, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '3px', fontWeight: '600' }}
-        >
-          <MdVisibility style={{ fontSize: '14px' }} /> View
-        </a>
-        <a 
-          href={`${application.resumeUrl.split('?')[0]}?fl_attachment:${encodeURIComponent(application.resumeOriginalName)}`}
-          download={application.resumeOriginalName}
-          style={{ fontSize: '11px', color: gold, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '3px', fontWeight: '600' }}
-        >
-          <MdDownload style={{ fontSize: '14px' }} /> Download
-        </a>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <MdDescription style={{ color: gold, fontSize: '18px', flexShrink: 0 }} />
+        <span style={{ fontSize: '13px', color: THEME.text, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+          {application.resumeOriginalName}
+        </span>
       </div>
+      <a 
+        href={application.resumeUrl}
+        download={application.resumeOriginalName.endsWith('.pdf') ? application.resumeOriginalName : `${application.resumeOriginalName}.pdf`}
+        style={{ fontSize: '11px', color: gold, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '3px', fontWeight: '600' }}
+      >
+        <MdDownload style={{ fontSize: '14px' }} /> Download
+      </a>
     </div>
-    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-      <MdDescription style={{ color: gold, fontSize: '18px', flexShrink: 0 }} />
-      <span style={{ fontSize: '13px', color: THEME.text, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-        {application.resumeOriginalName}
-      </span>
-    </div>
-    
-    {/* PDF Preview - Updated for better compatibility */}
-    {application.resumeUrl && (application.resumeUrl.includes('.pdf') || application.resumeOriginalName.endsWith('.pdf')) && (
-      <div style={{ marginTop: '12px' }}>
-        <iframe
-          src={`https://docs.google.com/viewer?url=${encodeURIComponent(application.resumeUrl.split('?')[0])}&embedded=true`}
-          style={{ width: '100%', height: '400px', border: '1px solid #eef2f6', borderRadius: '8px' }}
-          title="PDF Preview"
-        />
-      </div>
-    )}
-    
-    {/* Word Document Preview - For .doc/.docx files */}
-    {application.resumeUrl && (application.resumeUrl.includes('.doc') || application.resumeOriginalName.endsWith('.doc') || application.resumeOriginalName.endsWith('.docx')) && (
-      <div style={{ marginTop: '12px', padding: '12px', background: '#fff', borderRadius: '8px', border: '1px solid #eef2f6' }}>
-        <p style={{ fontSize: '12px', color: THEME.textMuted, margin: '0 0 8px' }}>
-          📄 Word Document - Download to view
-        </p>
-        <a 
-          href={`${application.resumeUrl.split('?')[0]}?fl_attachment:${encodeURIComponent(application.resumeOriginalName)}`}
-          download={application.resumeOriginalName}
-          style={{ 
-            display: 'inline-block',
-            padding: '8px 16px',
-            background: gold,
-            color: '#fff',
-            borderRadius: '6px',
-            textDecoration: 'none',
-            fontSize: '12px',
-            fontWeight: '600',
-            cursor: 'pointer'
-          }}
-        >
-          Download Document
-        </a>
-      </div>
-    )}
   </div>
 )}
 

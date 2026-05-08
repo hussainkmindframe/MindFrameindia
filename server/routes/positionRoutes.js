@@ -36,4 +36,3 @@ router.patch('/positions/:id/increment-applications', updateApplicationCount);
 export default router;
 
 
-
