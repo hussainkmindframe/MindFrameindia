@@ -240,7 +240,6 @@ export default function Television() {
           alt="Television Advertising Agency Mumbai"
         />
         <div className="tv-hero-overlay">
-          <div className="tv-breadcrumb">Home / Services / Television Advertising</div>
           <div className="tv-hero-title">Television Advertising Agency in Mumbai</div>
           <div className="tv-hero-subtitle">IMPACTFUL TV CAMPAIGNS THAT DELIVER ROI</div>
         </div>

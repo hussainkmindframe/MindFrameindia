@@ -347,7 +347,6 @@ export default function BrandServices() {
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
         <div className="hero-overlay">
-          <div className="breadcrumb">Home / Services / Brand Services</div>
           
           {/* Word Cloud */}
           <div className="word-cloud">

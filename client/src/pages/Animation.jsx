@@ -102,7 +102,6 @@ export default function Animation() {
           alt="2D 3D Animation Services Mumbai"
         />
         <div className="an-hero-overlay">
-          <div className="an-breadcrumb">Home / Services / Animation</div>
           <div className="an-hero-title">2D / 3D Animation Services in Mumbai</div>
           <div className="an-hero-subtitle">CREATIVITY MEETS TECHNICAL EXCELLENCE</div>
         </div>

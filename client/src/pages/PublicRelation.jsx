@@ -299,7 +299,6 @@ export default function PublicRelation() {
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
         <div className="hero-overlay">
-          <div className="breadcrumb">Home / Services / Public Relations</div>
           <div className="hero-title">
             Leading PR Agency in Mumbai
           </div>
