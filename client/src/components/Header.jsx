@@ -34,7 +34,6 @@ const navLinks = [
         children: [
           { name: "Digital Marketing", path: "/services/digital-marketing" },
           { name: "Marketing Branding", path: "/services/marketing-branding" },
-          { name: "Performance Marketing", path: "/services/performance" },
           { name: "Customized Campaign Design", path: "/services/customize-campaign" },
           { name: "Advertizing Services", path: "/services/advertizing-services" },
         ],
