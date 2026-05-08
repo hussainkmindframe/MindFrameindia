@@ -449,7 +449,7 @@ export default function OurWork() {
                 className="card-img"
               />
               <div className="hover-overlay">
-                <span className="hover-cta">View Project</span>
+                {/* <span className="hover-cta">View Project</span> */}
               </div>
             </div>
 
