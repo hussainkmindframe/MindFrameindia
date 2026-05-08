@@ -1,4 +1,6 @@
 import { useState } from "react";
+import SEO from '../components/SEO';
+import { seoConfig } from '../config/seoConfig';
 import wrk1 from '../assets/work/wrk1.png';
 import wrk2 from '../assets/work/wrk2.jpg';
 import wrk3 from '../assets/work/wrk3.png';
@@ -282,7 +284,14 @@ export default function OurWork() {
       : projects.filter((p) => p.tag === activeTag);
 
   return (
-    <div style={styles.page}>
+    <>
+      <SEO 
+        title={seoConfig.ourWork.title}
+        description={seoConfig.ourWork.description}
+        keywords={seoConfig.ourWork.keywords}
+        path={seoConfig.ourWork.path}
+      />
+      <div style={styles.page}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap');
 
@@ -462,6 +471,7 @@ export default function OurWork() {
         ))}
       </div>
     </div>
+    </>
   );
 }
 

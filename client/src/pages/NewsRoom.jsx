@@ -1,4 +1,6 @@
 import { useState } from "react";
+import SEO from '../components/SEO';
+import { seoConfig } from '../config/seoConfig';
 import bannerImage from "../assets/news-room/banner.jpg";
 import img1 from "../assets/news-room/2016-1.jpg";
 import img2 from "../assets/news-room/2016-2.jpg";
@@ -94,7 +96,14 @@ export default function NewsRoom() {
   };
 
   return (
-    <div style={styles.page}>
+    <>
+      <SEO 
+        title={seoConfig.newsroom.title}
+        description={seoConfig.newsroom.description}
+        keywords={seoConfig.newsroom.keywords}
+        path={seoConfig.newsroom.path}
+      />
+      <div style={styles.page}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap');
 
@@ -335,5 +344,6 @@ export default function NewsRoom() {
         })}
       </div>
     </div>
+    </>
   );
 }

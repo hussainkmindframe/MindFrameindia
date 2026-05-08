@@ -5,6 +5,8 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import SEO from '../components/SEO';
+import { seoConfig } from '../config/seoConfig';
 
 const gold = '#c9a84c';
 
@@ -136,7 +138,14 @@ export default function Contact() {
   const contactLineStyle = { fontSize: 12, color: '#666', margin: '2px 0' };
 
   return (
-    <div style={{ background: '#f7f6f2', fontFamily: 'Georgia, serif', minHeight: '100vh' }}>
+    <>
+      <SEO 
+        title={seoConfig.contact.title}
+        description={seoConfig.contact.description}
+        keywords={seoConfig.contact.keywords}
+        path={seoConfig.contact.path}
+      />
+      <div style={{ background: '#f7f6f2', fontFamily: 'Georgia, serif', minHeight: '100vh' }}>
       <style>{`
         @keyframes spin {
           0% { transform: rotate(0deg); }
@@ -405,6 +414,7 @@ export default function Contact() {
           </form>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

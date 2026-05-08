@@ -11,6 +11,8 @@ import Altaf from '../assets/team/altaf.png';
 import Aman from '../assets/team/Aman.png';
 import salome from '../assets/team/salome.png';
 import Pranay from '../assets/team/Pranay.jpg';
+import SEO from '../components/SEO';
+import { seoConfig } from '../config/seoConfig';
 
 const teams = [
   {
@@ -307,13 +309,20 @@ function TeamSection({ team }) {
 
 export default function OurTeam() {
   return (
-    <div
-      style={{
-        fontFamily: "'DM Sans', sans-serif",
-        background: "#fff",
-        minHeight: "100vh",
-      }}
-    >
+    <>
+      <SEO 
+        title={seoConfig.team.title}
+        description={seoConfig.team.description}
+        keywords={seoConfig.team.keywords}
+        path={seoConfig.team.path}
+      />
+      <div
+        style={{
+          fontFamily: "'DM Sans', sans-serif",
+          background: "#fff",
+          minHeight: "100vh",
+        }}
+      >
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -342,5 +351,6 @@ export default function OurTeam() {
         <TeamSection key={team.id} team={team} />
       ))}
     </div>
+    </>
   );
 }

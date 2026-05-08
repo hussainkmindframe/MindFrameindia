@@ -1,3 +1,6 @@
+import SEO from '../components/SEO';
+import { seoConfig } from '../config/seoConfig';
+
 const sections = [
   {
     id: "intro",
@@ -124,46 +127,51 @@ function renderContent(item, i) {
 
 export default function PrivacyPolicy() {
   return (
-    <div style={{ background: "#f9f8f6", minHeight: "100vh", padding: "60px 24px 80px" }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap');
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-      `}</style>
+    <>
+      <SEO 
+        title={seoConfig.privacy.title}
+        description={seoConfig.privacy.description}
+        keywords={seoConfig.privacy.keywords}
+        path={seoConfig.privacy.path}
+      />
+      <div style={{ background: "#f9f8f6", minHeight: "100vh", padding: "60px 24px 80px" }}>
+        <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap');
+          * { box-sizing: border-box; margin: 0; padding: 0; }
+        `}</style>
 
-      <div style={{ maxWidth: "900px", margin: "0 auto", background: "#fff", padding: "48px 64px 64px", borderRadius: "2px" }}>
+        <div style={{ maxWidth: "900px", margin: "0 auto", background: "#fff", padding: "48px 64px 64px", borderRadius: "2px" }}>
+          <h1 style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: "clamp(28px, 4vw, 38px)",
+            fontWeight: 700,
+            color: "#111",
+            textAlign: "center",
+            marginBottom: "36px",
+            letterSpacing: "-0.3px",
+          }}>
+            Privacy Policy
+          </h1>
 
-        {/* Title */}
-        <h1 style={{
-          fontFamily: "'DM Sans', sans-serif",
-          fontSize: "clamp(28px, 4vw, 38px)",
-          fontWeight: 700,
-          color: "#111",
-          textAlign: "center",
-          marginBottom: "36px",
-          letterSpacing: "-0.3px",
-        }}>
-          Privacy Policy
-        </h1>
-
-        {sections.map(section => (
-          <div key={section.id} style={{ marginBottom: "28px" }}>
-            {section.heading && (
-              <p style={{
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: "15px",
-                fontWeight: section.headingStyle === "bold" ? 700 : 600,
-                color: "#111",
-                marginBottom: "10px",
-                marginTop: "6px",
-              }}>
-                {section.heading}
-              </p>
-            )}
-            {section.content.map((item, i) => renderContent(item, i))}
-          </div>
-        ))}
-
+          {sections.map(section => (
+            <div key={section.id} style={{ marginBottom: "28px" }}>
+              {section.heading && (
+                <p style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: "15px",
+                  fontWeight: section.headingStyle === "bold" ? 700 : 600,
+                  color: "#111",
+                  marginBottom: "10px",
+                  marginTop: "6px",
+                }}>
+                  {section.heading}
+                </p>
+              )}
+              {section.content.map((item, i) => renderContent(item, i))}
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

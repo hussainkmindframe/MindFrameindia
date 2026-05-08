@@ -8,6 +8,8 @@ import blogService from '../services/blogService';
 import BlogCard from '../components/BlogCard';
 import Loading from '../components/Loading';
 import { useSearchParams } from 'react-router-dom';
+import SEO from '../components/SEO';
+import { seoConfig } from '../config/seoConfig';
 export default function Blogs() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -43,7 +45,14 @@ export default function Blogs() {
   };
 
   return (
-    <div style={{ fontFamily: "'DM Sans', sans-serif", background: '#fff', minHeight: '100vh' }}>
+    <>
+      <SEO 
+        title={seoConfig.blogs.title}
+        description={seoConfig.blogs.description}
+        keywords={seoConfig.blogs.keywords}
+        path={seoConfig.blogs.path}
+      />
+      <div style={{ fontFamily: "'DM Sans', sans-serif", background: '#fff', minHeight: '100vh' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -446,6 +455,7 @@ export default function Blogs() {
           <a href="/contact" className="bl-cta-btn">Contact Us Today</a>
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }

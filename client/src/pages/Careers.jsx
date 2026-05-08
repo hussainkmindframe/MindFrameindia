@@ -722,6 +722,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
 import apiClient from "../services/apiClient.js";
+import SEO from '../components/SEO';
+import { seoConfig } from '../config/seoConfig';
 
 const socialIcons = {
   facebook: (
@@ -926,8 +928,15 @@ export default function Careers() {
   }
 
   return (
-    <div style={{ fontFamily: "'DM Sans', sans-serif", background: "#fff", minHeight: "100vh" }}>
-      <style>{`
+    <>
+      <SEO 
+        title={seoConfig.careers.title}
+        description={seoConfig.careers.description}
+        keywords={seoConfig.careers.keywords}
+        path={seoConfig.careers.path}
+      />
+      <div style={{ fontFamily: "'DM Sans', sans-serif", background: "#fff", minHeight: "100vh" }}>
+        <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1226,5 +1235,6 @@ export default function Careers() {
         </div>
       </div>
     </div>
+    </>
   );
 }

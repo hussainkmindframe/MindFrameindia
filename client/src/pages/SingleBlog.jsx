@@ -6,6 +6,8 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import blogService from '../services/blogService';
 import Loading from '../components/Loading';
+import SEO from '../components/SEO';
+import { getBlogSEOData, createArticleSchema } from '../config/seoConfig';
 import { formatDate } from '../utils/formatters';
 
 export default function SingleBlog() {
@@ -53,7 +55,19 @@ export default function SingleBlog() {
     );
 
   return (
-    <div style={{ fontFamily: "'DM Sans', sans-serif", background: '#fff', minHeight: '100vh' }}>
+    <>
+      {blog && (
+        <SEO 
+          title={getBlogSEOData(blog).title}
+          description={getBlogSEOData(blog).description}
+          keywords={getBlogSEOData(blog).keywords}
+          path={getBlogSEOData(blog).path}
+          image={getBlogSEOData(blog).image}
+          type="article"
+          structured={createArticleSchema(blog)}
+        />
+      )}
+      <div style={{ fontFamily: "'DM Sans', sans-serif", background: '#fff', minHeight: '100vh' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -309,7 +323,8 @@ export default function SingleBlog() {
         </div>
 
       </article>
-    </div>
+      </div>
+    </>
   );
 }
 

@@ -16,6 +16,10 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import SEO from '../components/SEO';
+import { seoConfig } from '../config/seoConfig';
+import { organizationSchema } from '../components/SEO';
+
 import Testimonials from './Testimonial';
 import clb1 from '../assets/celebrity/clb-1.jpg';
 import clb2 from '../assets/celebrity/clb-2.jpg';
@@ -439,7 +443,15 @@ export default function Home() {
   }, []);
 
   return (
-    <div style={{ fontFamily: 'Georgia, serif', overflowX: 'hidden' }}>
+    <>
+      <SEO 
+        title={seoConfig.home.title}
+        description={seoConfig.home.description}
+        keywords={seoConfig.home.keywords}
+        path={seoConfig.home.path}
+        structured={organizationSchema}
+      />
+      <div style={{ fontFamily: 'Georgia, serif', overflowX: 'hidden' }}>
 
       {/* ── 1. HERO: Background Video ───────────────────────────────────────── */}
       <section style={{ 
@@ -868,6 +880,7 @@ export default function Home() {
       {/* ── 10. TESTIMONIALS ───────────────────────────────────────────────── */}
       <Testimonials />
 
-    </div>
+      </div>
+    </>
   );
 }

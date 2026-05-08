@@ -160,44 +160,48 @@ function CareerModal({ application, onClose, onStatusChange, onDelete }) {
           </div>
 
           {/* Resume */}
-          {application.resumeOriginalName && (
-            <div style={{ background: '#f8f9fa', borderRadius: '10px', padding: '12px 14px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                <p style={{ fontSize: '10px', fontWeight: '700', color: THEME.textMuted, textTransform: 'uppercase', letterSpacing: '1px', margin: 0 }}>Resume</p>
-                <div style={{ display: 'flex', gap: '8px' }}>
-                  <a 
-                    href={application.resumeUrl} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    style={{ 
-                      fontSize: '11px', color: gold, textDecoration: 'none', 
-                      display: 'flex', alignItems: 'center', gap: '3px', fontWeight: '600' 
-                    }}
-                  >
-                    <MdVisibility style={{ fontSize: '14px' }} /> View
-                  </a>
-                  <a 
-                    href={application.resumeUrl?.includes('cloudinary') 
-                      ? application.resumeUrl.replace('/upload/', '/upload/fl_attachment/') 
-                      : application.resumeUrl} 
-                    download={application.resumeOriginalName}
-                    style={{ 
-                      fontSize: '11px', color: gold, textDecoration: 'none', 
-                      display: 'flex', alignItems: 'center', gap: '3px', fontWeight: '600' 
-                    }}
-                  >
-                    <MdDownload style={{ fontSize: '14px' }} /> Download
-                  </a>
-                </div>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <MdDescription style={{ color: gold, fontSize: '18px', flexShrink: 0 }} />
-                <span style={{ fontSize: '13px', color: THEME.text, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                  {application.resumeOriginalName}
-                </span>
-              </div>
-            </div>
-          )}
+{application.resumeOriginalName && (
+  <div style={{ background: '#f8f9fa', borderRadius: '10px', padding: '12px 14px' }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+      <p style={{ fontSize: '10px', fontWeight: '700', color: THEME.textMuted, textTransform: 'uppercase', letterSpacing: '1px', margin: 0 }}>Resume</p>
+      <div style={{ display: 'flex', gap: '8px' }}>
+        {/* View Button - Opens in new tab with PDF viewer */}
+        <a 
+          href={application.resumeUrl}
+          target="_blank" 
+          rel="noopener noreferrer"
+          style={{ fontSize: '11px', color: gold, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '3px', fontWeight: '600' }}
+        >
+          <MdVisibility style={{ fontSize: '14px' }} /> View
+        </a>
+        <a 
+          href={application.resumeUrl}
+          download={application.resumeOriginalName}
+          style={{ fontSize: '11px', color: gold, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '3px', fontWeight: '600' }}
+        >
+          <MdDownload style={{ fontSize: '14px' }} /> Download
+        </a>
+      </div>
+    </div>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <MdDescription style={{ color: gold, fontSize: '18px', flexShrink: 0 }} />
+      <span style={{ fontSize: '13px', color: THEME.text, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+        {application.resumeOriginalName}
+      </span>
+    </div>
+    
+    {/* PDF Preview - Add this iframe for inline preview */}
+    {application.resumeUrl && application.resumeUrl.endsWith('.pdf') && (
+      <div style={{ marginTop: '12px' }}>
+        <iframe
+          src={`https://docs.google.com/viewer?url=${encodeURIComponent(application.resumeUrl)}&embedded=true`}
+          style={{ width: '100%', height: '400px', border: '1px solid #eef2f6', borderRadius: '8px' }}
+          title="PDF Preview"
+        />
+      </div>
+    )}
+  </div>
+)}
 
           {/* Applied At */}
           <div style={{ background: '#f8f9fa', borderRadius: '10px', padding: '12px 14px' }}>

@@ -203,8 +203,18 @@ const styles = {
   },
 };
 
+import SEO from '../components/SEO';
+import { seoConfig } from '../config/seoConfig';
+
 export default function WebDevelopment() {
   return (
+    <>
+      <SEO 
+        title={seoConfig.services.webDevelopment.title}
+        description={seoConfig.services.webDevelopment.description}
+        keywords={seoConfig.services.webDevelopment.keywords}
+        path={seoConfig.services.webDevelopment.path}
+      />
     <div style={styles.page}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap');
@@ -327,5 +337,6 @@ export default function WebDevelopment() {
 
       </div>
     </div>
+    </>
   );
 }

@@ -4,6 +4,8 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import SEO from '../components/SEO';
+import { seoConfig } from '../config/seoConfig';
 import clt1 from '../assets/client-logo/clt-1.png';
 import clt2 from '../assets/client-logo/clt-2.png';
 import clt3 from '../assets/client-logo/clt-3.png';
@@ -180,7 +182,14 @@ const Testimonials = () => {
   );
 
   return (
-    <div style={{ fontFamily: 'Georgia, serif', color: '#1a1a1a' }}>
+    <>
+      <SEO 
+        title={seoConfig.testimonials.title}
+        description={seoConfig.testimonials.description}
+        keywords={seoConfig.testimonials.keywords}
+        path={seoConfig.testimonials.path}
+      />
+      <div style={{ fontFamily: 'Georgia, serif', color: '#1a1a1a' }}>
 
       {/* Professional Logo Carousel Section - No Arrows, Only Auto Slide */}
       <div
@@ -435,6 +444,7 @@ const Testimonials = () => {
         }
       `}</style>
     </div>
+    </>
   );
 };
 

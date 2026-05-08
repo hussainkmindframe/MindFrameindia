@@ -3,6 +3,8 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
+import SEO from '../components/SEO';
+import { seoConfig } from '../config/seoConfig';
 
 const gold = '#c9a84c';
 
@@ -73,7 +75,14 @@ export default function About() {
   const bodyText = { fontSize: 13, color: '#444', lineHeight: 1.9, margin: '0 0 18px' };
 
   return (
-    <div style={{ background: '#f7f6f2', fontFamily: 'Georgia, serif', color: '#1a1a1a', minHeight: '100vh' }}>
+    <>
+      <SEO 
+        title={seoConfig.about.title}
+        description={seoConfig.about.description}
+        keywords={seoConfig.about.keywords}
+        path={seoConfig.about.path}
+      />
+      <div style={{ background: '#f7f6f2', fontFamily: 'Georgia, serif', color: '#1a1a1a', minHeight: '100vh' }}>
       <style>{`
         .about-wrapper {
           max-width: 1200px;
@@ -194,6 +203,7 @@ export default function About() {
         ))}
 
       </div>
-    </div>
+      </div>
+    </>
   );
 }
