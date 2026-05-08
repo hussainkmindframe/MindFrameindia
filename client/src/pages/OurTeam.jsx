@@ -332,19 +332,7 @@ export default function OurTeam() {
         }
       `}</style>
 
-      {/* Breadcrumb */}
-      <div style={{ textAlign: "center", padding: "20px 24px 0" }}>
-        <p
-          style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: "11px",
-            color: "#aaa",
-            letterSpacing: "0.5px",
-          }}
-        >
-          Home &nbsp;›&nbsp; Our Team
-        </p>
-      </div>
+  
 
       {/* Team sections */}
       {teams.map((team) => (

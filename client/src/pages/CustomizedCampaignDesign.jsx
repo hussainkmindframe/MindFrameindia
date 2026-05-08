@@ -382,7 +382,6 @@ export default function CustomizedCampaignDesign() {
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
         <div className="hero-overlay">
-          <div className="breadcrumb">Home / Services / Campaign Design</div>
           <div className="hero-title">
             Creative Advertising<br />Campaign Designing
           </div>

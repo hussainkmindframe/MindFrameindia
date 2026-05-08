@@ -473,7 +473,6 @@ export default function MarketingAndBranding() {
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
         <div className="hero-overlay">
-          <div className="breadcrumb">Home / Services / Marketing & Branding</div>
           <div className="hero-title">
             Unlocking the Power of<br />Innovative Brand Advertising
           </div>

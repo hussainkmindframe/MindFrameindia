@@ -312,7 +312,6 @@ export default function Blogs() {
           alt="Mind Frame India Blog"
         />
         <div className="bl-hero-overlay">
-          <div className="bl-breadcrumb">Home / Blogs</div>
           <div className="bl-hero-title">Our Digital Marketing Blog</div>
           <div className="bl-hero-subtitle">INSIGHTS · STRATEGIES · TRENDS</div>
           <p className="bl-hero-sub-text">

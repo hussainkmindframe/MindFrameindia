@@ -267,9 +267,7 @@ export default function NewsRoom() {
             background: "linear-gradient(to bottom, rgba(250,248,245,0.55) 0%, rgba(250,248,245,0.15) 100%)",
           }}
         />
-        <div style={{ position: "absolute", top: 20, left: "50%", transform: "translateX(-50%)", zIndex: 2 }}>
-          <span className="breadcrumb">Home &nbsp;›&nbsp; Blogs &nbsp;›&nbsp; News Room</span>
-        </div>
+       
         <div
           style={{
             position: "absolute",

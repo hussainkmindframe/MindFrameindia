@@ -419,7 +419,6 @@ export default function MediaBuying() {
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
         <div className="hero-overlay">
-          <div className="breadcrumb">Home / Services / Media Buying</div>
           <div className="hero-title">
             Media Buying Agency in Mumbai & Media Planning Services
           </div>

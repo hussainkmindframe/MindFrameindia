@@ -112,7 +112,6 @@ export default function AugmentedReality() {
           alt="Augmented Reality Virtual Reality Mumbai"
         />
         <div className="ar-hero-overlay">
-          <div className="ar-breadcrumb">Home / Services / AR & VR</div>
           <div className="ar-hero-title">AR & VR Agency in Mumbai</div>
           <div className="ar-hero-subtitle">IMMERSIVE EXPERIENCES THAT INSPIRE</div>
         </div>

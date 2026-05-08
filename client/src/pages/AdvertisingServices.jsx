@@ -385,7 +385,6 @@ export default function AdvertisingServices() {
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
         <div className="hero-overlay">
-          <div className="breadcrumb">Home / Services / Advertising</div>
           <div className="hero-title">
             Best Advertising Services<br />Across India
           </div>

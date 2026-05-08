@@ -374,7 +374,6 @@ export default function BelowTheLine() {
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
         <div className="hero-overlay">
-          <div className="breadcrumb">Home / Services / BTL Advertising</div>
           <div className="hero-title">
             Cost Effective Below The Line<br />Advertising Services in Mumbai
           </div>

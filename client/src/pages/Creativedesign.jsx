@@ -280,7 +280,6 @@ export default function CreativeDesign() {
           style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 40%" }}
         />
         <div className="cs-hero-overlay">
-          <div className="cs-breadcrumb">Home / Services / Creative Design</div>
           <div className="cs-hero-title">Creative Design Agency in Mumbai</div>
           <div className="cs-hero-subtitle">DESIGN THAT SPEAKS BEFORE YOU DO</div>
         </div>

@@ -273,9 +273,7 @@ export default function Careers() {
 
       {/* ── HEADER ── */}
       <div style={{ background: "#fff", padding: "32px 24px 48px", textAlign: "center" }}>
-        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "12px", color: "#999", letterSpacing: "0.5px", marginBottom: "20px" }}>
-          Home &nbsp;→&nbsp; Careers
-        </p>
+   
         <h1 style={{
           fontFamily: "'Cormorant Garamond', serif",
           fontSize: "clamp(42px, 8vw, 72px)",

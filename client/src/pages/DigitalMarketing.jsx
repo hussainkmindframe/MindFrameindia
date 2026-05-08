@@ -325,7 +325,6 @@ export default function DigitalMarketing() {
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
         <div className="hero-overlay">
-          <div className="breadcrumb">Home / Services / Digital Marketing</div>
           <div className="hero-title">
             Digital Marketing Agency in Mumbai
           </div>
