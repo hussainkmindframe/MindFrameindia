@@ -33,28 +33,39 @@ export default function AddBlog() {
     setFormData({ ...formData, [name]: type === 'checkbox' ? checked : value });
   };
 
+
+
   const handleImageUpload = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setUploadingImage(true);
-    try {
-      const formDataForUpload = new FormData();
-      formDataForUpload.append('image', file);
-      const response = await fetch('/api/blogs/upload-image', {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` },
-        body: formDataForUpload,
-      });
-      if (!response.ok) throw new Error('Image upload failed');
-      const data = await response.json();
-      setFormData({ ...formData, image: data.image });
-      toast.success('Image uploaded successfully!');
-    } catch (error) {
-      toast.error('Failed to upload image');
-    } finally {
-      setUploadingImage(false);
-    }
-  };
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  const MAX_SIZE = 2 * 1024 * 1024;
+  if (file.size > MAX_SIZE) {
+    toast.error('Image size must be under 2MB');
+    e.target.value = '';
+    return;
+  }
+
+  setUploadingImage(true);
+  try {
+    const formDataForUpload = new FormData();
+    formDataForUpload.append('image', file);
+    const response = await fetch('/api/blogs/upload-image', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` },
+      body: formDataForUpload,
+    });
+    if (!response.ok) throw new Error('Image upload failed');
+    const data = await response.json();
+    setFormData({ ...formData, image: data.image });
+    toast.success('Image uploaded successfully!');
+  } catch (error) {
+    toast.error('Failed to upload image');
+  } finally {
+    setUploadingImage(false);
+  }
+};
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -139,7 +150,7 @@ export default function AddBlog() {
                 disabled={loading || uploadingImage}
               />
               <p style={{ color: '#adb5bd', fontSize: '11px', marginTop: '5px' }}>
-                Supported: JPEG, PNG, GIF, WebP (Max 20MB)
+                Supported: JPEG, PNG (Max 2MB)
               </p>
               {uploadingImage && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: gold, fontSize: '13px', marginTop: '8px' }}>
