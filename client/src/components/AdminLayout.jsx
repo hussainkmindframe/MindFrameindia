@@ -83,7 +83,7 @@ export default function AdminLayout({ pageTitle, pageSubtitle, children }) {
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{
+            {/* <div style={{
               display: 'flex', alignItems: 'center', gap: '6px',
               padding: '5px 12px',
               background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.15)',
@@ -91,7 +91,7 @@ export default function AdminLayout({ pageTitle, pageSubtitle, children }) {
             }}>
               <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: THEME.green, display: 'inline-block' }} />
               <span style={{ color: '#0a7c4e', fontSize: '12px', fontWeight: '500' }}>Online</span>
-            </div>
+            </div> */}
           </div>
         </header>
 
