@@ -13,7 +13,7 @@ const gold = "#c9a84c";
 
 const navLinks = [
   { label: "Home", to: "/" },
-  { label: "About Us", to: "/about" },
+  { label: "About Us", to: "/about-us" },
   {
     label: "Services",
     to: "/services",
@@ -54,8 +54,8 @@ const navLinks = [
   { label: "Our Work", to: "/work" },
   { label: "Client Testimonials", to: "/testimonials" },
   { label: "Blogs", to: "/blogs" },
-  { label: "News Room", to: "/News" },
-  { label: "Contact Us", to: "/contact" },
+  { label: "News Room", to: "/news-room" },
+  { label: "Contact Us", to: "/contact-us" },
 ];
 
 export default function Header() {
@@ -378,7 +378,7 @@ export default function Header() {
             <p style={{ fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: gold, fontFamily: "Georgia, serif", margin: "0 0 12px", fontWeight: 700 }}>Get In Touch</p>
             <p style={{ fontSize: 13, color: "#444", margin: "0 0 3px", fontFamily: "Georgia, serif" }}>+91 9892000733 / +91 9167830733</p>
             <p style={{ fontSize: 13, color: "#444", margin: "0 0 18px", fontFamily: "Georgia, serif" }}>info@mindframeindia.com</p>
-            <Link to="/contact" onClick={() => setSidebarOpen(false)}
+            <Link to="/contact-us" onClick={() => setSidebarOpen(false)}
               style={{ display: "inline-block", padding: "10px 22px", background: gold, color: "#fff", fontSize: 12.5, fontFamily: "Georgia, serif", textDecoration: "none", letterSpacing: 0.5, borderRadius: 2, transition: "background 0.2s" }}
               onMouseEnter={(e) => e.currentTarget.style.background = "#b8943a"}
               onMouseLeave={(e) => e.currentTarget.style.background = gold}

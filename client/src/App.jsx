@@ -107,11 +107,11 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/blogs" element={<Blogs />} />
           <Route path="/blog/:id" element={<SingleBlog />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
+          <Route path="/about-us" element={<About />} />
+          <Route path="/contact-us" element={<Contact />} />
           <Route path="/work" element={<OurWork />} />
           <Route path="/testimonials" element={<Testimonial />} />
-          <Route path="/News" element={<NewsRoom />} />
+          <Route path="/news-room" element={<NewsRoom />} />
           <Route
             path="/services/web-development"
             element={<WebDevelopment />}

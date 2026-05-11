@@ -47,7 +47,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   const quickLinks = [
-    { label: 'About Us', to: '/about', external: false },
+    { label: 'About Us', to: '/about-us', external: false },
     { label: 'Our Team', to: '/team', external: false },
     { label: 'Our Work', to: '/work', external: false },
     { label: 'Brand Presentation', to: '/services/brand-identity', external: false },

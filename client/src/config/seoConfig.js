@@ -23,7 +23,7 @@ export const seoConfig = {
     description:
       'Learn about Mindframe India - our mission to transform brands through digital innovation, our expert team, and how we help businesses succeed in the digital landscape.',
     keywords: 'about mindframe, digital marketing company, creative agency, our team, company story, advertising agency india',
-    path: '/about',
+    path: '/about-us',
     type: 'website',
   },
 
@@ -32,7 +32,7 @@ export const seoConfig = {
     description:
       'Contact Mindframe India today for digital marketing, advertising, web development, and creative services. Reach out to discuss your project with our experts.',
     keywords: 'contact mindframe, get in touch, digital marketing consultation, advertising agency contact, mindframe support',
-    path: '/contact',
+    path: '/contact-us',
     type: 'website',
   },
 
@@ -70,7 +70,7 @@ export const seoConfig = {
     description:
       'Latest news, press releases, media coverage, and industry updates from Mindframe India - your source for digital marketing and advertising news.',
     keywords: 'news, press release, media coverage, newsroom, industry news, announcements, mindframe updates',
-    path: '/news',
+    path: '/news-room',
     type: 'website',
   },
 

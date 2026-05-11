@@ -515,7 +515,7 @@ export default function Home() {
           </p>
           <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap', padding: '0 16px' }}>
             <Link
-              to="/contact"
+              to="/contact-us"
               style={{
                 padding: 'clamp(10px, 2vw, 13px) clamp(24px, 4vw, 32px)', 
                 background: gold, 
@@ -532,7 +532,7 @@ export default function Home() {
               GET IN TOUCH
             </Link>
             <Link
-              to="/about"
+              to="/about-us"
               style={{
                 padding: 'clamp(10px, 2vw, 13px) clamp(24px, 4vw, 32px)', 
                 background: 'transparent',

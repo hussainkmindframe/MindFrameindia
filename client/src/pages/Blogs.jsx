@@ -451,7 +451,7 @@ export default function Blogs() {
           <p className="bl-cta-sub">
             Explore our digital marketing services and let's grow your business together.
           </p>
-          <a href="/contact" className="bl-cta-btn">Contact Us Today</a>
+          <a href="/contact-us" className="bl-cta-btn">Contact Us Today</a>
         </div>
       )}
       </div>
