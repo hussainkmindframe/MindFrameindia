@@ -1,0 +1,43 @@
+[33m8900cfe[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m add
+[33m2d954ff[m update
+[33mc3b64cf[m update
+[33m345dc1f[m update
+[33m018f954[m add
+[33m31b72d9[m add
+[33mbac9eb3[m add
+[33m06e92df[m add
+[33mc33454f[m add
+[33m6df5f10[m add
+[33m31689d1[m add
+[33m2d33875[m add
+[33m2bc9bde[m add
+[33me98e594[m add
+[33m02eab61[m add
+[33m68ca0da[m add
+[33m9064581[m add
+[33md1aedb4[m add
+[33m0d7c800[m add
+[33m6a11efd[m fix: add client/vercel.json for SPA routing (React Router 404 fix)
+[33mf9a2161[m trigger: force backend redeploy with root route fix
+[33m9da6767[m fix: add root route to avoid confusing 404 on backend url
+[33m32755a6[m fix: OurTeam.jsx image import case for linux/vercel (Aaqib, Abdul, Aman)
+[33m034b7a7[m fix: App.jsx WebDevelopment import case for linux/vercel
+[33m4264c68[m add
+[33m4681d7b[m trigger: redeploy with case fix
+[33m1cbd08a[m fix: rename files to correct case for linux/vercel compatibility
+[33m96413c8[m fix: cors for vercel deployment
+[33m743835a[m add
+[33m4a9e8b6[m add
+[33m2457c2c[m add
+[33m45d0250[m add
+[33mf3798be[m add
+[33m3aaef9a[m updt
+[33m71c0eca[m add
+[33m560757a[m add
+[33me22dea9[m add
+[33m9621321[m add
+[33mf4b5170[m add
+[33m1e482d8[m updated
+[33mf830974[m updt
+[33m8461edc[m xsc
+[33mcf34e00[m first commit
