@@ -17,7 +17,7 @@ import { useAuthStore } from "./utils/authStore";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
-import scrolltotop from "./components/scrolltotop"; 
+// import scrolltotop from "./components/scrolltotop"; 
 
 import Home from "./pages/Home";
 import Blogs from "./pages/Blogs";
@@ -79,7 +79,7 @@ export default function App() {
 
   return (
     <Router>
-      <scrolltotop/> {/* ← ADD THIS */}
+      {/* <scrolltotop/> ← ADD THIS */}
       <Toaster
         position="top-right"
         toastOptions={{
