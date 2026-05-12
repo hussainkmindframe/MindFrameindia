@@ -1,39 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const videos = [
-  {
-    id: 1,
-    title: "Supreme Furnitures TVC 60 Sec AD by Mind Frame India",
-    ytId: "YQch1ko8Lgs",
-  },
-  {
-    id: 2,
-    title: "ABMH Mother & Child Care MIDDLE CLASS 30 HINDI TVC",
-    ytId: "Ys9fIbVVhuU",
-  },
-  {
-    id: 3,
-    title: "UMMEED – An Emotional Cancer Awareness Campaign for Aditya Birla Memorial Hospital | Pune",
-    ytId: "9u7dQGzBXJQ",
-  },
-  {
-    id: 4,
-    title: "Kohler TVC – The Bold Look of Kohler",
-    ytId: "XMCYvxx3H2Y",
-  },
-  {
-    id: 5,
-    title: "Five Fat Monk Dim Sum Story Part 1 | Food & Beverages Ads | Mind Frame India",
-    ytId: "Cq9UdCwl8QE",
-  },
-  {
-    id: 6,
-    title: "ABMH Mother & Child Care ELITE CLASS 30 HINDI TVC",
-    ytId: "g0R83YLwAJc",
-  },
+  { id: 1, title: "Supreme Furnitures TVC 60 Sec AD by Mind Frame India", ytId: "YQch1ko8Lgs" },
+  { id: 2, title: "ABMH Mother & Child Care MIDDLE CLASS 30 HINDI TVC", ytId: "Ys9fIbVVhuU" },
+  { id: 3, title: "UMMEED – An Emotional Cancer Awareness Campaign for Aditya Birla Memorial Hospital | Pune", ytId: "9u7dQGzBXJQ" },
+  { id: 4, title: "Kohler TVC – The Bold Look of Kohler", ytId: "XMCYvxx3H2Y" },
+  { id: 5, title: "Five Fat Monk Dim Sum Story Part 1 | Food & Beverages Ads | Mind Frame India", ytId: "Cq9UdCwl8QE" },
+  { id: 6, title: "ABMH Mother & Child Care ELITE CLASS 30 HINDI TVC", ytId: "g0R83YLwAJc" },
 ];
 
-// Direct YouTube Embed Component - Bilkul waise hi jaise Home page mein hai
 function YTEmbed({ videoId, title }) {
   return (
     <div style={{ borderRadius: 4, overflow: 'hidden', background: '#000', aspectRatio: '16/9', width: '100%' }}>
@@ -51,31 +26,84 @@ function YTEmbed({ videoId, title }) {
   );
 }
 
+const initialForm = { name: '', email: '', mobile: '', location: '', message: '' };
+const initialErrors = { name: '', email: '', mobile: '', location: '', message: '' };
+
+function validate(fields) {
+  const errs = { ...initialErrors };
+  if (!fields.name.trim()) errs.name = 'Name is required.';
+  if (!fields.email.trim()) {
+    errs.email = 'Email is required.';
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email)) {
+    errs.email = 'Enter a valid email.';
+  }
+  if (!fields.mobile.trim()) {
+    errs.mobile = 'Mobile No. is required.';
+  } else if (!/^\+?[0-9\s\-]{7,15}$/.test(fields.mobile)) {
+    errs.mobile = 'Enter a valid mobile number.';
+  }
+  if (!fields.location.trim()) errs.location = 'Location is required.';
+  if (!fields.message.trim()) errs.message = 'Please describe your requirement.';
+  return errs;
+}
+
+function hasErrors(errs) {
+  return Object.values(errs).some(Boolean);
+}
+
 export default function Television() {
+  const [form, setForm] = useState(initialForm);
+  const [errors, setErrors] = useState(initialErrors);
+  const [touched, setTouched] = useState({});
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  function handleChange(e) {
+    const { name, value } = e.target;
+    const updated = { ...form, [name]: value };
+    setForm(updated);
+    if (touched[name]) {
+      setErrors(validate(updated));
+    }
+  }
+
+  function handleBlur(e) {
+    const { name } = e.target;
+    setTouched((t) => ({ ...t, [name]: true }));
+    setErrors(validate(form));
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const allTouched = { name: true, email: true, mobile: true, location: true, message: true };
+    setTouched(allTouched);
+    const errs = validate(form);
+    setErrors(errs);
+    if (hasErrors(errs)) return;
+
+    setLoading(true);
+    // Simulate async submit (replace with real API call)
+    setTimeout(() => {
+      setLoading(false);
+      setSubmitted(true);
+      setForm(initialForm);
+      setTouched({});
+      setErrors(initialErrors);
+    }, 1200);
+  }
+
   return (
     <div style={{ fontFamily: "'DM Sans', sans-serif", background: "#fff", minHeight: "100vh" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* ── HERO ── */
-        .tv-hero {
-          position: relative; height: 480px; overflow: hidden;
-        }
-        .tv-hero img {
-          width: 100%; height: 100%;
-          object-fit: cover; object-position: center;
-        }
+        .tv-hero { position: relative; height: 480px; overflow: hidden; }
+        .tv-hero img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
         .tv-hero-overlay {
           position: absolute; inset: 0;
           background: linear-gradient(135deg, rgba(0,0,0,0.68) 0%, rgba(10,5,30,0.55) 100%);
           display: flex; align-items: center; justify-content: center; flex-direction: column;
-        }
-        .tv-breadcrumb {
-          position: absolute; top: 20px; left: 0; right: 0;
-          text-align: center; font-size: 11px;
-          letter-spacing: 2.5px; color: rgba(255,255,255,0.6);
-          text-transform: uppercase;
         }
         .tv-hero-title {
           font-family: 'DM Sans', sans-serif;
@@ -91,51 +119,35 @@ export default function Television() {
           letter-spacing: 4px; text-transform: uppercase;
         }
 
-        /* ── LAYOUT: LEFT TEXT + RIGHT FORM ── */
         .tv-intro-wrap {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 0;
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 72px 60px 60px;
+          display: grid; grid-template-columns: 1fr 1fr;
+          gap: 0; max-width: 1200px;
+          margin: 0 auto; padding: 72px 60px 60px;
         }
         .tv-intro-left { padding-right: 60px; }
         .tv-intro-right { padding-left: 40px; border-left: 1px solid #e8e2d9; }
 
-        /* LEFT TEXT */
         .tv-main-heading {
           font-family: 'Cormorant Garamond', serif;
           font-size: clamp(20px, 2.5vw, 27px);
           font-weight: 700; color: #b08d57;
           text-align: center; margin-bottom: 12px; line-height: 1.3;
         }
-        .tv-gold-line {
-          width: 55px; height: 2px;
-          background: #b08d57; margin: 0 auto 28px;
-        }
+        .tv-gold-line { width: 55px; height: 2px; background: #b08d57; margin: 0 auto 28px; }
         .tv-sub-gold {
           font-family: 'Cormorant Garamond', serif;
           font-size: clamp(17px, 2vw, 22px);
           font-weight: 700; font-style: italic;
           color: #b08d57; margin-bottom: 14px; line-height: 1.3;
         }
-        .tv-body {
-          font-size: 13px; font-weight: 300;
-          color: #555; line-height: 1.85; margin-bottom: 14px;
-        }
+        .tv-body { font-size: 13px; font-weight: 300; color: #555; line-height: 1.85; margin-bottom: 14px; }
         .tv-body strong { font-weight: 600; color: #333; }
         .tv-body em { font-style: italic; }
 
-        /* RIGHT FORM */
-        .tv-form-label {
-          font-size: 13px; font-weight: 500; color: #444;
-          margin-bottom: 20px; display: block;
-        }
-        .tv-form-grid {
-          display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-          margin-bottom: 12px;
-        }
+        /* FORM STYLES */
+        .tv-form-label { font-size: 13px; font-weight: 500; color: #444; margin-bottom: 20px; display: block; }
+        .tv-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+        .tv-field { display: flex; flex-direction: column; gap: 4px; }
         .tv-input {
           width: 100%; padding: 10px 12px;
           border: 1px solid #d4cdc4; border-radius: 2px;
@@ -145,80 +157,76 @@ export default function Television() {
         }
         .tv-input:focus { border-color: #b08d57; }
         .tv-input::placeholder { color: #aaa; }
+        .tv-input.error { border-color: #d9534f; }
         .tv-textarea {
           width: 100%; padding: 10px 12px;
           border: 1px solid #d4cdc4; border-radius: 2px;
           font-size: 12.5px; font-family: 'DM Sans', sans-serif;
           color: #333; outline: none; resize: vertical;
           min-height: 100px; transition: border-color 0.2s;
-          margin-bottom: 14px;
         }
         .tv-textarea:focus { border-color: #b08d57; }
         .tv-textarea::placeholder { color: #aaa; }
+        .tv-textarea.error { border-color: #d9534f; }
+        .tv-error-msg { font-size: 11px; color: #d9534f; margin-top: 2px; }
         .tv-send-btn {
-          display: inline-block; padding: 12px 28px;
+          display: inline-flex; align-items: center; gap: 8px;
+          padding: 12px 28px;
           background: #b08d57; color: #fff;
           font-size: 11px; font-weight: 700; letter-spacing: 2px;
           text-transform: uppercase; border: none; cursor: pointer;
           transition: background 0.25s, transform 0.2s;
           border-radius: 2px;
         }
-        .tv-send-btn:hover { background: #9a7842; transform: translateY(-1px); }
+        .tv-send-btn:hover:not(:disabled) { background: #9a7842; transform: translateY(-1px); }
+        .tv-send-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+        .tv-spinner {
+          width: 14px; height: 14px;
+          border: 2px solid rgba(255,255,255,0.4);
+          border-top-color: #fff;
+          border-radius: 50%;
+          animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* ── ARTICLE SECTION ── */
-        .tv-article {
-          background: #f9f7f4;
-          border-top: 1px solid #e8e2d9;
-          padding: 64px 60px;
-          max-width: 1200px;
-          margin: 0 auto;
+        /* SUCCESS BANNER */
+        .tv-success {
+          background: #f0faf3; border: 1px solid #a3d9b1;
+          border-radius: 4px; padding: 20px 24px;
+          display: flex; align-items: flex-start; gap: 14px;
+          animation: fadeIn 0.4s ease;
         }
-        .tv-article-h2 {
-          font-family: 'Cormorant Garamond', serif;
-          font-size: clamp(20px, 2.8vw, 28px);
-          font-weight: 700; color: #b08d57;
-          text-align: center; margin-bottom: 20px;
-          line-height: 1.3;
+        .tv-success-icon {
+          width: 28px; height: 28px; flex-shrink: 0;
+          background: #28a745; border-radius: 50%;
+          display: flex; align-items: center; justify-content: center;
         }
-        .tv-article-h3 {
-          font-family: 'DM Sans', sans-serif;
-          font-size: clamp(15px, 1.8vw, 18px);
-          font-weight: 700; color: #1a1510;
-          margin: 28px 0 8px;
+        .tv-success-icon svg { width: 16px; height: 16px; }
+        .tv-success-title { font-size: 14px; font-weight: 600; color: #1a6630; margin-bottom: 4px; }
+        .tv-success-sub { font-size: 12.5px; color: #2d7a3a; line-height: 1.5; }
+        .tv-send-another {
+          margin-top: 14px; background: none; border: 1px solid #28a745;
+          color: #28a745; font-size: 11px; font-weight: 600;
+          letter-spacing: 1.5px; text-transform: uppercase;
+          padding: 8px 16px; cursor: pointer; border-radius: 2px;
+          transition: background 0.2s, color 0.2s;
         }
-        .tv-article-body {
-          font-size: 13px; font-weight: 300;
-          color: #555; line-height: 1.85; margin-bottom: 8px;
-        }
+        .tv-send-another:hover { background: #28a745; color: #fff; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ARTICLE */
+        .tv-article { background: #f9f7f4; border-top: 1px solid #e8e2d9; padding: 64px 60px; max-width: 1200px; margin: 0 auto; }
+        .tv-article-h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(20px, 2.8vw, 28px); font-weight: 700; color: #b08d57; text-align: center; margin-bottom: 20px; line-height: 1.3; }
+        .tv-article-h3 { font-family: 'DM Sans', sans-serif; font-size: clamp(15px, 1.8vw, 18px); font-weight: 700; color: #1a1510; margin: 28px 0 8px; }
+        .tv-article-body { font-size: 13px; font-weight: 300; color: #555; line-height: 1.85; margin-bottom: 8px; }
         .tv-article-body strong { font-weight: 600; color: #333; }
-        .tv-bullet {
-          font-size: 13px; font-weight: 300;
-          color: #555; line-height: 1.85;
-          padding-left: 20px; margin-bottom: 6px;
-          position: relative;
-        }
-        .tv-bullet::before {
-          content: '•'; position: absolute; left: 0;
-          color: #b08d57;
-        }
+        .tv-bullet { font-size: 13px; font-weight: 300; color: #555; line-height: 1.85; padding-left: 20px; margin-bottom: 6px; position: relative; }
+        .tv-bullet::before { content: '•'; position: absolute; left: 0; color: #b08d57; }
 
-        /* ── VIDEO SECTION ── */
-        .tv-videos-wrap {
-          padding: 60px 24px 80px;
-          max-width: 1300px; margin: 0 auto;
-        }
-        .tv-videos-tagline {
-          font-family: 'Cormorant Garamond', serif;
-          font-size: clamp(18px, 2.2vw, 24px);
-          font-weight: 600; font-style: italic;
-          color: #b08d57; text-align: center;
-          margin-bottom: 36px;
-        }
-        .tv-videos-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 16px;
-        }
+        /* VIDEOS */
+        .tv-videos-wrap { padding: 60px 24px 80px; max-width: 1300px; margin: 0 auto; }
+        .tv-videos-tagline { font-family: 'Cormorant Garamond', serif; font-size: clamp(18px, 2.2vw, 24px); font-weight: 600; font-style: italic; color: #b08d57; text-align: center; margin-bottom: 36px; }
+        .tv-videos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 
         @media (max-width: 900px) {
           .tv-intro-wrap { grid-template-columns: 1fr; padding: 48px 24px; }
@@ -230,24 +238,21 @@ export default function Television() {
         }
         @media (max-width: 560px) {
           .tv-videos-grid { grid-template-columns: 1fr; }
+          .tv-form-grid { grid-template-columns: 1fr; }
         }
       `}</style>
 
-      {/* ── HERO ── */}
+      {/* HERO */}
       <div className="tv-hero">
-        <img
-          src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=1600&q=85"
-          alt="Television Advertising Agency Mumbai"
-        />
+        <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=1600&q=85" alt="Television Advertising Agency Mumbai" />
         <div className="tv-hero-overlay">
           <div className="tv-hero-title">Television Advertising Agency in Mumbai</div>
           <div className="tv-hero-subtitle">IMPACTFUL TV CAMPAIGNS THAT DELIVER ROI</div>
         </div>
       </div>
 
-      {/* ── INTRO: LEFT TEXT + RIGHT FORM ── */}
+      {/* INTRO: LEFT TEXT + RIGHT FORM */}
       <div className="tv-intro-wrap">
-
         {/* LEFT */}
         <div className="tv-intro-left">
           <h2 className="tv-main-heading">Cost Effective Television Advertising Agency in Mumbai</h2>
@@ -263,59 +268,113 @@ export default function Television() {
 
         {/* RIGHT FORM */}
         <div className="tv-intro-right">
-          <span className="tv-form-label">Fill in your details and you'll hear from us shortly!</span>
-          <div className="tv-form-grid">
-            <input className="tv-input" placeholder="Name*" />
-            <input className="tv-input" placeholder="E-mail*" />
-            <input className="tv-input" placeholder="Mobile No.*" />
-            <input className="tv-input" placeholder="Location*" />
-          </div>
-          <textarea className="tv-textarea" placeholder="Message (Requirement)*" />
-          <button className="tv-send-btn">Send Message</button>
-        </div>
+          {submitted ? (
+            <div className="tv-success">
+              <div className="tv-success-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </div>
+              <div>
+                <div className="tv-success-title">Message Sent Successfully!</div>
+                <div className="tv-success-sub">Thank you for reaching out. Our team will get back to you within 24 hours.</div>
+                <button className="tv-send-another" onClick={() => setSubmitted(false)}>Send Another Message</button>
+              </div>
+            </div>
+          ) : (
+            <>
+              <span className="tv-form-label">Fill in your details and you'll hear from us shortly!</span>
+              <form onSubmit={handleSubmit} noValidate>
+                <div className="tv-form-grid">
+                  <div className="tv-field">
+                    <input
+                      className={`tv-input${errors.name && touched.name ? ' error' : ''}`}
+                      placeholder="Name*"
+                      name="name"
+                      value={form.name}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    {errors.name && touched.name && <span className="tv-error-msg">{errors.name}</span>}
+                  </div>
 
+                  <div className="tv-field">
+                    <input
+                      className={`tv-input${errors.email && touched.email ? ' error' : ''}`}
+                      placeholder="E-mail*"
+                      name="email"
+                      type="email"
+                      value={form.email}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    {errors.email && touched.email && <span className="tv-error-msg">{errors.email}</span>}
+                  </div>
+
+                  <div className="tv-field">
+                    <input
+                      className={`tv-input${errors.mobile && touched.mobile ? ' error' : ''}`}
+                      placeholder="Mobile No.*"
+                      name="mobile"
+                      type="tel"
+                      value={form.mobile}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    {errors.mobile && touched.mobile && <span className="tv-error-msg">{errors.mobile}</span>}
+                  </div>
+
+                  <div className="tv-field">
+                    <input
+                      className={`tv-input${errors.location && touched.location ? ' error' : ''}`}
+                      placeholder="Location*"
+                      name="location"
+                      value={form.location}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    {errors.location && touched.location && <span className="tv-error-msg">{errors.location}</span>}
+                  </div>
+                </div>
+
+                <div className="tv-field" style={{ marginBottom: 14 }}>
+                  <textarea
+                    className={`tv-textarea${errors.message && touched.message ? ' error' : ''}`}
+                    placeholder="Message (Requirement)*"
+                    name="message"
+                    value={form.message}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.message && touched.message && <span className="tv-error-msg">{errors.message}</span>}
+                </div>
+
+                <button className="tv-send-btn" type="submit" disabled={loading}>
+                  {loading && <span className="tv-spinner" />}
+                  {loading ? 'Sending…' : 'Send Message'}
+                </button>
+              </form>
+            </>
+          )}
+        </div>
       </div>
 
-      {/* ── ARTICLE SECTION ── */}
+      {/* ARTICLE SECTION */}
       <div style={{ background: "#f9f7f4", borderTop: "1px solid #e8e2d9", borderBottom: "1px solid #e8e2d9" }}>
         <div className="tv-article">
-
           <h2 className="tv-article-h2">Why Choose Mind Frame India For TV Advertising?</h2>
           <p className="tv-article-body">
             Do you want to boost your brand's visibility and reach through strategic TV ad campaigns? We at <strong>Mind Frame India</strong> are here to make it happen. We help our clients connect with millions of viewers in India with our TV advertising. We specializes in making high-quality, impactful TV commercials that effectively convey your brand's message and resonate with your target audience. Our team of talented creative professionals, media planners, and strategists work closely with you to understand your business objectives and craft a tailor-made TV advertising strategy that delivers measurable results.
           </p>
 
           <h3 className="tv-article-h3">Build Instant Credibility</h3>
-          <p className="tv-article-body">
-            Television is a powerful advertising medium that instantly boosts brand credibility and trustworthiness in the eyes of consumers. Consumers perceive brands that advertise on TV as more established and reputable, giving them an edge over their competitors. Mind Frame India helps brands quickly achieve the desired visibility and position themselves as industry leaders through strategic TV ad campaigns.
-          </p>
+          <p className="tv-article-body">Television is a powerful advertising medium that instantly boosts brand credibility and trustworthiness in the eyes of consumers.</p>
 
           <h3 className="tv-article-h3">Targeted Reach, Maximum Exposure</h3>
-          <p className="tv-article-body">
-            There is no doubt that television ads are best to drive sales and increase brand awareness as they expose your brand to million of potential customer. TV ads reach to targeted audience and deliver to maximum exposure to your brand.
-          </p>
+          <p className="tv-article-body">TV ads reach targeted audiences and deliver maximum exposure to your brand across millions of potential customers.</p>
 
           <h3 className="tv-article-h3">High Recall Value and Immediate Impact</h3>
-          <p className="tv-article-body">
-            TV commercials are noted for their strong recall and immediate effect, as they imprint product imagery and brand messaging on viewers' minds. We at Mind Frame India aim to create visually compelling and memorable TV commercials that remain etched in the minds of your target audience long after they see your ad, ultimately driving increased brand recognition and recall.
-          </p>
-
-          <h2 className="tv-article-h2" style={{ marginTop: 48 }}>The Power of TV Advertising</h2>
-
-          <h3 className="tv-article-h3">Build Instant Credibility</h3>
-          <p className="tv-article-body">
-            TV advertising establishes your brand as credible and trustworthy in the eyes of consumers. With visually stunning and memorable commercials, we help your business stand out and build confidence among your audience.
-          </p>
-
-          <h3 className="tv-article-h3">Targeted Reach with Maximum Visibility</h3>
-          <p className="tv-article-body">
-            Our campaigns are designed to connect with millions of potential customers across India. By leveraging TV's expansive reach, we maximize exposure and drive brand awareness effectively.
-          </p>
-
-          <h3 className="tv-article-h3">High Recall Value</h3>
-          <p className="tv-article-body">
-            Television commercials are known for their lasting impact. We create visually compelling TVCs that embed your brand's message in your audience's minds, leading to increased recognition and strong recall value.
-          </p>
+          <p className="tv-article-body">We create visually compelling and memorable TV commercials that remain etched in the minds of your target audience long after they see your ad.</p>
 
           <h2 className="tv-article-h2" style={{ marginTop: 48 }}>The Mind Frame Advantage – Our In-House Production Team</h2>
           <p className="tv-article-body">What makes us stand out is our in-house production team. Here's why it makes a difference:</p>
@@ -323,36 +382,20 @@ export default function Television() {
           <p className="tv-bullet"><strong>Creative Control:</strong> Greater flexibility and alignment with your vision.</p>
           <p className="tv-bullet"><strong>Faster Turnaround:</strong> Bring ideas to life quickly with minimized delays.</p>
           <p className="tv-bullet"><strong>Confidentiality Assured:</strong> Reduced risks of conflicts or data breaches.</p>
-          <p className="tv-article-body" style={{ marginTop: 12 }}>
-            Our production expertise ensures your commercials aren't just compelling — they're extraordinary.
-          </p>
 
           <h2 className="tv-article-h2" style={{ marginTop: 48 }}>Our Process – Seamless Collaboration from Start to Finish</h2>
-
           <h3 className="tv-article-h3">Understanding Your Brand</h3>
-          <p className="tv-article-body">
-            We begin by deeply understanding your brand, target audience, and marketing goals to ensure our campaigns align with your objectives.
-          </p>
-
+          <p className="tv-article-body">We begin by deeply understanding your brand, target audience, and marketing goals.</p>
           <h3 className="tv-article-h3">Creative Concept Development</h3>
-          <p className="tv-article-body">
-            Our creative team brings your brand story to life by developing engaging, out-of-the-box concepts that captivate and inspire.
-          </p>
-
+          <p className="tv-article-body">Our creative team brings your brand story to life with engaging, out-of-the-box concepts.</p>
           <h3 className="tv-article-h3">Production Excellence</h3>
-          <p className="tv-article-body">
-            Using the latest technology and a talented in-house team, we produce high-quality TVCs with quick turnaround times, ensuring every detail reflects your brand values.
-          </p>
-
+          <p className="tv-article-body">Using the latest technology and our in-house team, we produce high-quality TVCs with quick turnaround times.</p>
           <h3 className="tv-article-h3">Flawless Campaign Execution</h3>
-          <p className="tv-article-body">
-            From strategic media planning to seamless delivery, we handle every aspect of your campaign to achieve maximum exposure and success.
-          </p>
-
+          <p className="tv-article-body">From strategic media planning to seamless delivery, we handle every aspect of your campaign.</p>
         </div>
       </div>
 
-      {/* ── VIDEO GRID - Direct YouTube Videos (No Thumbnail, No Modal) ── */}
+      {/* VIDEO GRID */}
       <div className="tv-videos-wrap">
         <p className="tv-videos-tagline">We create stories that generate leads.</p>
         <div className="tv-videos-grid">
@@ -361,7 +404,6 @@ export default function Television() {
           ))}
         </div>
       </div>
-
     </div>
   );
 }
